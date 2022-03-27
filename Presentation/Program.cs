@@ -1,9 +1,12 @@
 using wms.Dto.Responses.Validation;
 using wms.Filters;
 
+using Application;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddApplication();
 
 builder.Services
     .AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
