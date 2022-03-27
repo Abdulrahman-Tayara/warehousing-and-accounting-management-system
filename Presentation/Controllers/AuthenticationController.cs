@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Requests;
 using wms.Dto.Responses.Authentication;
@@ -30,6 +31,6 @@ public class AuthenticationController : ApiControllerBase
     [HttpGet("test")]
     public IActionResult Test()
     {
-        throw new Exception("This is a test to the 500 Internal Server Error exception");
+        return Ok(new {name = "Alaa Abo Muner", proffession = "Amazing"});
     }
 }

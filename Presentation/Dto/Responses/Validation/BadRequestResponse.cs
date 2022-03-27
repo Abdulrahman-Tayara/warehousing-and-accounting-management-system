@@ -4,9 +4,9 @@ using wms.Dto.Responses.Common;
 
 namespace wms.Dto.Responses.Validation;
 
-public class ValidationFailedResponse : NoDataResponse
+public class BadRequestResponse : NoDataResponse
 {
-    public ValidationFailedResponse(ModelStateDictionary modelState) : base(MapModelStateToMessage(modelState))
+    public BadRequestResponse(ModelStateDictionary modelState) : base(MapModelStateToMessage(modelState))
     {
     }
 

@@ -13,7 +13,7 @@ builder.Services
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory =
-            actionContext => new ValidationFailedObjectResult(actionContext.ModelState);
+            actionContext => new BadRequestObjectResult(actionContext.ModelState);
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

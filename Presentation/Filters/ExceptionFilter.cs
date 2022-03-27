@@ -1,7 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using wms.Dto.Responses.Common;
+
+using Application.Exceptions;
+using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace wms.Filters;
 
@@ -16,7 +18,7 @@ public class ExceptionFilter : ExceptionFilterAttribute
         _hostEnvironment = hostEnvironment;
         _exceptionMap = new Dictionary<Type, Action<ExceptionContext>>
         {
-            // {typeof(InvalidOperationException), HandleValidationException}
+            // {typeof(NotFoundException), HandleNotFoundException}
         };
     }
 
@@ -27,6 +29,10 @@ public class ExceptionFilter : ExceptionFilterAttribute
         if (_exceptionMap.ContainsKey(type)) // Exception is any of the types declared in the dictionary.
         {
             _exceptionMap[type].Invoke(context);
+        }
+        else if (context.Exception is BaseException)
+        {
+            HandleCustomException(context);
         }
         else // Exception is unknown
         {
@@ -51,6 +57,17 @@ public class ExceptionFilter : ExceptionFilterAttribute
         var responseBody = new NoDataResponse(message);
 
         context.Result = new ObjectResult(responseBody) {StatusCode = StatusCodes.Status500InternalServerError};
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleCustomException(ExceptionContext context)
+    {
+        BaseException exception = (BaseException) context.Exception;
+
+        var responseBody = new NoDataResponse(exception.Message);
+
+        context.Result = new ObjectResult(responseBody) {StatusCode = exception.Code};
 
         context.ExceptionHandled = true;
     }
