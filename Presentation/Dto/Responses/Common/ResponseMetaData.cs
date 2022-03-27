@@ -6,5 +6,5 @@ public class ResponseMetaData
 {
     [Required] public string time { get; set; }
 
-    [Required] public string message { get; set; }
+    public string? message { get; set; }
 }

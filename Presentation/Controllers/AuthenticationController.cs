@@ -26,4 +26,10 @@ public class AuthenticationController : ApiControllerBase
             }
         };
     }
+
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        throw new Exception("This is a test to the 500 Internal Server Error exception");
+    }
 }
