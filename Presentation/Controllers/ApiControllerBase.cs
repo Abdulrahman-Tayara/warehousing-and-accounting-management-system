@@ -7,11 +7,13 @@ namespace wms.Controllers;
 [Route("api/[controller]")]
 public class ApiControllerBase : ControllerBase
 {
+    [NonAction]
     public override OkObjectResult Ok(object? value)
     {
         return Ok(value, "Success");
     }
 
+    [NonAction]
     public OkObjectResult Ok(object? value, string message)
     {
         if (value == null)

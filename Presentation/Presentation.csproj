@@ -22,4 +22,9 @@
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dto\Responses\Authentication" />
+      <Folder Include="Dto\Responses\Category" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Requests.Category;
-using wms.Dto.Responses.Category;
+using wms.Dto.Responses.Common;
 using wms.Dto.ViewModels;
 
 namespace wms.Controllers;
@@ -8,11 +8,11 @@ namespace wms.Controllers;
 public class CategoryController : ApiControllerBase
 {
     [HttpPost]
-    public ActionResult<CreateCategoryResponse> Create(CreateCategoryRequestBody body)
+    public ActionResult<BaseResponse<CategoryViewModel>> Create(CreateCategoryRequestBody body)
     {
         var createdCategory = CreateCategory(body);
 
-        return Ok(new CreateCategoryResponse(createdCategory));
+        return Ok(createdCategory, "Category created successfully");
     }
 
     private CategoryViewModel CreateCategory(CreateCategoryRequestBody body)

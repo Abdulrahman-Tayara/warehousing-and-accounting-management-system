@@ -1,7 +1,6 @@
-using Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Requests;
-using wms.Dto.Responses.Authentication;
+using wms.Dto.Responses.Common;
 using wms.Dto.ViewModels;
 
 namespace wms.Controllers;
@@ -9,11 +8,11 @@ namespace wms.Controllers;
 public class AuthenticationController : ApiControllerBase
 {
     [HttpPost("authenticate")]
-    public ActionResult<AuthenticateResponseBody> Authenticate(AuthenticateRequestBody body)
+    public ActionResult<BaseResponse<AuthenticatedUserViewModel>> Authenticate(AuthenticateRequestBody body)
     {
         var authenticatedUser = _Authenticate(body);
 
-        return Ok(new AuthenticateResponseBody(authenticatedUser));
+        return Ok(authenticatedUser, "Authentication success");
     }
 
     private AuthenticatedUserViewModel _Authenticate(AuthenticateRequestBody body)
