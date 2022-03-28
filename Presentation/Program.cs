@@ -2,10 +2,12 @@ using wms.Dto.Responses.Validation;
 using wms.Filters;
 
 using Application;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 builder.Services
