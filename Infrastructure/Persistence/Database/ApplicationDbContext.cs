@@ -7,6 +7,9 @@ namespace Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, IdentityRole<int>, int>
 {
+    
+    public DbSet<Category> Categories { get; set; }
+
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
