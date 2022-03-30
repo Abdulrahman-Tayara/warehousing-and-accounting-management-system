@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Requests;
 using wms.Dto.Responses.Common;
@@ -7,6 +8,10 @@ namespace wms.Controllers;
 
 public class AuthenticationController : ApiControllerBase
 {
+    public AuthenticationController(IMediator mediator) : base(mediator)
+    {
+    }
+
     [HttpPost("authenticate")]
     public ActionResult<BaseResponse<AuthenticatedUserViewModel>> Authenticate(AuthenticateRequestBody body)
     {

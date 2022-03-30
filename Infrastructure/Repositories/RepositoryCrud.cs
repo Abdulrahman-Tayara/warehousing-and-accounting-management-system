@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -21,6 +22,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     where TContext : DbContext
     where TEntity : BaseEntity<TKey>
     where TModel : class
+    where TKey : IEquatable<TKey>
 {
     protected readonly IMapper mapper;
     protected readonly DbSet<TModel> dbSet;
@@ -41,16 +43,34 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
             .ContinueWith(task => MapModelToEntity(task.Result.Entity));
     }
 
-    public IEnumerable<TEntity> GetAllAsync(Func<TEntity, bool>? filter = default)
+    public IEnumerable<TEntity> GetAll()
     {
-        if (filter == null)
+        return dbSet.AsQueryable()
+            .ProjectTo<TEntity>(mapper.ConfigurationProvider);
+    }
+
+    protected IEnumerable<TEntity> GetAllFiltered(Func<TModel, bool> filter)
+    {
+        return dbSet.Where(model => filter(model)).ProjectTo<TEntity>(mapper.ConfigurationProvider);
+    }
+
+    public Task<TEntity> GetFirstAsync(Func<TEntity, bool> filter)
+    {
+        return dbSet.FirstAsync(model => filter(MapModelToEntity(model)))
+            .ContinueWith(task => MapModelToEntity(task.Result));
+    }
+
+    public Task<TEntity> FindByIdAsync(TKey id)
+    {
+        var field = typeof(TModel).GetField("Id");
+        
+        if (field == null)
         {
-            return dbSet.AsQueryable()
-                .ProjectTo<TEntity>(mapper.ConfigurationProvider);
+            throw new ValidationException(typeof(TModel) + " has no Id field");
         }
 
-        return dbSet.Where(model => filter(MapModelToEntity(model)))
-            .ProjectTo<TEntity>(mapper.ConfigurationProvider);
+        return dbSet.FirstAsync(model => field.GetValue(model)!.Equals(id))
+            .ContinueWith(task => MapModelToEntity(task.Result));
     }
 
     protected TModel MapEntityToModel(TEntity entity) =>

@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Responses.Common;
 
@@ -7,6 +8,14 @@ namespace wms.Controllers;
 [Route("api/[controller]")]
 public class ApiControllerBase : ControllerBase
 {
+
+    protected IMediator Mediator;
+
+    public ApiControllerBase(IMediator mediator)
+    {
+        Mediator = mediator;
+    }
+
     [NonAction]
     public override OkObjectResult Ok(object? value)
     {

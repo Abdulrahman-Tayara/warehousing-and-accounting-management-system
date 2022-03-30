@@ -1,9 +1,8 @@
-using System.Reflection;
-using Application.Common.Mappings;
-using Application.Repositories;
+using Application.Commands.Users.CreateUser;
+using Application.Queries.Users;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Requests.Users;
 
@@ -11,42 +10,36 @@ namespace wms.Controllers;
 
 public class UsersController : ApiControllerBase
 {
-    private ILogger<UsersController> _logger;
-    private IMapper _mapper;
-    private readonly IUserRepository _userRepository;
+    private readonly ILogger<UsersController> _logger;
+    private readonly IMapper _mapper;
 
-    public UsersController(ILogger<UsersController> logger, IMapper mapper, IUserRepository userRepository)
+    public UsersController(ILogger<UsersController> logger, IMapper mapper,
+        IMediator mediator) : base(mediator)
     {
         _logger = logger;
         _mapper = mapper;
-        _userRepository = userRepository;
     }
 
     [HttpPost]
-    public Task<User> CreateUser(CreateUserRequest request)
+    public async Task<ActionResult<User>> CreateUser(CreateUserRequest request)
     {
-        var mapFromTypes = Assembly.GetExecutingAssembly().GetExportedTypes()
-            .Where(t => t.GetInterfaces().Any(i =>
-                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)))
-            .Select(t => t.Name)
-            .ToList();
-        
-        _logger.LogInformation(mapFromTypes.Count.ToString());
-        
-        var user = _mapper.Map<User>(new ApplicationIdentityUser()
-        {
-            Id = 1,
-            UserName = "Abd",
-            PasswordHash = "123"
-        });
-        
-        _logger.LogInformation("User {} {}", user.UserName, user.PasswordHash);
+        var command = _mapper.Map<CreateUserCommand>(request);
 
-        return Task.Run<User>(() => user);
-        // return _userRepository.CreateAsync(new User()
-        // {
-        //     PasswordHash = request.Password,
-        //     UserName = request.Username
-        // });
+        var userId = await Mediator.Send(command);
+
+        var user = await Mediator.Send(new GetUserQuery()
+        {
+            Id = userId
+        });
+
+        return Ok(user);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    {
+        var result = await Mediator.Send(new GetAllUsersQuery());
+
+        return Ok(result);
     }
 }

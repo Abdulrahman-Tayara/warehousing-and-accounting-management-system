@@ -5,6 +5,7 @@ using Domain.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -36,16 +37,15 @@ public class UserRepository : IUserRepository
         throw new Exception(result.GetErrorsAsString());
     }
 
-    public IEnumerable<User> GetAllAsync(Func<User, bool>? filter = default)
+    public IEnumerable<User> GetAll()
     {
-        if (filter == null)
-        {
-            return _userManager.Users
-                .ProjectTo<User>(_mapper.ConfigurationProvider);
-        }
-
         return _userManager.Users
-            .Where(model => filter(_mapper.Map<User>(model)))
             .ProjectTo<User>(_mapper.ConfigurationProvider);
+    }
+
+    public Task<User> FindByIdAsync(int id)
+    {
+        return _userManager.FindByIdAsync(id.ToString())
+            .ContinueWith(task => _mapper.Map<User>(task.Result));
     }
 }

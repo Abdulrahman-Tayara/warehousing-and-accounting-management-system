@@ -11,5 +11,7 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
 {
     Task<TEntity> CreateAsync(TEntity entity);
 
-    IEnumerable<TEntity> GetAllAsync(Func<TEntity, bool>? filter = default);
+    IEnumerable<TEntity> GetAll();
+
+    Task<TEntity> FindByIdAsync(TKey id);
 }

@@ -5,12 +5,20 @@ namespace Application.Common.Mappings;
 
 public class MappingProfiles : Profile
 {
-    public MappingProfiles()
+    public MappingProfiles(Assembly[] assemblies)
     {
-        AddProfiles(Assembly.GetExecutingAssembly());
+        AddProfiles(assemblies);
     }
 
-    private void AddProfiles(Assembly assembly)
+    private void AddProfiles(Assembly[] assemblies)
+    {
+        foreach (var assembly in assemblies)
+        {
+            AddAssemblyProfiles(assembly);
+        }
+    }
+
+    private void AddAssemblyProfiles(Assembly assembly)
     {
         var mapFromTypes = assembly.GetExportedTypes()
             .Where(t => t.GetInterfaces().Any(i =>

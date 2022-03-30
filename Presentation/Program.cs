@@ -1,3 +1,4 @@
+using System.Reflection;
 using wms.Dto.Responses.Validation;
 using wms.Filters;
 
@@ -6,9 +7,13 @@ using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+builder.Services.AddApplication()
+    .AddApplicationAutomapper(new []
+    {
+        Assembly.GetExecutingAssembly(),
+        Assembly.GetAssembly(typeof(Infrastructure.DependencyInjection))!
+    });
 
 builder.Services
     .AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
