@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace wms.Dto.Responses.Common;
+namespace wms.Dto.Common.Responses;
 
 public class BaseResponse<T>
 {

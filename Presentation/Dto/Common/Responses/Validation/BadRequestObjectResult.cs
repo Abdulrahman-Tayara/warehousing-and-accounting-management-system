@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace wms.Dto.Responses.Validation;
+namespace wms.Dto.Common.Responses.Validation;
 
 public class BadRequestObjectResult : ObjectResult
 {

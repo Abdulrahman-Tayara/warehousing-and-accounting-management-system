@@ -3,10 +3,11 @@ using Application.Queries.Users;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using wms.Dto.Requests.Users;
+using wms.Dto.Users;
 
-namespace wms.Controllers;
+namespace wms.Controllers.Api;
 
 public class UsersController : ApiControllerBase
 {
@@ -36,6 +37,7 @@ public class UsersController : ApiControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
         var result = await Mediator.Send(new GetAllUsersQuery());

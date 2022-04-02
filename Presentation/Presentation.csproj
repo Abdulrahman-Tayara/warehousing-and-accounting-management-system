@@ -21,12 +21,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />
+      <ProjectReference Include="..\Authentication\Authentication.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Dto\Responses\Authentication" />
-      <Folder Include="Dto\Responses\Category" />
+      <Folder Include="Dto\Common" />
     </ItemGroup>
 
 </Project>

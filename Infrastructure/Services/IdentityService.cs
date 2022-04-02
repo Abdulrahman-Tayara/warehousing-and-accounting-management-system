@@ -1,13 +1,13 @@
 using Application.Exceptions;
+using Application.Services.Identity;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Extensions;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services;
 
-public class IdentityService
+public class IdentityService : IIdentityService
 {
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationIdentityUser> _userManager;
@@ -18,26 +18,20 @@ public class IdentityService
         _userManager = userManager;
     }
 
-    public async Task<User> CreateUserAsync(User user)
+    public async Task<bool> CheckPasswordAsync(User user, string password)
     {
-        var identityUser = _mapper.Map<User, ApplicationIdentityUser>(user);
-
-        var result = await _userManager.CreateAsync(identityUser);
-
-        if (result.Succeeded)
-            return _mapper.Map<ApplicationIdentityUser, User>(identityUser);
-
-        throw new Exception(result.GetErrorsAsString());
+        var identityUser = await _userManager.FindByIdAsync(user.Id.ToString());
+        
+        return await _userManager.CheckPasswordAsync(identityUser, password);
     }
 
-    public async Task<User> FindUserByIdAsync(int id)
+    public async Task<User> FindUserByNameAsync(string username)
     {
-        var identityUser = await _userManager.FindByIdAsync(id.ToString());
+        var identityUser = await _userManager.FindByNameAsync(username);
 
         if (identityUser == null)
             throw new NotFoundException();
 
         return _mapper.Map<ApplicationIdentityUser, User>(identityUser);
     }
-    
 }

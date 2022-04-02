@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace wms.Dto.ViewModels;
+namespace wms.Dto.Category;
 
-public class CategoryViewModel
+public class CreateCategoryRequestBody
 {
     [Required] public string Id { get; set; }
 

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using wms.Dto.Responses.Common;
 
-namespace wms.Dto.Responses.Validation;
+namespace wms.Dto.Common.Responses.Validation;
 
 public class BadRequestResponse : NoDataResponse
 {

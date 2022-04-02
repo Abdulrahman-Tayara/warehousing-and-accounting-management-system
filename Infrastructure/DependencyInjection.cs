@@ -1,11 +1,11 @@
 using Application.Repositories;
+using Application.Services.Identity;
 using Infrastructure.Models;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence.Database;
-using Microsoft.AspNetCore.Builder;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,16 +15,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseInMemoryDatabase("wms_db");
-        });
-        
-        // services.AddSqlServer<ApplicationDbContext>(configuration.GetConnectionString("DefaultConnection"));
+        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("wms_db"); });
+        else
+            services.AddSqlServer<ApplicationDbContext>(configuration.GetConnectionString("DefaultConnection"));
 
         services.AddUserIdentityServer();
         services.AddRepositories();
-        
+        services.AddServices();
+
         return services;
     }
 
@@ -40,9 +39,14 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
     }
-    
+
     static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+    }
+
+    static void AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IIdentityService, IdentityService>();
     }
 }

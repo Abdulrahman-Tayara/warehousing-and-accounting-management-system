@@ -1,4 +1,4 @@
-namespace wms.Dto.Responses.Common;
+namespace wms.Dto.Common.Responses;
 
 public class NoDataResponse : BaseResponse<object>
 {

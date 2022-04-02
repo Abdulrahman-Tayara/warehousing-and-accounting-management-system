@@ -29,7 +29,7 @@ public class UserRepository : IUserRepository
     {
         var identityUser = _mapper.Map<User, ApplicationIdentityUser>(user);
 
-        var result = await _userManager.CreateAsync(identityUser);
+        var result = await _userManager.CreateAsync(identityUser, user.PasswordHash);
 
         if (result.Succeeded)
             return _mapper.Map<ApplicationIdentityUser, User>(identityUser);

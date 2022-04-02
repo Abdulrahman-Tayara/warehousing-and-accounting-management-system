@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Mappings;
+using Authentication.Dto;
 
-namespace wms.Dto.Requests;
+namespace wms.Dto.Authentication;
 
-public class AuthenticateRequestBody
+public class LoginRequest : IMapFrom<JwtLoginRequest>
 {
     [Required] public string UserName { get; set; }
 

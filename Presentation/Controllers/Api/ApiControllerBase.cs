@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using wms.Dto.Responses.Common;
+using wms.Dto.Common.Responses;
 
-namespace wms.Controllers;
+namespace wms.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]

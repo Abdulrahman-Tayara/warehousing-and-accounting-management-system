@@ -1,7 +1,7 @@
 using Application.Commands.Users.CreateUser;
 using Application.Common.Mappings;
 
-namespace wms.Dto.Requests.Users;
+namespace wms.Dto.Users;
 
 public class CreateUserRequest : IMapFrom<CreateUserCommand>
 {

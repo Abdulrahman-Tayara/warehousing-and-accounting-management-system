@@ -1,9 +1,8 @@
 using System.Reflection;
-using wms.Dto.Responses.Validation;
-using wms.Filters;
-
 using Application;
+using Authentication;
 using Infrastructure;
+using wms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,29 +13,21 @@ builder.Services.AddApplication()
         Assembly.GetExecutingAssembly(),
         Assembly.GetAssembly(typeof(Infrastructure.DependencyInjection))!
     });
+builder.Services.AddApplicationAuthentication(builder.Configuration);
 
 builder.Services
-    .AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory =
-            actionContext => new BadRequestObjectResult(actionContext.ModelState);
-    });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    .AddApplicationControllers()
+    .AddSwaggerDocumentation();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwaggerMiddlewares();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
