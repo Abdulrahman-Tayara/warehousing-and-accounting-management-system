@@ -20,5 +20,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 RUN ls -l
-# ENTRYPOINT ["dotnet", "wms.Presentation.dll"]
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet HerokuApp.dll
+# ENTRYPOINT ["dotnet", "Presentation.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Presentation.dll
