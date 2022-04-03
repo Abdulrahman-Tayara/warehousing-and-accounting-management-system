@@ -18,3 +18,5 @@ docker-build:
   - echo "Docker Image ID is $(cat imageid.txt)"
   - |-
     curl -X PATCH https://api.heroku.com/apps/warehouse-management-system0/formation --header "Content-Type: application/json" --header "Accept: application/vnd.heroku+json; version=3.docker-releases" --header "Authorization: Bearer ${HEROKU_TOKEN}" --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid.txt)'" } ] }'
+  only:
+    - master

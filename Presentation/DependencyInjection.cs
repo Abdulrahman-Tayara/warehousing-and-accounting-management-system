@@ -51,10 +51,10 @@ public static class DependencyInjection
 
     public static void UseSwaggerMiddlewares(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
+        // if (app.Environment.IsDevelopment())
+        // {
             app.UseSwagger();
             app.UseSwaggerUI();
-        }
+        // }
     }
 }
