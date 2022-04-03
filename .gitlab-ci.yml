@@ -1,0 +1,20 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - build
+  
+docker-build:
+  stage: build
+  script:
+  - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/warehouse-management-system0/wms-api .
+  - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+  - docker push registry.heroku.com/warehouse-management-system0/wms-api
+  - apk add --no-cache curl
+  - echo "Docker Image ID is $(cat imageid.txt)"
+  - |-
+    curl -X PATCH https://api.heroku.com/apps/warehouse-management-system0/formation --header "Content-Type: application/json" --header "Accept: application/vnd.heroku+json; version=3.docker-releases" --header "Authorization: Bearer ${HEROKU_TOKEN}" --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid.txt)'" } ] }'
