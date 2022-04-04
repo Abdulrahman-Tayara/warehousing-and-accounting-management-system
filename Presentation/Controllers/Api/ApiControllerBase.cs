@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common.Responses;
@@ -8,12 +9,13 @@ namespace wms.Controllers.Api;
 [Route("api/[controller]")]
 public class ApiControllerBase : ControllerBase
 {
-
     protected IMediator Mediator;
+    protected IMapper Mapper;
 
-    public ApiControllerBase(IMediator mediator)
+    public ApiControllerBase(IMediator mediator, IMapper mapper)
     {
         Mediator = mediator;
+        Mapper = mapper;
     }
 
     [NonAction]

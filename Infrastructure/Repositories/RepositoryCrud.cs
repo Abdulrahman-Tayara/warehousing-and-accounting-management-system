@@ -12,7 +12,7 @@ public abstract class RepositoryCrud<TEntity, TModel> : RepositoryCrudBase<Appli
     where TEntity : BaseEntity<int>
     where TModel : class
 {
-    public RepositoryCrud(ApplicationDbContext dbContext, Mapper mapper) : base(dbContext, mapper)
+    public RepositoryCrud(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
     }
 }

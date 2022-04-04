@@ -12,19 +12,17 @@ namespace wms.Controllers.Api;
 public class UsersController : ApiControllerBase
 {
     private readonly ILogger<UsersController> _logger;
-    private readonly IMapper _mapper;
 
     public UsersController(ILogger<UsersController> logger, IMapper mapper,
-        IMediator mediator) : base(mediator)
+        IMediator mediator) : base(mediator, mapper)
     {
         _logger = logger;
-        _mapper = mapper;
     }
 
     [HttpPost]
     public async Task<ActionResult<User>> CreateUser(CreateUserRequest request)
     {
-        var command = _mapper.Map<CreateUserCommand>(request);
+        var command = Mapper.Map<CreateUserCommand>(request);
 
         var userId = await Mediator.Send(command);
 

@@ -14,7 +14,7 @@ public class AuthenticationController : ApiControllerBase
     private readonly IAuthenticationService _authenticationService;
 
     public AuthenticationController(IMediator mediator, IMapper mapper,
-        IAuthenticationService authenticationService) : base(mediator)
+        IAuthenticationService authenticationService) : base(mediator, mapper)
     {
         _authenticationService = authenticationService;
         _mapper = mapper;

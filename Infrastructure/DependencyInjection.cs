@@ -1,3 +1,4 @@
+using System.Reflection;
 using Application.Repositories;
 using Application.Services.Identity;
 using Infrastructure.Models;
@@ -15,6 +16,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("wms_db"); });
         else
@@ -27,7 +30,7 @@ public static class DependencyInjection
         return services;
     }
 
-    static void AddUserIdentityServer(this IServiceCollection services)
+    private static void AddUserIdentityServer(this IServiceCollection services)
     {
         services.AddDefaultIdentity<ApplicationIdentityUser>(options =>
             {
@@ -40,12 +43,13 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
     }
 
-    static void AddRepositories(this IServiceCollection services)
+    private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
     }
 
-    static void AddServices(this IServiceCollection services)
+    private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IIdentityService, IdentityService>();
     }
