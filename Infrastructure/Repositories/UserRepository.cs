@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -22,7 +23,7 @@ public class UserRepository : IUserRepository
 
     public Task SaveChanges()
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public async Task<User> CreateAsync(User user)
@@ -46,6 +47,24 @@ public class UserRepository : IUserRepository
     public Task<User> FindByIdAsync(int id)
     {
         return _userManager.FindByIdAsync(id.ToString())
-            .ContinueWith(task => _mapper.Map<User>(task.Result));
+            .ContinueWith(task =>
+            {
+                if (task.Result == null)
+                    throw new NotFoundException("user", id);
+                
+                return _mapper.Map<User>(task.Result);
+            });
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var model = await _userManager.FindByIdAsync(id.ToString());
+
+        if (model == null)
+        {
+            throw new NotFoundException();
+        }
+        
+        await _userManager.DeleteAsync(model);
     }
 }

@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Exceptions;
 using Application.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
+using Infrastructure.Models;
 using Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,17 +62,35 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
             .ContinueWith(task => MapModelToEntity(task.Result));
     }
 
-    public Task<TEntity> FindByIdAsync(TKey id)
+    public async Task<TEntity> FindByIdAsync(TKey id)
     {
-        var field = typeof(TModel).GetField("Id");
-        
-        if (field == null)
+        try
         {
-            throw new ValidationException(typeof(TModel) + " has no Id field");
+            var model = await _findByIdAsync(id);
+            return MapModelToEntity(model);
         }
+        catch (InvalidOperationException e)
+        {
+            throw new NotFoundException();
+        }
+    }
 
-        return dbSet.FirstAsync(model => field.GetValue(model)!.Equals(id))
-            .ContinueWith(task => MapModelToEntity(task.Result));
+    private  Task<TModel> _findByIdAsync(TKey id)
+    {
+        return dbSet.FirstAsync(model => model.Id().Equals(id));
+    }
+
+    public async Task DeleteAsync(TKey id)
+    {
+        try
+        {
+            var model = await _findByIdAsync(id);
+            dbSet.Remove(model);
+        }
+        catch (InvalidOperationException _)
+        {
+            throw new NotFoundException();
+        }
     }
 
     protected TModel MapEntityToModel(TEntity entity) =>

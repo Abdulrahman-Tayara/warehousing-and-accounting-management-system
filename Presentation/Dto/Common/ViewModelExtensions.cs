@@ -9,8 +9,7 @@ public static class ViewModelExtensions
     public static UserViewModel ToViewModel(this User user, IMapper mapper)
     {
         var vm = mapper.Map<UserViewModel>(user);
-
-        Console.WriteLine("User id" + vm.Id);
+        
         return vm;
     }
     

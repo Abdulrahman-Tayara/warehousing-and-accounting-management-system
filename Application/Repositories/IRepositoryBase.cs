@@ -14,4 +14,6 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
     IEnumerable<TEntity> GetAll();
 
     Task<TEntity> FindByIdAsync(TKey id);
+
+    Task DeleteAsync(TKey id);
 }

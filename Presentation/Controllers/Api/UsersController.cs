@@ -1,7 +1,7 @@
 using Application.Commands.Users.CreateUser;
+using Application.Commands.Users.DeleteUser;
 using Application.Queries.Users;
 using AutoMapper;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,5 +43,21 @@ public class UsersController : ApiControllerBase
         var result = await Mediator.Send(new GetAllUsersQuery());
 
         return Ok(result.ToViewModels(Mapper));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<BaseResponse<UserViewModel>>> GetUser(int id)
+    {
+        var user = await Mediator.Send(new GetUserQuery {Id = id});
+
+        return Ok(user.ToViewModel(Mapper));
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<BaseResponse<object?>>> DeleteUser(int id)
+    {
+        await Mediator.Send(new DeleteUserCommand {Id = id});
+
+        return Ok(null);
     }
 }
