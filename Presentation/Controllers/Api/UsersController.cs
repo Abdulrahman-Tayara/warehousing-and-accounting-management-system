@@ -5,6 +5,8 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using wms.Dto.Common;
+using wms.Dto.Common.Responses;
 using wms.Dto.Users;
 
 namespace wms.Controllers.Api;
@@ -20,7 +22,7 @@ public class UsersController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(CreateUserRequest request)
+    public async Task<ActionResult<BaseResponse<UserViewModel>>> CreateUser(CreateUserRequest request)
     {
         var command = Mapper.Map<CreateUserCommand>(request);
 
@@ -31,15 +33,15 @@ public class UsersController : ApiControllerBase
             Id = userId
         });
 
-        return Ok(user);
+        return Ok(user.ToViewModel(Mapper));
     }
 
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<BaseResponse<IEnumerable<UserViewModel>>>> GetUsers()
     {
         var result = await Mediator.Send(new GetAllUsersQuery());
 
-        return Ok(result);
+        return Ok(result.ToViewModels(Mapper));
     }
 }

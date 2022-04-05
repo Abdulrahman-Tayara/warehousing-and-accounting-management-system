@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using wms.Dto.Common.Responses.Validation;
 using wms.Filters;
+using wms.Utils;
 
 namespace wms;
 
@@ -10,6 +11,10 @@ public static class DependencyInjection
     {
         services
             .AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
+            })
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.InvalidModelStateResponseFactory =
