@@ -6,4 +6,9 @@ public class User : BaseEntity<int>
 
     public string PasswordHash { get; set; }
 
+    public void Update(User user)
+    {
+        UserName = user.UserName;
+    }
+    
 }

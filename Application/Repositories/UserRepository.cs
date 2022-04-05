@@ -4,5 +4,6 @@ namespace Application.Repositories;
 
 public interface IUserRepository : IRepositoryCrud<User, int>
 {
-    
+    Task<User> Update(User user);
+
 }

@@ -6,7 +6,6 @@ using Domain.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -51,7 +50,7 @@ public class UserRepository : IUserRepository
             {
                 if (task.Result == null)
                     throw new NotFoundException("user", id);
-                
+
                 return _mapper.Map<User>(task.Result);
             });
     }
@@ -64,7 +63,23 @@ public class UserRepository : IUserRepository
         {
             throw new NotFoundException();
         }
-        
+
         await _userManager.DeleteAsync(model);
+    }
+
+    public async Task<User> Update(User user)
+    {
+        var model =  await _userManager.FindByIdAsync(user.Id.ToString());
+
+        model.UserName = user.UserName;
+        
+        var result = await _userManager.UpdateAsync(model);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception(result.GetErrorsAsString());
+        }
+
+        return _mapper.Map<User>(model);
     }
 }

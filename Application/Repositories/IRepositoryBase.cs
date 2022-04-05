@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Domain.Entities;
 
 namespace Application.Repositories;
@@ -13,6 +14,8 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
 
     IEnumerable<TEntity> GetAll();
 
+    
+    /// <exception cref="NotFoundException"></exception>
     Task<TEntity> FindByIdAsync(TKey id);
 
     Task DeleteAsync(TKey id);
