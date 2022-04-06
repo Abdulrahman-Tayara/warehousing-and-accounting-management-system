@@ -1,10 +1,11 @@
 using System.Text.Json.Serialization;
 using Application.Common.Mappings;
 using Domain.Entities;
+using wms.Dto.Common;
 
 namespace wms.Dto.Users;
 
-public class UserViewModel : IMapFrom<User>
+public class UserViewModel : IMapFrom<User>, IViewModel
 {
     public int Id { get; set; }
     

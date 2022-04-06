@@ -4,7 +4,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Authentication;
+using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Users;
 
 namespace wms.Controllers.Api;
 
@@ -27,7 +29,7 @@ public class AuthenticationController : ApiControllerBase
 
         return Ok(new LoginResponse()
         {
-            User = result.User,
+            User = result.User.ToViewModel<UserViewModel>(Mapper),
             Token = result.Token
         });
     }

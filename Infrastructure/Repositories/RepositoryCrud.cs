@@ -36,14 +36,13 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         dbSet = dbContext.Set<TModel>();
     }
 
-    public Task<TEntity> CreateAsync(TEntity entity)
+    public async Task<TEntity> CreateAsync(TEntity entity)
     {
         var model = MapEntityToModel(entity);
 
-        var result = dbSet.AddAsync(model);
+        var result = await dbSet.AddAsync(model);
 
-        return result.AsTask()
-            .ContinueWith(task => MapModelToEntity(task.Result.Entity));
+        return MapModelToEntity(result.Entity);
     }
 
     public IEnumerable<TEntity> GetAll()
@@ -72,13 +71,14 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         }
         catch (InvalidOperationException e)
         {
+            Console.WriteLine(e.StackTrace);
             throw new NotFoundException();
         }
     }
 
     private  Task<TModel> _findByIdAsync(TKey id)
     {
-        return dbSet.FirstAsync(model => model.Id().Equals(id));
+        return dbSet.FirstAsync(model => model.Id.Equals(id));
     }
 
     public async Task DeleteAsync(TKey id)

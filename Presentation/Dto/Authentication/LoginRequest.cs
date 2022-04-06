@@ -6,7 +6,7 @@ namespace wms.Dto.Authentication;
 
 public class LoginRequest : IMapFrom<JwtLoginRequest>
 {
-    [Required] public string UserName { get; set; }
+    [Required] public string Username { get; set; }
 
     [Required] public string Password { get; set; }
 }

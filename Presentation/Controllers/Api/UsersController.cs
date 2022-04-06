@@ -35,7 +35,7 @@ public class UsersController : ApiControllerBase
             Id = userId
         });
 
-        return Ok(user.ToViewModel(Mapper));
+        return Ok(user.ToViewModel<UserViewModel>(Mapper));
     }
 
     [HttpGet]
@@ -44,7 +44,7 @@ public class UsersController : ApiControllerBase
     {
         var result = await Mediator.Send(new GetAllUsersQuery());
 
-        return Ok(result.ToViewModels(Mapper));
+        return Ok(result.ToViewModels<UserViewModel>(Mapper));
     }
 
     [HttpGet("{id}")]
@@ -52,7 +52,7 @@ public class UsersController : ApiControllerBase
     {
         var user = await Mediator.Send(new GetUserQuery {Id = id});
 
-        return Ok(user.ToViewModel(Mapper));
+        return Ok(user.ToViewModel<UserViewModel>(Mapper));
     }
 
     [HttpDelete("{id}")]
@@ -73,6 +73,6 @@ public class UsersController : ApiControllerBase
 
         var user =  await Mediator.Send(new GetUserQuery {Id = id});
 
-        return Ok(user.ToViewModel(Mapper));
+        return Ok(user.ToViewModel<UserViewModel>(Mapper));
     }
 }
