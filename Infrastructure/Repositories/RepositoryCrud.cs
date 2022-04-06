@@ -6,13 +6,14 @@ using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Models;
 using Infrastructure.Persistence.Database;
+using Infrastructure.Persistence.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public abstract class RepositoryCrud<TEntity, TModel> : RepositoryCrudBase<ApplicationDbContext, TEntity, int, TModel>
     where TEntity : BaseEntity<int>
-    where TModel : class
+    where TModel : class, IDbModel
 {
     public RepositoryCrud(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
@@ -23,7 +24,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     IRepositoryCrud<TEntity, TKey>
     where TContext : DbContext
     where TEntity : BaseEntity<TKey>
-    where TModel : class
+    where TModel : class, IDbModel
     where TKey : IEquatable<TKey>
 {
     protected readonly IMapper mapper;

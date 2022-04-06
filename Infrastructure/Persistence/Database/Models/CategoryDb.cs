@@ -5,7 +5,7 @@ namespace Infrastructure.Persistence.Database.Models;
 
 
 [Table("Categories")]
-public class CategoryDb
+public class CategoryDb : IDbModel
 {
     [Key]
     public int CategoryId { get; set; }

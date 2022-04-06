@@ -4,7 +4,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Extensions;
-using Infrastructure.Models;
+using Infrastructure.Persistence.Database.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Repositories;
