@@ -79,13 +79,21 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         return dbSet.FirstAsync(model => model.Id.Equals(id));
     }
 
-    public Task<TEntity> Update(TEntity entity)
+    public async Task<TEntity> Update(TEntity entity)
     {
-        var model = MapEntityToModel(entity);
+        try
+        {
+            var modelInDb = await _findByIdAsync(entity.Id);
 
-        var result = dbSet.Update(model);
-
-        return Task.FromResult(MapModelToEntity(result.Entity));
+            dbContext.Entry(modelInDb).CurrentValues.SetValues(entity);
+            
+            return entity;
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine(e.StackTrace);
+            throw new NotFoundException();
+        }
     }
 
     public async Task DeleteAsync(TKey id)
@@ -95,8 +103,9 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
             var model = await _findByIdAsync(id);
             dbSet.Remove(model);
         }
-        catch (InvalidOperationException _)
+        catch (InvalidOperationException e)
         {
+            Console.WriteLine(e.StackTrace);
             throw new NotFoundException();
         }
     }
