@@ -17,7 +17,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        
+
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("wms_db"); });
         else
@@ -48,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+        services.AddScoped<IUnitRepository, UnitRepository>();
     }
 
     private static void AddServices(this IServiceCollection services)

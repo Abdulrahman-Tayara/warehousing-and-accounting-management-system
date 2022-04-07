@@ -10,6 +10,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
 
     public DbSet<ManufacturerDb> Manufacturers { get; set; }
     public DbSet<CategoryDb> Categories { get; set; }
+    public DbSet<UnitDb> Units { get; set; }
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
