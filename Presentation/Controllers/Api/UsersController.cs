@@ -3,7 +3,6 @@ using Application.Commands.Users.DeleteUser;
 using Application.Commands.Users.UpdateUser;
 using Application.Queries.Users;
 using AutoMapper;
-using Infrastructure.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

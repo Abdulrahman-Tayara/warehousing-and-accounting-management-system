@@ -2,7 +2,6 @@ using Application.Exceptions;
 using Application.Services.Identity;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Models;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.AspNetCore.Identity;
 

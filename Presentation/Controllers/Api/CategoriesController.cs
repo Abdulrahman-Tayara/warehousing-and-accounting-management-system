@@ -1,7 +1,7 @@
 using Application.Commands.Categories;
 using Application.Queries.Categories;
 using AutoMapper;
-using Infrastructure.Models;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

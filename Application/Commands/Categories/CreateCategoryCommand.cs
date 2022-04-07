@@ -27,6 +27,8 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
         var createdCategory = await _repository.CreateAsync(category);
 
+        await _repository.SaveChanges();
+
         return createdCategory.Id;
     }
 }

@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using Application.Exceptions;
 using Application.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
-using Infrastructure.Models;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.EntityFrameworkCore;

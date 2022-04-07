@@ -10,7 +10,6 @@ using wms.Dto.Manufacturers;
 
 namespace wms.Controllers.Api;
 
-[Authorize]
 public class ManufacturersController : ApiControllerBase
 {
     public ManufacturersController(IMediator mediator, IMapper mapper) : base(mediator, mapper)

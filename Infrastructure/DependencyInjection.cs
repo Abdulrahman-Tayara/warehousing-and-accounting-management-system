@@ -1,7 +1,6 @@
 using System.Reflection;
 using Application.Repositories;
 using Application.Services.Identity;
-using Infrastructure.Models;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Repositories;
