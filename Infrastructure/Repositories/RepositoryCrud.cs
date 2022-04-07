@@ -74,9 +74,18 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         }
     }
 
-    private  Task<TModel> _findByIdAsync(TKey id)
+    private Task<TModel> _findByIdAsync(TKey id)
     {
         return dbSet.FirstAsync(model => model.Id.Equals(id));
+    }
+
+    public Task<TEntity> Update(TEntity entity)
+    {
+        var model = MapEntityToModel(entity);
+
+        var result = dbSet.Update(model);
+
+        return Task.FromResult(MapModelToEntity(result.Entity));
     }
 
     public async Task DeleteAsync(TKey id)
