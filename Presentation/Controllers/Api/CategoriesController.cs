@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Category;
+using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 
 namespace wms.Controllers.Api;
@@ -24,10 +25,16 @@ public class CategoriesController : ApiControllerBase
 
         var categoryId = await Mediator.Send(command);
 
-        var query = new GetCategoryQuery {Id = categoryId};
+        return await GetCategory(categoryId);
+    }
 
-        var queryResult = await Mediator.Send(query);
+    [HttpGet]
+    public async Task<ActionResult<BaseResponse<Category>>> GetCategory(int id)
+    {
+        var query = new GetCategoryQuery {Id = id};
 
-        return Ok(queryResult);
+        var categoryEntity = await Mediator.Send(query);
+
+        return Ok(categoryEntity.ToViewModel<CategoryViewModel>(Mapper));
     }
 }
