@@ -1,7 +1,6 @@
 using Application.Commands.Categories;
 using Application.Queries.Categories;
 using AutoMapper;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<Category>>> CreateCategory(CreateCategoryRequest request)
+    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> CreateCategory(CreateCategoryRequest request)
     {
         var command = Mapper.Map<CreateCategoryCommand>(request);
 
@@ -28,13 +27,23 @@ public class CategoriesController : ApiControllerBase
         return await GetCategory(categoryId);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<BaseResponse<Category>>> GetCategory(int id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> GetCategory(int id)
     {
         var query = new GetCategoryQuery {Id = id};
 
         var categoryEntity = await Mediator.Send(query);
 
         return Ok(categoryEntity.ToViewModel<CategoryViewModel>(Mapper));
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<BaseResponse<IEnumerable<CategoryViewModel>>>> GetCategories()
+    {
+        var query = new GetAllCategoriesQuery();
+
+        var categoryEntities = await Mediator.Send(query);
+
+        return Ok(categoryEntities.ToViewModels<CategoryViewModel>(Mapper));
     }
 }
