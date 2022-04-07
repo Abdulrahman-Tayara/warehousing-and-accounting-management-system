@@ -46,4 +46,16 @@ public class CategoriesController : ApiControllerBase
 
         return Ok(categoryEntities.ToViewModels<CategoryViewModel>(Mapper));
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> CreateCategory(UpdateCategoryRequest request,
+        int id)
+    {
+        var command = Mapper.Map<UpdateCategoryCommand>(request);
+        command.Id = id;
+
+        var updatedCategoryId = await Mediator.Send(command);
+
+        return await GetCategory(updatedCategoryId);
+    }
 }
