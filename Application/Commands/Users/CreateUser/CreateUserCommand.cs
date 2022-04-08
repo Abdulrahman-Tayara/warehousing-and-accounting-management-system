@@ -1,37 +1,28 @@
+using Application.Commands.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Commands.Users.CreateUser;
 
-public class CreateUserCommand : IRequest<int>
+public class CreateUserCommand : ICreateEntityCommand<int>
 {
     public string Username { get; set; }
     
     public string Password { get; set; }
 }
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+public class CreateUserCommandHandler : CreateEntityCommandHandler<CreateUserCommand, User, int, IUserRepository>
 {
-    private readonly IUserRepository _userRepository;
-
-    public CreateUserCommandHandler(IUserRepository userRepository)
+    public CreateUserCommandHandler(IUserRepository repository) : base(repository)
     {
-        _userRepository = userRepository;
     }
 
-    public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    protected override User CreateEntity(CreateUserCommand request)
     {
-        var user = new User()
+        return new User
         {
             UserName = request.Username,
             PasswordHash = request.Password
         };
-
-        var createdUser = await _userRepository.CreateAsync(user);
-
-        await _userRepository.SaveChanges();
-
-        return createdUser.Id;
     }
 }

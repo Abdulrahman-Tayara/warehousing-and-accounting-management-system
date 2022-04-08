@@ -1,37 +1,28 @@
+using Application.Commands.Common;
 using Application.Repositories;
-using MediatR;
-using Unit = Domain.Entities.Unit;
+using Domain.Entities;
 
 namespace Application.Commands.Units;
 
-public class CreateUnitCommand : IRequest<int>
+public class CreateUnitCommand : ICreateEntityCommand<int>
 {
     public string Name { get; init; }
 
     public int Value { get; set; }
 }
 
-public class CreateUnitCommandHandler : IRequestHandler<CreateUnitCommand, int>
+public class CreateUnitCommandHandler : CreateEntityCommandHandler<CreateUnitCommand, Unit, int, IUnitRepository>
 {
-    private readonly IUnitRepository _repository;
-
-    public CreateUnitCommandHandler(IUnitRepository repository)
+    public CreateUnitCommandHandler(IUnitRepository repository) : base(repository)
     {
-        _repository = repository;
     }
 
-    public async Task<int> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
+    protected override Unit CreateEntity(CreateUnitCommand request)
     {
-        var unit = new Unit
+        return new Unit
         {
             Name = request.Name,
             Value = request.Value
         };
-
-        var createdUnit = await _repository.CreateAsync(unit);
-
-        await _repository.SaveChanges();
-
-        return createdUnit.Id;
     }
 }

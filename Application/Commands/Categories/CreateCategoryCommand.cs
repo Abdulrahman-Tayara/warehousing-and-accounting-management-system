@@ -1,34 +1,25 @@
+using Application.Commands.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Commands.Categories;
 
-public class CreateCategoryCommand : IRequest<int>
+public class CreateCategoryCommand : ICreateEntityCommand<int>
 {
     public string Name { get; init; }
 }
 
-public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
+public class CreateCategoryCommandHandler : CreateEntityCommandHandler<CreateCategoryCommand, Category, int, ICategoryRepository>
 {
-    private readonly ICategoryRepository _repository;
-
-    public CreateCategoryCommandHandler(ICategoryRepository repository)
+    public CreateCategoryCommandHandler(ICategoryRepository repository) : base(repository)
     {
-        _repository = repository;
     }
 
-    public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    protected override Category CreateEntity(CreateCategoryCommand request)
     {
-        var category = new Category
+        return new Category
         {
             Name = request.Name
         };
-
-        var createdCategory = await _repository.CreateAsync(category);
-
-        await _repository.SaveChanges();
-
-        return createdCategory.Id;
     }
 }

@@ -1,10 +1,10 @@
+using Application.Commands.Common;
 using Application.Repositories;
-using MediatR;
-using Unit = Domain.Entities.Unit;
+using Domain.Entities;
 
 namespace Application.Commands.Units;
 
-public class UpdateUnitCommand : IRequest<int>
+public class UpdateUnitCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }
 
@@ -13,23 +13,14 @@ public class UpdateUnitCommand : IRequest<int>
     public int Value { get; set; }
 }
 
-public class UpdateUnitCommandHandler : IRequestHandler<UpdateUnitCommand, int>
+public class UpdateUnitCommandHandler : UpdateEntityCommandHandler<UpdateUnitCommand, Unit, int, IUnitRepository>
 {
-    private readonly IUnitRepository _repository;
-
-    public UpdateUnitCommandHandler(IUnitRepository repository)
+    public UpdateUnitCommandHandler(IUnitRepository repository) : base(repository)
     {
-        _repository = repository;
     }
 
-    public async Task<int> Handle(UpdateUnitCommand request, CancellationToken cancellationToken)
+    protected override Unit GetEntityToUpdate(UpdateUnitCommand request)
     {
-        var updatingEntity = new Unit {Id = request.Id, Name = request.Name, Value = request.Value};
-
-        await _repository.Update(updatingEntity);
-
-        await _repository.SaveChanges();
-
-        return updatingEntity.Id;
+        return new Unit {Id = request.Id, Name = request.Name, Value = request.Value};
     }
 }

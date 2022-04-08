@@ -1,33 +1,24 @@
+using Application.Commands.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Commands.Categories;
 
-public class UpdateCategoryCommand : IRequest<int>
+public class UpdateCategoryCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }
 
     public string Name { get; init; }
 }
 
-public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, int>
+public class UpdateCategoryCommandHandler : UpdateEntityCommandHandler<UpdateCategoryCommand, Category, int, ICategoryRepository>
 {
-    private readonly ICategoryRepository _repository;
-
-    public UpdateCategoryCommandHandler(ICategoryRepository repository)
+    public UpdateCategoryCommandHandler(ICategoryRepository repository) : base(repository)
     {
-        _repository = repository;
     }
 
-    public async Task<int> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    protected override Category GetEntityToUpdate(UpdateCategoryCommand request)
     {
-        var updatingEntity = new Category {Id = request.Id, Name = request.Name};
-
-        await _repository.Update(updatingEntity);
-
-        await _repository.SaveChanges();
-
-        return updatingEntity.Id;
+        return new Category {Id = request.Id, Name = request.Name};
     }
 }
