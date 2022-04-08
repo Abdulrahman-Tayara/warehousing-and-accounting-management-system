@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Application.Common.Mappings;
 using wms.Dto.Common;
 
-namespace wms.Dto.Category;
+namespace wms.Dto.Categories;
 
 public class CategoryViewModel : IViewModel, IMapFrom<Domain.Entities.Category>
 {

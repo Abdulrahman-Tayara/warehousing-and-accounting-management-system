@@ -45,8 +45,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
     public IEnumerable<TEntity> GetAll()
     {
-        return dbSet.AsQueryable()
-            .ProjectTo<TEntity>(mapper.ConfigurationProvider);
+        return dbSet.ProjectTo<TEntity>(mapper.ConfigurationProvider);
     }
 
     protected IEnumerable<TEntity> GetAllFiltered(Func<TModel, bool> filter)

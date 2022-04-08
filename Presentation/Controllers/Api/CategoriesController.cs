@@ -4,7 +4,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using wms.Dto.Category;
+using wms.Dto.Categories;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 

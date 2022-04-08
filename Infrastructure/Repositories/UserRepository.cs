@@ -55,6 +55,11 @@ public class UserRepository : IUserRepository
             });
     }
 
+    public Task<User> FindIncludedByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task DeleteAsync(int id)
     {
         var model = await _userManager.FindByIdAsync(id.ToString());

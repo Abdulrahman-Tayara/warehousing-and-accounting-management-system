@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<UnitDb> Units { get; set; }
     public DbSet<CurrencyDb> Currencies { get; set; }
     public DbSet<ApplicationSettingDb> Settings { get; set; }
+    public DbSet<ProductDb> Products { get; set; }
     
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
