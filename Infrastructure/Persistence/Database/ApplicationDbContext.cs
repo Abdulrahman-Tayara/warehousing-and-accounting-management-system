@@ -12,7 +12,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<CategoryDb> Categories { get; set; }
     public DbSet<UnitDb> Units { get; set; }
     public DbSet<CurrencyDb> Currencies { get; set; }
-
+    public DbSet<ApplicationSettingDb> Settings { get; set; }
+    
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }

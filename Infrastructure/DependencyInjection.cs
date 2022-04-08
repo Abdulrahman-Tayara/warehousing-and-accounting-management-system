@@ -1,12 +1,15 @@
 using System.Reflection;
 using Application.Repositories;
 using Application.Services.Identity;
+using Application.Services.Settings;
+using Application.Settings;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Services;
+using Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +29,7 @@ public static class DependencyInjection
         services.AddUserIdentityServer();
         services.AddRepositories();
         services.AddServices();
-
+        services.AddApplicationSettings();
         return services;
     }
 
@@ -55,5 +58,11 @@ public static class DependencyInjection
     private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IIdentityService, IdentityService>();
+    }
+
+    private static void AddApplicationSettings(this IServiceCollection services)
+    {
+        services.AddScoped<IApplicationSettingsProvider, ApplicationSettingsProvider>();
+        services.AddScoped<ApplicationSettings>(s => s.GetService<IApplicationSettingsProvider>()!.Get());
     }
 }
