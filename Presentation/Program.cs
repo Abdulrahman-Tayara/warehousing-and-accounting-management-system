@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication()
-    .AddApplicationAutomapper(new []
+    .AddApplicationAutomapper(new[]
     {
         Assembly.GetExecutingAssembly(),
         Assembly.GetAssembly(typeof(Infrastructure.DependencyInjection))!
@@ -22,6 +22,13 @@ builder.Services
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseCors(
+    policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+);
 
 app.UseSwaggerMiddlewares();
 
