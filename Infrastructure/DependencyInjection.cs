@@ -25,7 +25,13 @@ public static class DependencyInjection
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("wms_db"); });
         else
-            services.AddSqlServer<ApplicationDbContext>(configuration.GetConnectionString("DefaultConnection"));
+        {
+            services.AddSqlServer<ApplicationDbContext>(
+                configuration.GetValue<bool>("UseLocalDatabaseServer")
+                    ? configuration.GetConnectionString("LocalConnection")
+                    : configuration.GetConnectionString("DefaultConnection")
+            );
+        }
 
         services.AddUserIdentityServer();
         services.AddRepositories();
