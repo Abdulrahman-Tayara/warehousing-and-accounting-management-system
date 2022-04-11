@@ -2,6 +2,7 @@ using System.Reflection;
 using Application;
 using Authentication;
 using Infrastructure;
+using Infrastructure.Persistence.Database;
 using wms;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services
     .AddSwaggerDocumentation();
 
 var app = builder.Build();
+
+app.EnsureDatabaseOps();
 
 // Configure the HTTP request pipeline.
 

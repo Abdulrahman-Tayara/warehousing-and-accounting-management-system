@@ -7,7 +7,8 @@ namespace Infrastructure.Persistence.Database.Models;
 public class ApplicationSettingDb
 {
     [Key]
-    public string Key { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public string Key { get; set; } = default!;
     
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 }

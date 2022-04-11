@@ -29,4 +29,8 @@
       <Compile Remove="Migrations\20220404211154_InitialCreate.Designer.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
+
 </Project>

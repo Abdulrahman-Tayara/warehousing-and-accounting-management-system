@@ -9,27 +9,28 @@ namespace Infrastructure.Persistence.Database.Models;
 public class ProductDb : IDbModel, IMapFrom<Product>
 {
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } = default;
     
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public int CategoryId { get; set; }
+    public int CategoryId { get; set; } = default;
     [ForeignKey("CategoryId")]
-    public CategoryDb Category { get; set; }
+    public CategoryDb Category { get; set; } = default!;
 
-    public int ManufacturerId { get; set; }
+    public int ManufacturerId { get; set; } = default;
     [ForeignKey("ManufacturerId")]
-    public ManufacturerDb Manufacturer { get; set; }
+    public ManufacturerDb Manufacturer { get; set; } = default!;
 
-    public int UnitId { get; set; }
+    public int UnitId { get; set; } = default;
     [ForeignKey("UnitId")]
-    public UnitDb Unit { get; set; }
+    public UnitDb Unit { get; set; } = default!;
 
-    public string Barcode { get; set; }
+    public string Barcode { get; set; } = default!;
 
-    public double Price { get; set; }
+    public double Price { get; set; } = default;
     
-    public int CurrencyId { get; set; }
+    public int CurrencyId { get; set; } = default;
     [ForeignKey("CurrencyId")]
-    public CurrencyDb Currency { get; set; }
+    public CurrencyDb Currency { get; set; } = default!;
 }
