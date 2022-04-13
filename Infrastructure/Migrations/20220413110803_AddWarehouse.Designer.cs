@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220413105404_AddWarehouseLocation")]
-    partial class AddWarehouseLocation
+    [Migration("20220413110803_AddWarehouse")]
+    partial class AddWarehouse
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
