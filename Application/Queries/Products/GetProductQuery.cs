@@ -20,7 +20,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Product>
 
     public async Task<Product> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.FindIncludedByIdAsync(request.Id);
+        var result = await _repository.FindByIdAsync(request.Id, options: new FindOptions {IncludeRelations = true});
 
         return result;
     }

@@ -25,25 +25,25 @@ public class UserRepository : IUserRepository
         return Task.CompletedTask;
     }
 
-    public async Task<User> CreateAsync(User user)
+    public async Task<SaveAction<Task<User>>> CreateAsync(User user)
     {
         var identityUser = _mapper.Map<User, ApplicationIdentityUser>(user);
 
         var result = await _userManager.CreateAsync(identityUser, user.PasswordHash);
 
         if (result.Succeeded)
-            return _mapper.Map<ApplicationIdentityUser, User>(identityUser);
+            return () => Task.FromResult(_mapper.Map<ApplicationIdentityUser, User>(identityUser));
 
         throw new Exception(result.GetErrorsAsString());
     }
 
-    public IEnumerable<User> GetAll()
+    public IEnumerable<User> GetAll(GetAllOptions? options = default)
     {
         return _userManager.Users
             .ProjectTo<User>(_mapper.ConfigurationProvider);
     }
 
-    public Task<User> FindByIdAsync(int id)
+    public Task<User> FindByIdAsync(int id, FindOptions? options = default)
     {
         return _userManager.FindByIdAsync(id.ToString())
             .ContinueWith(task =>
