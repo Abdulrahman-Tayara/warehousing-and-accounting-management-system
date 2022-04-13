@@ -12,6 +12,8 @@ public class StoragePlaceDb : IDbModel, IMapFrom<StoragePlace>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
+    public string Name { get; set; }
+    
     public int WarehouseId { get; set; }
     [ForeignKey("WarehouseId")]
     public WarehouseDb? Warehouse { get; set; } 

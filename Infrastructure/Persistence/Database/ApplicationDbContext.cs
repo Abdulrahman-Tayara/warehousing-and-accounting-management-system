@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<ApplicationSettingDb> Settings { get; set; } = null!;
     public DbSet<ProductDb> Products { get; set; } = null!;
     public DbSet<WarehouseDb> Warehouses { get; set; }
+    public DbSet<StoragePlaceDb> StoragePlaces { get; set; }
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {

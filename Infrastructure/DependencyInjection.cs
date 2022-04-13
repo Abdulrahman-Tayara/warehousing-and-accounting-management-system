@@ -62,6 +62,7 @@ public static class DependencyInjection
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+        services.AddScoped<IStoragePlaceRepository, StoragePlacesRepository>();
     }
 
     private static void AddServices(this IServiceCollection services)

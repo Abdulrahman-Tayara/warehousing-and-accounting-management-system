@@ -10,4 +10,5 @@ public class StoragePlace : BaseEntity<int>
     public int? ContainerId { get; set; }
     public StoragePlace? Container { get; set; }
     
+    public bool HasContainer => ContainerId != null;
 }
