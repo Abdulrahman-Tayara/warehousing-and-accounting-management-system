@@ -80,8 +80,8 @@ public static class DependencyInjection
         {
             using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
-                dbContext.Database.EnsureCreated();
                 dbContext.Database.Migrate();
+                dbContext.Database.EnsureCreated();
                 //Seeding the data base too.                
             }
         }
