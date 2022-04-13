@@ -34,37 +34,32 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         dbSet = dbContext.Set<TModel>();
     }
 
-    public async Task<TEntity> CreateAsync(TEntity entity)
+    public async Task<SaveAction<Task<TEntity>>> CreateAsync(TEntity entity)
     {
         var model = MapEntityToModel(entity);
 
         var result = await dbSet.AddAsync(model);
 
-        return MapModelToEntity(result.Entity);
+        return async () =>
+        {
+            await SaveChanges();
+        
+            return MapModelToEntity(result.Entity);
+        };
     }
 
-    public IEnumerable<TEntity> GetAll()
+    public IEnumerable<TEntity> GetAll(GetAllOptions? options = default)
     {
-        return dbSet.AsQueryable()
-            .ProjectTo<TEntity>(mapper.ConfigurationProvider);
+        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
+        
+        return set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
     }
-
-    protected IEnumerable<TEntity> GetAllFiltered(Func<TModel, bool> filter)
-    {
-        return dbSet.Where(model => filter(model)).ProjectTo<TEntity>(mapper.ConfigurationProvider);
-    }
-
-    public Task<TEntity> GetFirstAsync(Func<TEntity, bool> filter)
-    {
-        return dbSet.FirstAsync(model => filter(MapModelToEntity(model)))
-            .ContinueWith(task => MapModelToEntity(task.Result));
-    }
-
-    public async Task<TEntity> FindByIdAsync(TKey id)
+    
+    public async Task<TEntity> FindByIdAsync(TKey id, FindOptions? options = default)
     {
         try
         {
-            var model = await _findByIdAsync(id);
+            var model = await _findByIdAsync(id, options);
             return MapModelToEntity(model);
         }
         catch (InvalidOperationException e)
@@ -74,11 +69,13 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         }
     }
 
-    private Task<TModel> _findByIdAsync(TKey id)
+    private Task<TModel> _findByIdAsync(TKey id, FindOptions? options = default)
     {
-        return dbSet.FirstAsync(model => model.Id.Equals(id));
+        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
+        
+        return set.FirstAsync(model => model.Id.Equals(id));
     }
-
+    
     public async Task<TEntity> Update(TEntity entity)
     {
         try
@@ -115,4 +112,6 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
     protected TEntity MapModelToEntity(TModel model) =>
         mapper.Map<TEntity>(model);
+
+    protected virtual IQueryable<TModel> GetIncludedDbSet() => dbSet.AsQueryable();
 }

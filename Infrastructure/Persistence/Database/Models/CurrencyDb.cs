@@ -9,11 +9,12 @@ namespace Infrastructure.Persistence.Database.Models;
 public class CurrencyDb : IDbModel, IMapFrom<Currency>
 {
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } = default;
     
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     
-    public string Symbol { get; set; }
+    public string Symbol { get; set; } = default!;
     
-    public float Factor { get; set; }
+    public float Factor { get; set; } = default;
 }

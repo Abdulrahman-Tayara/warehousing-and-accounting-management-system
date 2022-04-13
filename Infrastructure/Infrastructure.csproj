@@ -25,12 +25,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common" />
+      <Compile Remove="Migrations\20220404211154_InitialCreate.cs" />
+      <Compile Remove="Migrations\20220404211154_InitialCreate.Designer.cs" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Migrations\20220404211154_InitialCreate.cs" />
-      <Compile Remove="Migrations\20220404211154_InitialCreate.Designer.cs" />
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

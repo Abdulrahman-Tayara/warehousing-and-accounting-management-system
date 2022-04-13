@@ -26,10 +26,10 @@ public abstract class CreateEntityCommandHandler<TRequest, TEntity, TKey, TRepos
     {
         var entity = CreateEntity(request);
 
-        entity = await Repository.CreateAsync(entity);
-
-        await Repository.SaveChanges();
-
+        var saveAction = await Repository.CreateAsync(entity);
+        
+        entity = await saveAction();
+        
         return entity.Id;
     }
 

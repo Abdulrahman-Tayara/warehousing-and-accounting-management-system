@@ -7,11 +7,12 @@ namespace Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, IdentityRole<int>, int>
 {
-
-    public DbSet<ManufacturerDb> Manufacturers { get; set; }
-    public DbSet<CategoryDb> Categories { get; set; }
-    public DbSet<UnitDb> Units { get; set; }
-    public DbSet<CurrencyDb> Currencies { get; set; }
+    public DbSet<ManufacturerDb> Manufacturers { get; set; } = null!;
+    public DbSet<CategoryDb> Categories { get; set; } = null!;
+    public DbSet<UnitDb> Units { get; set; } = null!;
+    public DbSet<CurrencyDb> Currencies { get; set; } = null!;
+    public DbSet<ApplicationSettingDb> Settings { get; set; } = null!;
+    public DbSet<ProductDb> Products { get; set; } = null!;
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {

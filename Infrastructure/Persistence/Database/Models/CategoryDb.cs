@@ -8,7 +8,9 @@ namespace Infrastructure.Persistence.Database.Models;
 [Table("Categories")]
 public class CategoryDb : IMapFrom<Category>, IDbModel
 {
-    [Key] public int Id { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } = default;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }
