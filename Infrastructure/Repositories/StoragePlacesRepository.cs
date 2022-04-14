@@ -12,7 +12,7 @@ public class StoragePlacesRepository : RepositoryCrud<StoragePlace, StoragePlace
     public StoragePlacesRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
     }
-
+    
     protected override IQueryable<StoragePlaceDb> GetIncludedDbSet()
     {
         return dbSet
