@@ -19,6 +19,6 @@ public class GetAllProductsQueryHandler : RequestHandler<GetAllProductsQuery, IE
 
     protected override IEnumerable<Product> Handle(GetAllProductsQuery request)
     {
-        return _repository.GetAll(new GetAllOptions {IncludeRelations = true});
+        return _repository.GetAll(new GetAllOptions<Product> {IncludeRelations = true});
     }
 }
