@@ -17,6 +17,6 @@ public static class ViewModelExtensions
         IMapper mapper)
         where TViewModel : IViewModel
     {
-        return entities.Select(entity => entity.ToViewModel<TViewModel>(mapper));
+        return mapper.Map<IEnumerable<IEntity>, IEnumerable<TViewModel>>(entities);
     }
 }

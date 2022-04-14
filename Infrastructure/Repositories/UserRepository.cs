@@ -37,7 +37,7 @@ public class UserRepository : IUserRepository
         throw new Exception(result.GetErrorsAsString());
     }
 
-    public IEnumerable<User> GetAll(GetAllOptions? options = default)
+    public IEnumerable<User> GetAll(GetAllOptions<User>? options = default)
     {
         return _userManager.Users
             .ProjectTo<User>(_mapper.ConfigurationProvider);

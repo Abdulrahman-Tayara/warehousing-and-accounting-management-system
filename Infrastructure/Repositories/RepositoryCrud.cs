@@ -48,11 +48,18 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         };
     }
 
-    public IEnumerable<TEntity> GetAll(GetAllOptions? options = default)
+    public IEnumerable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
-        
-        return set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
+
+        IQueryable<TEntity> entitiesSet =  set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
+
+        if (options is {Filter: { }})
+        {
+            entitiesSet = entitiesSet.Where(options.Filter);
+        }
+
+        return entitiesSet;
     }
     
     public async Task<TEntity> FindByIdAsync(TKey id, FindOptions? options = default)

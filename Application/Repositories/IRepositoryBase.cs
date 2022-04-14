@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Application.Exceptions;
 using Domain.Entities;
 
@@ -12,7 +13,7 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
 {
     Task<SaveAction<Task<TEntity>>> CreateAsync(TEntity entity);
 
-    IEnumerable<TEntity> GetAll(GetAllOptions? options = default);
+    IEnumerable<TEntity> GetAll(GetAllOptions<TEntity>? options = default);
 
 
     /// <exception cref="NotFoundException"></exception>
@@ -30,7 +31,9 @@ public class FindOptions
     public bool IncludeRelations { get; set; } = false;
 }
 
-public class GetAllOptions
+public class GetAllOptions<TEntity>
 {
     public bool IncludeRelations { get; set; } = false;
+
+    public Expression<Func<TEntity, bool>>? Filter { get; set; } = null;
 }

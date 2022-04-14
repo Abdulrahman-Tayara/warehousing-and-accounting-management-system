@@ -20,6 +20,11 @@ public class GetAllStoragePlacesQueryHandler : IRequestHandler<GetAllStoragePlac
 
     public Task<IEnumerable<StoragePlace>> Handle(GetAllStoragePlacesQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_storagePlaceRepository.GetAll(new GetAllOptions {IncludeRelations = true}));
+        return Task.FromResult(_storagePlaceRepository.GetAll(
+            new GetAllOptions<StoragePlace>
+            {
+                IncludeRelations = true,
+                Filter = entity => entity.WarehouseId == request.WarehouseId
+            }));
     }
 }
