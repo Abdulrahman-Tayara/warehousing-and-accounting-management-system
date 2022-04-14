@@ -2,10 +2,11 @@ using System.Reflection;
 using Application;
 using Authentication;
 using Infrastructure;
-using Infrastructure.Persistence.Database;
 using wms;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("appsettings.local.json", true, true);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication()
