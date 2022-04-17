@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Categories;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
@@ -38,13 +39,14 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<CategoryViewModel>>>> GetCategories()
+    public async Task<ActionResult<BaseResponse<PageViewModel<CategoryViewModel>>>> GetCategories(
+        [FromQuery] PaginationRequestParams request)
     {
-        var query = new GetAllCategoriesQuery();
+        var query = request.AsQuery<GetAllCategoriesQuery>();
 
         var categoryEntities = await Mediator.Send(query);
 
-        return Ok(categoryEntities.ToViewModels<CategoryViewModel>(Mapper));
+        return Ok(categoryEntities.ToViewModel<CategoryViewModel>(Mapper));
     }
 
     [HttpPut("{id}")]

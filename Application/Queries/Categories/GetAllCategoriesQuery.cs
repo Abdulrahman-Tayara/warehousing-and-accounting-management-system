@@ -1,14 +1,14 @@
+using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Queries.Categories;
 
-public class GetAllCategoriesQuery : IRequest<IEnumerable<Category>>
+public class GetAllCategoriesQuery : GetPaginatedQuery<Category>
 {
 }
 
-public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, IEnumerable<Category>>
+public class GetAllCategoriesQueryHandler : PaginatedQueryHandled<GetAllCategoriesQuery, Category>
 {
 
     private readonly ICategoryRepository _repository;
@@ -18,7 +18,7 @@ public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuer
         _repository = repository;
     }
 
-    public Task<IEnumerable<Category>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+    protected override Task<IQueryable<Category>> GetQuery(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
         return Task.FromResult(_repository.GetAll());
     }

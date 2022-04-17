@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 using wms.Dto.StoragePlaces;
 
 namespace wms.Controllers.Api;
@@ -19,31 +20,35 @@ public class StoragePlacesController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<StoragePlaceViewModel>>> Create(int warehouseId, CreateStoragePlaceRequest request)
+    public async Task<ActionResult<BaseResponse<StoragePlaceViewModel>>> Create(int warehouseId,
+        CreateStoragePlaceRequest request)
     {
         var command = Mapper.Map<CreateStoragePlaceCommand>(request);
         command.WarehouseId = warehouseId;
-        
+
         var placeId = await Mediator.Send(command);
 
         var place = await Mediator.Send(new GetStoragePlaceQuery {Id = placeId});
-        
+
         return Ok(place.ToViewModel<StoragePlaceViewModel>(Mapper));
     }
-    
+
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<StoragePlaceViewModel>>>> GetAll(int warehouseId)
+    public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceViewModel>>>> GetAll(int warehouseId,
+        [FromQuery] PaginationRequestParams request)
     {
-        var places = await Mediator.Send(new GetAllStoragePlacesQuery {WarehouseId = warehouseId});
-        
-        return Ok(places.ToViewModels<StoragePlaceViewModel>(Mapper));
+        var places = await Mediator.Send(
+            request.AsQuery(new GetAllStoragePlacesQuery {WarehouseId = warehouseId})
+        );
+
+        return Ok(places.ToViewModel<StoragePlaceViewModel>(Mapper));
     }
-    
+
     [HttpGet("{id}")]
     public async Task<ActionResult<BaseResponse<StoragePlaceViewModel>>> Get(int id)
     {
         var place = await Mediator.Send(new GetStoragePlaceQuery {Id = id});
-        
+
         return Ok(place.ToViewModel<StoragePlaceViewModel>(Mapper));
     }
 

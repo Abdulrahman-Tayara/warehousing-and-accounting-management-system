@@ -1,15 +1,15 @@
-﻿using Application.Repositories;
+﻿using Application.Queries.Common;
+using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Queries.Warehouses;
 
-public class GetAllWarehousesQuery : IRequest<IEnumerable<Warehouse>>
+public class GetAllWarehousesQuery : GetPaginatedQuery<Warehouse>
 {
     
 }
 
-public class GetAllWarehousesQueryHandler : IRequestHandler<GetAllWarehousesQuery, IEnumerable<Warehouse>>
+public class GetAllWarehousesQueryHandler : PaginatedQueryHandled<GetAllWarehousesQuery, Warehouse>
 {
     private readonly IWarehouseRepository _warehouseRepository;
 
@@ -18,8 +18,9 @@ public class GetAllWarehousesQueryHandler : IRequestHandler<GetAllWarehousesQuer
         _warehouseRepository = warehouseRepository;
     }
 
-    public Task<IEnumerable<Warehouse>> Handle(GetAllWarehousesQuery request, CancellationToken cancellationToken)
+    protected override Task<IQueryable<Warehouse>> GetQuery(GetAllWarehousesQuery request, CancellationToken cancellationToken)
     {
         return Task.FromResult(_warehouseRepository.GetAll());
     }
+
 }

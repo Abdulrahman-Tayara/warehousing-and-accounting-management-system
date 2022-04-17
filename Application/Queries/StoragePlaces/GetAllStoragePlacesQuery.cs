@@ -1,15 +1,15 @@
-﻿using Application.Repositories;
+﻿using Application.Queries.Common;
+using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Queries.StoragePlaces;
 
-public class GetAllStoragePlacesQuery : IRequest<IEnumerable<StoragePlace>>
+public class GetAllStoragePlacesQuery : GetPaginatedQuery<StoragePlace>
 {
     public int? WarehouseId { get; set; }
 }
 
-public class GetAllStoragePlacesQueryHandler : IRequestHandler<GetAllStoragePlacesQuery, IEnumerable<StoragePlace>>
+public class GetAllStoragePlacesQueryHandler : PaginatedQueryHandled<GetAllStoragePlacesQuery, StoragePlace>
 {
     private readonly IStoragePlaceRepository _storagePlaceRepository;
 
@@ -18,7 +18,8 @@ public class GetAllStoragePlacesQueryHandler : IRequestHandler<GetAllStoragePlac
         _storagePlaceRepository = storagePlaceRepository;
     }
 
-    public Task<IEnumerable<StoragePlace>> Handle(GetAllStoragePlacesQuery request, CancellationToken cancellationToken)
+    protected override Task<IQueryable<StoragePlace>> GetQuery(GetAllStoragePlacesQuery request,
+        CancellationToken cancellationToken)
     {
         return Task.FromResult(_storagePlaceRepository.GetAll(
             new GetAllOptions<StoragePlace>

@@ -1,14 +1,14 @@
+using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Queries.Products;
 
-public class GetAllProductsQuery : IRequest<IEnumerable<Product>>
+public class GetAllProductsQuery : GetPaginatedQuery<Product>
 {
 }
 
-public class GetAllProductsQueryHandler : RequestHandler<GetAllProductsQuery, IEnumerable<Product>>
+public class GetAllProductsQueryHandler : PaginatedQueryHandled<GetAllProductsQuery, Product>
 {
     private readonly IProductRepository _repository;
 
@@ -17,8 +17,10 @@ public class GetAllProductsQueryHandler : RequestHandler<GetAllProductsQuery, IE
         _repository = repository;
     }
 
-    protected override IEnumerable<Product> Handle(GetAllProductsQuery request)
+    protected override Task<IQueryable<Product>> GetQuery(GetAllProductsQuery request,
+        CancellationToken cancellationToken)
     {
-        return _repository.GetAll(new GetAllOptions<Product> {IncludeRelations = true});
+        return Task.FromResult(
+            _repository.GetAll(new GetAllOptions<Product> {IncludeRelations = true}));
     }
 }

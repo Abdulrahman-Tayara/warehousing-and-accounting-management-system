@@ -1,15 +1,15 @@
-﻿using Application.Repositories;
+﻿using Application.Queries.Common;
+using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Queries.Currencies;
 
-public class GetAllCurrenciesQuery : IRequest<IEnumerable<Currency>>
+public class GetAllCurrenciesQuery : GetPaginatedQuery<Currency>
 {
     
 }
 
-public class GetAllCurrenciesQueryHandler : RequestHandler<GetAllCurrenciesQuery, IEnumerable<Currency>>
+public class GetAllCurrenciesQueryHandler : PaginatedQueryHandled<GetAllCurrenciesQuery, Currency>
 {
 
     private readonly ICurrencyRepository _currencyRepository;
@@ -19,8 +19,8 @@ public class GetAllCurrenciesQueryHandler : RequestHandler<GetAllCurrenciesQuery
         _currencyRepository = currencyRepository;
     }
 
-    protected override IEnumerable<Currency> Handle(GetAllCurrenciesQuery request)
+    protected override Task<IQueryable<Currency>> GetQuery(GetAllCurrenciesQuery request, CancellationToken cancellationToken)
     {
-        return _currencyRepository.GetAll();
+        return Task.FromResult(_currencyRepository.GetAll());
     }
 }

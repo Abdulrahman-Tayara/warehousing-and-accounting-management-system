@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 using wms.Dto.Manufacturers;
+using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
@@ -30,11 +31,12 @@ public class ManufacturersController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<ManufacturerViewModel>>>> GetManufacturers()
+    public async Task<ActionResult<BaseResponse<PageViewModel<ManufacturerViewModel>>>> GetManufacturers(
+        [FromQuery] PaginationRequestParams request)
     {
-        var manufacturers = await Mediator.Send(new GetAllManufacturersQuery());
+        var manufacturers = await Mediator.Send(request.AsQuery<GetAllManufacturersQuery>());
 
-        return Ok(manufacturers.ToViewModels<ManufacturerViewModel>(Mapper));
+        return Ok(manufacturers.ToViewModel<ManufacturerViewModel>(Mapper));
     }
     
     [HttpGet("{id}")]

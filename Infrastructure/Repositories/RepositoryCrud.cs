@@ -48,7 +48,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         };
     }
 
-    public IEnumerable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
+    public IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
 

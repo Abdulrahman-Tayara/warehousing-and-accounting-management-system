@@ -1,5 +1,7 @@
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
+using wms.Dto.Pagination;
 
 namespace wms.Dto.Common;
 
@@ -18,5 +20,19 @@ public static class ViewModelExtensions
         where TViewModel : IViewModel
     {
         return mapper.Map<IEnumerable<IEntity>, IEnumerable<TViewModel>>(entities);
+    }
+
+    public static PageViewModel<TViewModel> ToViewModel<TViewModel>(
+        this IPaginatedEnumerable<IEntity> page,
+        IMapper mapper)
+        where TViewModel : IViewModel
+    {
+        return new PageViewModel<TViewModel>
+        {
+            Data = page.ToViewModels<TViewModel>(mapper),
+            CurrentPage = page.CurrentPage,
+            PagesCount = page.PagesCount,
+            PageSize = page.PageSize
+        };
     }
 }

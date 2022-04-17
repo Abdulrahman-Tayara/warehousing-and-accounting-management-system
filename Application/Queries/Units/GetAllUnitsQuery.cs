@@ -1,14 +1,14 @@
+using Application.Queries.Common;
 using Application.Repositories;
-using MediatR;
 using Unit = Domain.Entities.Unit;
 
 namespace Application.Queries.Units;
 
-public class GetAllUnitsQuery : IRequest<IEnumerable<Unit>>
+public class GetAllUnitsQuery : GetPaginatedQuery<Unit>
 {
 }
 
-public class GetAllUnitsQueryHandler : IRequestHandler<GetAllUnitsQuery, IEnumerable<Unit>>
+public class GetAllUnitsQueryHandler : PaginatedQueryHandled<GetAllUnitsQuery, Unit>
 {
 
     private readonly IUnitRepository _repository;
@@ -18,7 +18,7 @@ public class GetAllUnitsQueryHandler : IRequestHandler<GetAllUnitsQuery, IEnumer
         _repository = repository;
     }
 
-    public Task<IEnumerable<Unit>> Handle(GetAllUnitsQuery request, CancellationToken cancellationToken)
+    protected override Task<IQueryable<Unit>> GetQuery(GetAllUnitsQuery request, CancellationToken cancellationToken)
     {
         return Task.FromResult(_repository.GetAll());
     }

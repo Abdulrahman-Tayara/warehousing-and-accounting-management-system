@@ -13,7 +13,7 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
 {
     Task<SaveAction<Task<TEntity>>> CreateAsync(TEntity entity);
 
-    IEnumerable<TEntity> GetAll(GetAllOptions<TEntity>? options = default);
+    IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default);
 
 
     /// <exception cref="NotFoundException"></exception>

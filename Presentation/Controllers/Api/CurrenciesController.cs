@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 using wms.Dto.Currencies;
+using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
@@ -28,19 +29,20 @@ public class CurrenciesController : ApiControllerBase
 
         return Ok(currency.ToViewModel<CurrencyViewModel>(Mapper));
     }
-    
-    [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<CurrencyViewModel>>>> GetAll()
-    {
-        var currencies = await Mediator.Send(new GetAllCurrenciesQuery());
 
-        return Ok(currencies.ToViewModels<CurrencyViewModel>(Mapper));
+    [HttpGet]
+    public async Task<ActionResult<BaseResponse<PageViewModel<CurrencyViewModel>>>> GetAll(
+        [FromQuery] PaginationRequestParams request)
+    {
+        var currencies = await Mediator.Send(request.AsQuery<GetAllCurrenciesQuery>());
+
+        return Ok(currencies.ToViewModel<CurrencyViewModel>(Mapper));
     }
-    
+
     [HttpGet("{id}")]
     public async Task<ActionResult<BaseResponse<CurrencyViewModel>>> GetCurrency(int id)
     {
-        var currencies = await Mediator.Send(new GetCurrencyQuery{Id = id});
+        var currencies = await Mediator.Send(new GetCurrencyQuery {Id = id});
 
         return Ok(currencies.ToViewModel<CurrencyViewModel>(Mapper));
     }
