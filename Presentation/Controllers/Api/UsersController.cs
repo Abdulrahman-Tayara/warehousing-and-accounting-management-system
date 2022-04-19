@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 using wms.Dto.Users;
 
 namespace wms.Controllers.Api;
@@ -39,11 +40,12 @@ public class UsersController : ApiControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<BaseResponse<IEnumerable<UserViewModel>>>> GetUsers()
+    public async Task<ActionResult<BaseResponse<PageViewModel<UserViewModel>>>> GetUsers(
+        [FromQuery] PaginationRequestParams request)
     {
-        var result = await Mediator.Send(new GetAllUsersQuery());
+        var result = await Mediator.Send(request.AsQuery<GetAllUsersQuery>());
 
-        return Ok(result.ToViewModels<UserViewModel>(Mapper));
+        return Ok(result.ToViewModel<UserViewModel>(Mapper));
     }
 
     [HttpGet("{id}")]

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 using wms.Dto.Products;
 
 namespace wms.Controllers.Api;
@@ -18,11 +19,12 @@ public class ProductsController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<ProductJoinedViewModel>>>> GetAllProducts()
+    public async Task<ActionResult<BaseResponse<PageViewModel<ProductJoinedViewModel>>>> GetAllProducts(
+        [FromQuery] PaginationRequestParams request)
     {
-        var productEntities = await Mediator.Send(new GetAllProductsQuery());
+        var productEntities = await Mediator.Send(request.AsQuery<GetAllProductsQuery>());
 
-        return Ok(productEntities.ToViewModels<ProductJoinedViewModel>(Mapper));
+        return Ok(productEntities.ToViewModel<ProductJoinedViewModel>(Mapper));
     }
 
     [HttpGet("{id}")]

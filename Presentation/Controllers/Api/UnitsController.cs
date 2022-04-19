@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Units;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
@@ -38,13 +39,14 @@ public class UnitsController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<UnitViewModel>>>> GetUnits()
+    public async Task<ActionResult<BaseResponse<PageViewModel<UnitViewModel>>>> GetUnits(
+        [FromQuery] PaginationRequestParams request)
     {
-        var query = new GetAllUnitsQuery();
+        var query = request.AsQuery<GetAllUnitsQuery>();
 
         var unitEntities = await Mediator.Send(query);
 
-        return Ok(unitEntities.ToViewModels<UnitViewModel>(Mapper));
+        return Ok(unitEntities.ToViewModel<UnitViewModel>(Mapper));
     }
 
     [HttpPut("{id}")]

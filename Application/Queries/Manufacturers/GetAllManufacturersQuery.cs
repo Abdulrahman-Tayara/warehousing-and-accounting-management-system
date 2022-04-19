@@ -1,15 +1,16 @@
+using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Manufacturers;
 
-public class GetAllManufacturersQuery : IRequest<IEnumerable<Manufacturer>>
+public class GetAllManufacturersQuery : GetPaginatedQuery<Manufacturer>
 {
     
 }
 
-public class GetAllManufacturersQueryHandler : RequestHandler<GetAllManufacturersQuery, IEnumerable<Manufacturer>>
+public class GetAllManufacturersQueryHandler : PaginatedQueryHandled<GetAllManufacturersQuery, Manufacturer>
 {
     private readonly IManufacturerRepository _manufacturerRepository;
 
@@ -18,8 +19,9 @@ public class GetAllManufacturersQueryHandler : RequestHandler<GetAllManufacturer
         _manufacturerRepository = manufacturerRepository;
     }
 
-    protected override IEnumerable<Manufacturer> Handle(GetAllManufacturersQuery request)
+    protected override Task<IQueryable<Manufacturer>> GetQuery(GetAllManufacturersQuery request, CancellationToken cancellationToken)
     {
-        return _manufacturerRepository.GetAll();
+        return Task.FromResult(_manufacturerRepository.GetAll());
     }
+
 }
