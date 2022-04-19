@@ -20,9 +20,12 @@ public class CreateProductCommand : ICreateEntityCommand<int>
     public double Price { get; init; }
 
     public int CurrencyId { get; init; }
+
+    public int? MinLevel { get; set; }
 }
 
-public class CreateProductCommandHandler : CreateEntityCommandHandler<CreateProductCommand, Product, int, IProductRepository>
+public class
+    CreateProductCommandHandler : CreateEntityCommandHandler<CreateProductCommand, Product, int, IProductRepository>
 {
     public CreateProductCommandHandler(IProductRepository repository) : base(repository)
     {
@@ -39,6 +42,7 @@ public class CreateProductCommandHandler : CreateEntityCommandHandler<CreateProd
             Barcode = request.Barcode,
             Price = request.Price,
             CurrencyId = request.CurrencyId,
+            MinLevel = request.MinLevel
         };
     }
 }

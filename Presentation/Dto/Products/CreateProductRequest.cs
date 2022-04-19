@@ -19,4 +19,6 @@ public class CreateProductRequest : IMapFrom<CreateProductCommand>
     [Required] public double Price { get; set; }
     
     [Required] public int CurrencyId { get; set; }
+    
+    [Required] public int? MinLevel { get; set; }
 }
