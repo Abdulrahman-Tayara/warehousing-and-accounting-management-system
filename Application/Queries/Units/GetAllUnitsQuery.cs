@@ -8,7 +8,7 @@ public class GetAllUnitsQuery : GetPaginatedQuery<Unit>
 {
 }
 
-public class GetAllUnitsQueryHandler : PaginatedQueryHandled<GetAllUnitsQuery, Unit>
+public class GetAllUnitsQueryHandler : PaginatedQueryHandler<GetAllUnitsQuery, Unit>
 {
 
     private readonly IUnitRepository _repository;

@@ -9,7 +9,7 @@ public class GetAllCurrenciesQuery : GetPaginatedQuery<Currency>
     
 }
 
-public class GetAllCurrenciesQueryHandler : PaginatedQueryHandled<GetAllCurrenciesQuery, Currency>
+public class GetAllCurrenciesQueryHandler : PaginatedQueryHandler<GetAllCurrenciesQuery, Currency>
 {
 
     private readonly ICurrencyRepository _currencyRepository;

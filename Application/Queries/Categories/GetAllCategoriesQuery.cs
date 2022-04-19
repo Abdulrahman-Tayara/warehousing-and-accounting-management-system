@@ -8,7 +8,7 @@ public class GetAllCategoriesQuery : GetPaginatedQuery<Category>
 {
 }
 
-public class GetAllCategoriesQueryHandler : PaginatedQueryHandled<GetAllCategoriesQuery, Category>
+public class GetAllCategoriesQueryHandler : PaginatedQueryHandler<GetAllCategoriesQuery, Category>
 {
 
     private readonly ICategoryRepository _repository;

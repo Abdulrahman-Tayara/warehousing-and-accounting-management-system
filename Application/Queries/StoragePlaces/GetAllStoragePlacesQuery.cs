@@ -9,7 +9,7 @@ public class GetAllStoragePlacesQuery : GetPaginatedQuery<StoragePlace>
     public int? WarehouseId { get; set; }
 }
 
-public class GetAllStoragePlacesQueryHandler : PaginatedQueryHandled<GetAllStoragePlacesQuery, StoragePlace>
+public class GetAllStoragePlacesQueryHandler : PaginatedQueryHandler<GetAllStoragePlacesQuery, StoragePlace>
 {
     private readonly IStoragePlaceRepository _storagePlaceRepository;
 

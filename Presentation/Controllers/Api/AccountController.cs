@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Accounts;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
+using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
@@ -38,13 +39,15 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<AccountViewModel>>>> GetAccounts()
+    public async Task<ActionResult<BaseResponse<PageViewModel<AccountViewModel>>>> GetAccounts(
+        [FromQuery] PaginationRequestParams request
+    )
     {
-        var query = new GetAllAccountsQuery();
+        var query = request.AsQuery<GetAllAccountsQuery>();
 
-        var unitEntities = await Mediator.Send(query);
+        var accountsPage = await Mediator.Send(query);
 
-        return Ok(unitEntities.ToViewModels<AccountViewModel>(Mapper));
+        return Ok(accountsPage.ToViewModel<AccountViewModel>(Mapper));
     }
 
     [HttpPut("{id}")]

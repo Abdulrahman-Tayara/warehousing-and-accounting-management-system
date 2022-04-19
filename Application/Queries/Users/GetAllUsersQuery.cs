@@ -8,7 +8,7 @@ public class GetAllUsersQuery : GetPaginatedQuery<User>
 {
 }
 
-public class GetAllUsersQueryHandler : PaginatedQueryHandled<GetAllUsersQuery, User>
+public class GetAllUsersQueryHandler : PaginatedQueryHandler<GetAllUsersQuery, User>
 {
     private readonly IUserRepository _userRepository;
 

@@ -9,7 +9,7 @@ public class GetAllWarehousesQuery : GetPaginatedQuery<Warehouse>
     
 }
 
-public class GetAllWarehousesQueryHandler : PaginatedQueryHandled<GetAllWarehousesQuery, Warehouse>
+public class GetAllWarehousesQueryHandler : PaginatedQueryHandler<GetAllWarehousesQuery, Warehouse>
 {
     private readonly IWarehouseRepository _warehouseRepository;
 

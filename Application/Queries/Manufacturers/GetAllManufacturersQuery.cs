@@ -10,7 +10,7 @@ public class GetAllManufacturersQuery : GetPaginatedQuery<Manufacturer>
     
 }
 
-public class GetAllManufacturersQueryHandler : PaginatedQueryHandled<GetAllManufacturersQuery, Manufacturer>
+public class GetAllManufacturersQueryHandler : PaginatedQueryHandler<GetAllManufacturersQuery, Manufacturer>
 {
     private readonly IManufacturerRepository _manufacturerRepository;
 

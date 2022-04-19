@@ -8,7 +8,7 @@ public class GetAllProductsQuery : GetPaginatedQuery<Product>
 {
 }
 
-public class GetAllProductsQueryHandler : PaginatedQueryHandled<GetAllProductsQuery, Product>
+public class GetAllProductsQueryHandler : PaginatedQueryHandler<GetAllProductsQuery, Product>
 {
     private readonly IProductRepository _repository;
 

@@ -18,7 +18,7 @@ public class GetPaginatedQuery<TEntity> : IRequest<IPaginatedEnumerable<TEntity>
     public int PageSize { get; set; } = 10;
 }
 
-public abstract class PaginatedQueryHandled<TRequest, TEntity> : IRequestHandler<TRequest, IPaginatedEnumerable<TEntity>>
+public abstract class PaginatedQueryHandler<TRequest, TEntity> : IRequestHandler<TRequest, IPaginatedEnumerable<TEntity>>
     where TEntity : class, IEntity
     where TRequest : GetPaginatedQuery<TEntity>
 {
