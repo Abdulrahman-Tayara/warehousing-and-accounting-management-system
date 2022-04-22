@@ -22,5 +22,5 @@ public class ProductViewModel : IViewModel, IMapFrom<Domain.Entities.Product>
     
     public int CurrencyId { get; set; }
     
-    public int? MinLevel { get; set; }
+    public int MinLevel { get; set; }
 }
