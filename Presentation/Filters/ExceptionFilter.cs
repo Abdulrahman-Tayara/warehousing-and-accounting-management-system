@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Application.Exceptions;
+using Domain.Exceptions;
 using wms.Dto.Common.Responses;
 using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
