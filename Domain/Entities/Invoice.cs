@@ -11,7 +11,7 @@ public class Invoice : BaseEntity<int>
     public int CurrencyId { get; set; }
     public Currency Currency { get; set; }
     
-    public int TotalPrice { get; set; }
+    public double TotalPrice { get; set; }
 
     public IEnumerable<ProductMovement> Items { get; set; }
     
