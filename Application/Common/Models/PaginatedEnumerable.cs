@@ -10,6 +10,7 @@ public interface IPaginatedEnumerable<out T> : IEnumerable<T>
 
     public int PagesCount { get; set; }
 
+    public int RowsCount { get; set; }
 }
 
 public class PaginatedEnumerable<T> : IPaginatedEnumerable<T>
@@ -18,6 +19,8 @@ public class PaginatedEnumerable<T> : IPaginatedEnumerable<T>
     public int CurrentPage { get; set; }
     public int PageSize { get; set; }
     public int PagesCount { get; set; }
+
+    public int RowsCount { get; set; }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
@@ -41,7 +44,8 @@ public class PaginatedEnumerable<T> : IPaginatedEnumerable<T>
             data = query.Skip(skip).Take(pageSize),
             CurrentPage = page,
             PagesCount = pagesCount,
-            PageSize = pageSize
+            PageSize = pageSize,
+            RowsCount = rowsCount
         };
     }
 }

@@ -32,7 +32,8 @@ public static class ViewModelExtensions
             Data = page.ToViewModels<TViewModel>(mapper),
             CurrentPage = page.CurrentPage,
             PagesCount = page.PagesCount,
-            PageSize = page.PageSize
+            PageSize = page.PageSize,
+            RowsCount = page.RowsCount
         };
     }
 }
