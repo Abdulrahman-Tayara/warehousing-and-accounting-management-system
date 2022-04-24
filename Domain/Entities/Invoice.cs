@@ -26,10 +26,12 @@ public class Invoice : BaseEntity<int>
 
 public enum InvoiceStatus
 {
-    
+    Opened,
+    Closed
 }
 
 public enum InvoiceType
 {
-    
+    In,
+    Out
 }

@@ -35,7 +35,7 @@ public class ProductMovementRepository : IProductMovementRepository
         throw new NotImplementedException();
     }
 
-    public IQueryable<AggregatedProductQuantity> AggregateProductsQuantities(IList<int> productIds)
+    public IQueryable<AggregateProductQuantity> AggregateProductsQuantities(IList<int> productIds)
     {
         throw new NotImplementedException();
     }
