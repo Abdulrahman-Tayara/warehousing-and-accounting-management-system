@@ -23,9 +23,17 @@ public class ProductMovement : BaseEntity<int>
 
     public ProductMovementType Type { get; set; }
     
-    public string Note { get; set; }
-    
     public DateTime CreatedAt { get; set; }
+
+    public static ProductMovementType TypeFromInvoice(InvoiceType invoiceType)
+    {
+        return invoiceType switch
+        {
+            InvoiceType.In => ProductMovementType.In,
+            InvoiceType.Out => ProductMovementType.Out,
+            _ => throw new NotImplementedException()
+        };
+    }
 }
 
 public enum ProductMovementType

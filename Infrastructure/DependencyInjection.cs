@@ -67,7 +67,7 @@ public static class DependencyInjection
         services.AddScoped<IStoragePlaceRepository, StoragePlacesRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
     }
 
     private static void AddServices(this IServiceCollection services)

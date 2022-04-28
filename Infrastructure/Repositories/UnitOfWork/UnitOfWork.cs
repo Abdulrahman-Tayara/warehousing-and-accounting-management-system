@@ -1,6 +1,7 @@
 using Application.Repositories;
 using Application.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Repositories.UnitOfWork;
 
@@ -19,9 +20,14 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<UserRepository> _userRepository;
     private readonly Lazy<WarehouseRepository> _warehouseRepository;
 
-    private readonly DbContext _dbContext;
+    private readonly IDbContextTransaction _transaction;
 
-    public UnitOfWork(Lazy<AccountRepository> accountRepository, Lazy<CategoryRepository> categoryRepository, Lazy<CurrencyAmountRepository> currencyAmountRepository, Lazy<CurrencyRepository> currencyRepository, Lazy<InvoiceRepository> invoiceRepository, Lazy<ManufacturerRepository> manufacturerRepository, Lazy<ProductMovementRepository> productMovementRepository, Lazy<ProductRepository> productRepository, Lazy<StoragePlaceRepository> storagePlaceRepository, Lazy<UnitRepository> unitRepository, Lazy<UserRepository> userRepository, Lazy<WarehouseRepository> warehouseRepository, DbContext dbContext)
+    public UnitOfWork(Lazy<AccountRepository> accountRepository, Lazy<CategoryRepository> categoryRepository,
+        Lazy<CurrencyAmountRepository> currencyAmountRepository, Lazy<CurrencyRepository> currencyRepository,
+        Lazy<InvoiceRepository> invoiceRepository, Lazy<ManufacturerRepository> manufacturerRepository,
+        Lazy<ProductMovementRepository> productMovementRepository, Lazy<ProductRepository> productRepository,
+        Lazy<StoragePlaceRepository> storagePlaceRepository, Lazy<UnitRepository> unitRepository,
+        Lazy<UserRepository> userRepository, Lazy<WarehouseRepository> warehouseRepository, DbContext dbContext)
     {
         _accountRepository = accountRepository;
         _categoryRepository = categoryRepository;
@@ -35,7 +41,7 @@ public class UnitOfWork : IUnitOfWork
         _unitRepository = unitRepository;
         _userRepository = userRepository;
         _warehouseRepository = warehouseRepository;
-        _dbContext = dbContext;
+        _transaction = dbContext.Database.BeginTransaction();
     }
 
     public IAccountRepository AccountRepository => _accountRepository.Value;
@@ -62,8 +68,14 @@ public class UnitOfWork : IUnitOfWork
 
     public IWarehouseRepository WarehouseRepository => _warehouseRepository.Value;
 
-    public void SaveChanges()
+    public void Commit()
     {
-        _dbContext.SaveChanges();
+        _transaction.Commit();
+    }
+
+    public void Dispose()
+    {
+        _transaction.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

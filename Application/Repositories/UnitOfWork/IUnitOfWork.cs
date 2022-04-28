@@ -1,6 +1,6 @@
 namespace Application.Repositories.UnitOfWork;
 
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
     public IAccountRepository AccountRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
@@ -15,5 +15,5 @@ public interface IUnitOfWork
     public IUserRepository UserRepository { get; }
     public IWarehouseRepository WarehouseRepository { get; }
 
-    public void SaveChanges();
+    public void Commit();
 }
