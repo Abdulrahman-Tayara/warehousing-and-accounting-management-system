@@ -39,4 +39,9 @@ public class ProductMovementRepository : IProductMovementRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<SaveAction<Task<IEnumerable<ProductMovement>>>> CreateAllAsync(IEnumerable<ProductMovement> entities)
+    {
+        throw new NotImplementedException();
+    }
 }

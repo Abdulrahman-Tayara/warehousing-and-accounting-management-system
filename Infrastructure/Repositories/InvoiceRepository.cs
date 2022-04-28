@@ -34,4 +34,9 @@ public class InvoiceRepository : IInvoiceRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<SaveAction<Task<IEnumerable<Invoice>>>> CreateAllAsync(IEnumerable<Invoice> entities)
+    {
+        throw new NotImplementedException();
+    }
 }

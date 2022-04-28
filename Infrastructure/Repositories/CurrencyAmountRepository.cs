@@ -34,4 +34,9 @@ public class CurrencyAmountRepository : ICurrencyAmountRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<SaveAction<Task<IEnumerable<CurrencyAmount>>>> CreateAllAsync(IEnumerable<CurrencyAmount> entities)
+    {
+        throw new NotImplementedException();
+    }
 }

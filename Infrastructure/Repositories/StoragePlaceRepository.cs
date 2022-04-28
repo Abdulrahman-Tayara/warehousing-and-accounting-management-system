@@ -34,4 +34,9 @@ public class StoragePlaceRepository : IStoragePlaceRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<SaveAction<Task<IEnumerable<StoragePlace>>>> CreateAllAsync(IEnumerable<StoragePlace> entities)
+    {
+        throw new NotImplementedException();
+    }
 }

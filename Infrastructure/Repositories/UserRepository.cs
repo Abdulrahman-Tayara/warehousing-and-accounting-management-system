@@ -87,4 +87,9 @@ public class UserRepository : IUserRepository
 
         return _mapper.Map<User>(model);
     }
+
+    public Task<SaveAction<Task<IEnumerable<User>>>> CreateAllAsync(IEnumerable<User> entities)
+    {
+        throw new NotImplementedException();
+    }
 }
