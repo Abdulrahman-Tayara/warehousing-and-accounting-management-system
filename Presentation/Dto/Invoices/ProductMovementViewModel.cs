@@ -7,6 +7,7 @@ namespace wms.Dto.Invoices;
 
 public class ProductMovementViewModel : IViewModel, IMapFrom<ProductMovement>
 {
+    public int Id { get; set; }
     public int InvoiceId { get; set; }
     public Product? Product { get; set; }
     public int PlaceId { get; set; }

@@ -30,7 +30,7 @@ public class ProductMovementDb : IDbModel, IMapFrom<ProductMovement>
     public int? CurrencyId { get; set; }
     [ForeignKey("CurrencyId")]
     public CurrencyDb? Currency { get; set; }
-    
+    [ForeignKey("ObjectId")]
     public IEnumerable<CurrencyAmountDb>? CurrencyAmounts { get; set; }
 
     public ProductMovementType Type { get; set; }
