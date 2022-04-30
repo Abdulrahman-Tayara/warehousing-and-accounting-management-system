@@ -1,47 +1,32 @@
 using Application.Repositories;
+using AutoMapper;
+using Domain.Aggregations;
 using Domain.Entities;
+using Infrastructure.Persistence.Database;
+using Infrastructure.Persistence.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ProductMovementRepository : IProductMovementRepository
+public class ProductMovementRepository : RepositoryCrud<ProductMovement, ProductMovementDb>, IProductMovementRepository
 {
-    public Task SaveChanges()
+    public ProductMovementRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<SaveAction<Task<ProductMovement>>> CreateAsync(ProductMovement entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IQueryable<ProductMovement> GetAll(GetAllOptions<ProductMovement>? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProductMovement> FindByIdAsync(int id, FindOptions? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProductMovement> Update(ProductMovement entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public IQueryable<AggregateProductQuantity> AggregateProductsQuantities(IList<int> productIds)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<SaveAction<Task<IEnumerable<ProductMovement>>>> CreateAllAsync(IEnumerable<ProductMovement> entities)
-    {
-        throw new NotImplementedException();
+        return dbSet
+            .Include(movement => movement.Product)
+            .Select(movement => new
+                {movement.Id, movement.ProductId, movement.Product, movement.Quantity, movement.Type})
+            .Where(movement => movement.ProductId != null && productIds.Contains((int) movement.ProductId!))
+            .GroupBy(movement => movement.ProductId)
+            .Select(movementsGrouping => new AggregateProductQuantity()
+            {
+                Product = mapper.Map<Product>(movementsGrouping.FirstOrDefault()!.Product),
+                QuantitySum = movementsGrouping.Sum(movement =>
+                    movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity)
+            });
     }
 }

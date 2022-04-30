@@ -16,4 +16,6 @@ public interface IUnitOfWork : IDisposable
     public IWarehouseRepository WarehouseRepository { get; }
 
     public void Commit();
+
+    public Task CommitAsync();
 }

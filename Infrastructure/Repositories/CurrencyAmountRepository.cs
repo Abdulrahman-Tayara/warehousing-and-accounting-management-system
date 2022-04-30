@@ -1,42 +1,15 @@
 using Application.Repositories;
+using AutoMapper;
 using Domain.Entities;
+using Infrastructure.Persistence.Database;
+using Infrastructure.Persistence.Database.Models;
 
 namespace Infrastructure.Repositories;
 
-public class CurrencyAmountRepository : ICurrencyAmountRepository
+public class CurrencyAmountRepository : RepositoryCrud<CurrencyAmount, CurrencyAmountDb>, ICurrencyAmountRepository
 {
-    public Task SaveChanges()
+    public CurrencyAmountRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
-        throw new NotImplementedException();
     }
 
-    public Task<SaveAction<Task<CurrencyAmount>>> CreateAsync(CurrencyAmount entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IQueryable<CurrencyAmount> GetAll(GetAllOptions<CurrencyAmount>? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<CurrencyAmount> FindByIdAsync(int id, FindOptions? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<CurrencyAmount> Update(CurrencyAmount entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<SaveAction<Task<IEnumerable<CurrencyAmount>>>> CreateAllAsync(IEnumerable<CurrencyAmount> entities)
-    {
-        throw new NotImplementedException();
-    }
 }

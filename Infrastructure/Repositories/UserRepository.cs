@@ -25,6 +25,11 @@ public class UserRepository : IUserRepository
         return Task.CompletedTask;
     }
 
+    public Task<SaveAction<Task<IEnumerable<User>>>> CreateAllAsync(IEnumerable<User> entities)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<SaveAction<Task<User>>> CreateAsync(User user)
     {
         var identityUser = _mapper.Map<User, ApplicationIdentityUser>(user);
@@ -86,10 +91,5 @@ public class UserRepository : IUserRepository
         }
 
         return _mapper.Map<User>(model);
-    }
-
-    public Task<SaveAction<Task<IEnumerable<User>>>> CreateAllAsync(IEnumerable<User> entities)
-    {
-        throw new NotImplementedException();
     }
 }

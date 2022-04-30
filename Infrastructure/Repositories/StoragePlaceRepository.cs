@@ -1,42 +1,22 @@
 using Application.Repositories;
+using AutoMapper;
 using Domain.Entities;
+using Infrastructure.Persistence.Database;
+using Infrastructure.Persistence.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class StoragePlaceRepository : IStoragePlaceRepository
+public class StoragePlaceRepository : RepositoryCrud<StoragePlace, StoragePlaceDb>, IStoragePlaceRepository
 {
-    public Task SaveChanges()
+    public StoragePlaceRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
-        throw new NotImplementedException();
     }
-
-    public Task<SaveAction<Task<StoragePlace>>> CreateAsync(StoragePlace entity)
+    
+    protected override IQueryable<StoragePlaceDb> GetIncludedDbSet()
     {
-        throw new NotImplementedException();
-    }
-
-    public IQueryable<StoragePlace> GetAll(GetAllOptions<StoragePlace>? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<StoragePlace> FindByIdAsync(int id, FindOptions? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<StoragePlace> Update(StoragePlace entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<SaveAction<Task<IEnumerable<StoragePlace>>>> CreateAllAsync(IEnumerable<StoragePlace> entities)
-    {
-        throw new NotImplementedException();
+        return dbSet
+            .Include(p => p.Container)
+            .Include(p => p.Warehouse);
     }
 }

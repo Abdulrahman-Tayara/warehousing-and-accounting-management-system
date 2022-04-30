@@ -12,7 +12,7 @@ public class CreateInvoiceCommand : IRequest<int>
     public int AccountId { get; set; }
     public int WarehouseId { get; set; }
     public int CurrencyId { get; set; }
-    public string Note { get; set; }
+    public string? Note { get; set; }
     public InvoiceType Type { get; set; }
     public IEnumerable<InvoiceItemDto> Items { get; set; }
 }
@@ -20,9 +20,9 @@ public class CreateInvoiceCommand : IRequest<int>
 public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand, int>
 {
     private readonly Lazy<IUnitOfWork> _unitOfWork;
-    private readonly Mediator _mediator;
+    private readonly IMediator _mediator;
 
-    public CreateInvoiceCommandHandler(Lazy<IUnitOfWork> unitOfWork, Mediator mediator)
+    public CreateInvoiceCommandHandler(Lazy<IUnitOfWork> unitOfWork, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
         _mediator = mediator;
@@ -63,6 +63,7 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
         var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
         var savedInvoiceEntity = await saveInvoiceAction.Invoke();
 
+        
         var productMovements = request.Items.Select(
             dto => new ProductMovement
             {
@@ -73,6 +74,7 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
                 UnitPrice = dto.UnitPrice,
                 TotalPrice = dto.UnitPrice * dto.Quantity,
                 CurrencyId = dto.CurrencyId,
+                Note = dto.Note,
                 Type = ProductMovement.TypeFromInvoice(request.Type),
                 CreatedAt = DateTime.Now
             }
@@ -84,12 +86,13 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
         var currencyAmounts = new List<CurrencyAmount>();
 
         savedProductMovementEntities.ToList().Zip(request.Items)
+            .Where(entry => entry.Second.HasCurrencyAmount)
             .ToList()
             .ForEach(entry =>
             {
                 var (savedProductMovementEntity, requestInvoiceItem) = entry;
 
-                var currencyAmountsForEachInvoiceItem = requestInvoiceItem.CurrencyAmounts
+                var currencyAmountsForEachInvoiceItem = requestInvoiceItem.CurrencyAmounts!
                     .Select(
                         dto => new CurrencyAmount
                         {
@@ -104,9 +107,9 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             });
 
         var saveCurrencyAmountsAction = await unitOfWork.CurrencyAmountRepository.CreateAllAsync(currencyAmounts);
-        var savedCurrencyAmountEntities = await saveCurrencyAmountsAction.Invoke();
+        var _ = await saveCurrencyAmountsAction.Invoke();
 
-        unitOfWork.Commit();
+        await unitOfWork.CommitAsync();
         
         return savedInvoiceEntity.Id;
     }

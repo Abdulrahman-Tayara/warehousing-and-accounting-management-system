@@ -1,4 +1,5 @@
 ﻿
+using Domain.Aggregations;
 using Domain.Entities;
 
 namespace Application.Repositories;

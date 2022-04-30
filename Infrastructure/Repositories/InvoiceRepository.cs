@@ -1,42 +1,25 @@
 using Application.Repositories;
+using AutoMapper;
 using Domain.Entities;
+using Infrastructure.Persistence.Database;
+using Infrastructure.Persistence.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class InvoiceRepository : IInvoiceRepository
+public class InvoiceRepository : RepositoryCrud<Invoice, InvoiceDb>, IInvoiceRepository
 {
-    public Task SaveChanges()
+    public InvoiceRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
-        throw new NotImplementedException();
     }
 
-    public Task<SaveAction<Task<Invoice>>> CreateAsync(Invoice entity)
+    protected override IQueryable<InvoiceDb> GetIncludedDbSet()
     {
-        throw new NotImplementedException();
-    }
-
-    public IQueryable<Invoice> GetAll(GetAllOptions<Invoice>? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Invoice> FindByIdAsync(int id, FindOptions? options = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Invoice> Update(Invoice entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<SaveAction<Task<IEnumerable<Invoice>>>> CreateAllAsync(IEnumerable<Invoice> entities)
-    {
-        throw new NotImplementedException();
+        return dbSet.Include(i => i.Items)
+                .ThenInclude(item => item.CurrencyAmounts!.Where(c => c.ObjectId.Equals(item.Id)))
+            .Include(i => i.Items)
+                .ThenInclude(item => item.Product)
+            .Include(i => i.Items)
+                .ThenInclude(item => item.Currency);
     }
 }

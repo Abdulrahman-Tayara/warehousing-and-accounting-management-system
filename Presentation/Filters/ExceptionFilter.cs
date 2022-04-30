@@ -17,7 +17,7 @@ public class ExceptionFilter : ExceptionFilterAttribute
         _hostEnvironment = hostEnvironment;
         _exceptionMap = new Dictionary<Type, Action<ExceptionContext>>
         {
-            // {typeof(NotFoundException), HandleNotFoundException}
+            {typeof(ProductMinLevelExceededException), HandleProductMinLevelExceededException}
         };
     }
 
@@ -65,6 +65,18 @@ public class ExceptionFilter : ExceptionFilterAttribute
         BaseException exception = (BaseException) context.Exception;
 
         var responseBody = new NoDataResponse(exception.Message);
+
+        context.Result = new ObjectResult(responseBody) {StatusCode = exception.Code};
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleProductMinLevelExceededException(ExceptionContext context)
+    {
+        var exception = context.Exception as ProductMinLevelExceededException;
+
+        var responseBody = new BaseResponse<IList<int>>(
+            new ResponseMetaData {message = exception!.Message}, exception.ProductsWithExceededMinLevel);
 
         context.Result = new ObjectResult(responseBody) {StatusCode = exception.Code};
 

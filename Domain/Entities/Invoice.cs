@@ -15,7 +15,7 @@ public class Invoice : BaseEntity<int>
 
     public IEnumerable<ProductMovement> Items { get; set; }
     
-    public string Note { get; set; }
+    public string? Note { get; set; }
     
     public DateTime CreatedAt { get; set; }
 

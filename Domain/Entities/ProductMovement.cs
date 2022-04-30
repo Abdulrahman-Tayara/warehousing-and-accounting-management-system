@@ -5,7 +5,7 @@ public class ProductMovement : BaseEntity<int>
     public int InvoiceId { get; set; }
     
     public int ProductId { get; set; }
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
     
     public int PlaceId { get; set; }
     public StoragePlace Place { get; set; }
@@ -21,6 +21,8 @@ public class ProductMovement : BaseEntity<int>
     
     public IEnumerable<CurrencyAmount> CurrencyAmounts { get; set; }
 
+    public string? Note { get; set; }
+    
     public ProductMovementType Type { get; set; }
     
     public DateTime CreatedAt { get; set; }
