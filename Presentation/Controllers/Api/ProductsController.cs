@@ -1,6 +1,10 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Commands.Products;
+using Application.Queries.Invoicing;
+using Application.Queries.Invoicing.Dto;
 using Application.Queries.Products;
 using AutoMapper;
+using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,5 +49,14 @@ public class ProductsController : ApiControllerBase
         var createdProductId = await Mediator.Send(command);
 
         return await GetProduct(createdProductId);
+    }
+
+    [HttpGet("{id}/checkQuantity")]
+    public async Task CheckQuantity(int id, [FromQuery] [Required] int quantity)
+    {
+        await Mediator.Send(new CheckProductQuantityQuery
+        {
+            ProductQuantities = new[] {new CheckProductQuantityDto {ProductId = id, Quantity = quantity}}
+        });
     }
 }

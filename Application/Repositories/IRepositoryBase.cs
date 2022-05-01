@@ -13,6 +13,8 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
 {
     Task<SaveAction<Task<TEntity>>> CreateAsync(TEntity entity);
 
+    Task<SaveAction<Task<IEnumerable<TEntity>>>> CreateAllAsync(IEnumerable<TEntity> entities);
+
     IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default);
 
 

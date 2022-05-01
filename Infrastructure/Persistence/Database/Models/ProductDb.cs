@@ -34,5 +34,5 @@ public class ProductDb : IDbModel, IMapFrom<Product>
     [ForeignKey("CurrencyId")]
     public CurrencyDb Currency { get; set; } = default!;
 
-    public int? MinLevel { get; set; } = default!;
+    public int MinLevel { get; set; } = default;
 }

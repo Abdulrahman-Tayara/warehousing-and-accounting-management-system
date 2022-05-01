@@ -1,4 +1,6 @@
-﻿namespace Application.Exceptions;
+﻿using Domain.Exceptions;
+
+namespace Application.Exceptions;
 
 public class InvalidCredentialException : BaseException
 {

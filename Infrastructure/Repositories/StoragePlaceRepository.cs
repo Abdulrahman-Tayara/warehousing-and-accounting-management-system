@@ -1,4 +1,4 @@
-﻿using Application.Repositories;
+using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence.Database;
@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class StoragePlacesRepository : RepositoryCrud<StoragePlace, StoragePlaceDb>, IStoragePlaceRepository
+public class StoragePlaceRepository : RepositoryCrud<StoragePlace, StoragePlaceDb>, IStoragePlaceRepository
 {
-    public StoragePlacesRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+    public StoragePlaceRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
     }
     

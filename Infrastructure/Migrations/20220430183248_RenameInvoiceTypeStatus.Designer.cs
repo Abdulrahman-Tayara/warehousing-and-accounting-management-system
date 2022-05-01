@@ -4,6 +4,7 @@ using Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220430183248_RenameInvoiceTypeStatus")]
+    partial class RenameInvoiceTypeStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,11 +173,14 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("ObjectId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductMovementDbId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CurrencyId");
 
-                    b.HasIndex("ObjectId");
+                    b.HasIndex("ProductMovementDbId");
 
                     b.ToTable("CurrencyAmounts");
                 });
@@ -580,7 +585,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Infrastructure.Persistence.Database.Models.ProductMovementDb", null)
                         .WithMany("CurrencyAmounts")
-                        .HasForeignKey("ObjectId");
+                        .HasForeignKey("ProductMovementDbId");
 
                     b.Navigation("Currency");
                 });
@@ -653,7 +658,7 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CurrencyId");
 
-                    b.HasOne("Infrastructure.Persistence.Database.Models.InvoiceDb", null)
+                    b.HasOne("Infrastructure.Persistence.Database.Models.InvoiceDb", "Invoice")
                         .WithMany("Items")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -668,6 +673,8 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Currency");
+
+                    b.Navigation("Invoice");
 
                     b.Navigation("Place");
 

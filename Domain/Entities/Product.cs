@@ -19,6 +19,8 @@ public class Product : BaseEntity<int>
     
     public int CurrencyId { get; set; }
     public Currency Currency { get; set; }
-    
-    public int? MinLevel { get; set; }
+
+    public int MinLevel { get; set; }
+
+    public bool HasMinLevel => MinLevel > 0;
 }

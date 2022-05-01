@@ -1,3 +1,5 @@
+using Domain.Exceptions;
+
 namespace Application.Exceptions;
 
 public class NotFoundException : BaseException

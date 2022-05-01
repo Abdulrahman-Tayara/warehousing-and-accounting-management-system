@@ -42,7 +42,7 @@ public class
             Barcode = request.Barcode,
             Price = request.Price,
             CurrencyId = request.CurrencyId,
-            MinLevel = request.MinLevel
+            MinLevel = request.MinLevel ?? 0
         };
     }
 }

@@ -6,6 +6,7 @@ using Domain.Entities;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Repositories;
 
@@ -43,8 +44,27 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         return async () =>
         {
             await SaveChanges();
-        
+
             return MapModelToEntity(result.Entity);
+        };
+    }
+
+    public async Task<SaveAction<Task<IEnumerable<TEntity>>>> CreateAllAsync(IEnumerable<TEntity> entities)
+    {
+        var models = entities.Select(entity => MapEntityToModel(entity));
+
+
+        IList<EntityEntry<TModel>> results = new List<EntityEntry<TModel>>();
+        foreach (var model in models)
+        {
+            results.Add(await dbSet.AddAsync(model));
+        }
+
+        return async () =>
+        {
+            await SaveChanges();
+
+            return results.Select(res => MapModelToEntity(res.Entity));
         };
     }
 
@@ -52,7 +72,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
 
-        IQueryable<TEntity> entitiesSet =  set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
+        IQueryable<TEntity> entitiesSet = set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
 
         if (options is {Filter: { }})
         {
@@ -61,7 +81,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
         return entitiesSet;
     }
-    
+
     public async Task<TEntity> FindByIdAsync(TKey id, FindOptions? options = default)
     {
         try
@@ -79,10 +99,10 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     private Task<TModel> _findByIdAsync(TKey id, FindOptions? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
-        
+
         return set.FirstAsync(model => model.Id.Equals(id));
     }
-    
+
     public async Task<TEntity> Update(TEntity entity)
     {
         try
@@ -90,7 +110,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
             var modelInDb = await _findByIdAsync(entity.Id);
 
             dbContext.Entry(modelInDb).CurrentValues.SetValues(entity);
-            
+
             return entity;
         }
         catch (InvalidOperationException e)

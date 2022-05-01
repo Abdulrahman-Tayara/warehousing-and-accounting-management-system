@@ -1,11 +1,13 @@
 using System.Reflection;
 using Application.Repositories;
+using Application.Repositories.UnitOfWork;
 using Application.Services.Identity;
 using Application.Services.Settings;
 using Application.Settings;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Services;
@@ -62,8 +64,13 @@ public static class DependencyInjection
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IWarehouseRepository, WarehouseRepository>();
-        services.AddScoped<IStoragePlaceRepository, StoragePlacesRepository>();
+        services.AddScoped<IStoragePlaceRepository, StoragePlaceRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        services.AddScoped<IProductMovementRepository, ProductMovementRepository>();
+        services.AddScoped<ICurrencyAmountRepository, CurrencyAmountRepository>();
+        
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
     }
 
     private static void AddServices(this IServiceCollection services)
