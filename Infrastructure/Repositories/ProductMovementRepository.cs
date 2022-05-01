@@ -29,4 +29,13 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
                     movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity)
             });
     }
+
+    protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
+    {
+        return dbSet.Include(item =>
+                item.CurrencyAmounts!.Where(c => c.Key.Equals(CurrencyAmountKey.Movement)))
+            .ThenInclude(currencyAmount => currencyAmount.Currency)
+            .Include(item => item.Product)
+            .Include(item => item.Currency);
+    }
 }

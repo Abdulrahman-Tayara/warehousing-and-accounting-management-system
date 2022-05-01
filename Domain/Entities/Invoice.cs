@@ -12,9 +12,6 @@ public class Invoice : BaseEntity<int>
     public Currency Currency { get; set; }
     
     public double TotalPrice { get; set; }
-
-    public IEnumerable<ProductMovement> Items { get; set; }
-    
     public string? Note { get; set; }
     
     public DateTime CreatedAt { get; set; }

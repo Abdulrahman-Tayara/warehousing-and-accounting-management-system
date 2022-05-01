@@ -10,7 +10,6 @@ public class InvoiceViewModel : IViewModel, IMapFrom<Invoice>
     public int WarehouseId { get; set; }
     public int CurrencyId { get; set; }
     public double TotalPrice { get; set; }
-    public IEnumerable<ProductMovementViewModel> Items { get; set; }
     public string? Note { get; set; }
     public DateTime CreatedAt { get; set; }
     public InvoiceStatus Status { get; set; }
