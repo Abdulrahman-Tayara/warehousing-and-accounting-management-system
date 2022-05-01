@@ -22,7 +22,7 @@ public class InvoiceDb : IDbModel, IMapFrom<Invoice>
 
     public double TotalPrice { get; set; }
     
-    [InverseProperty("Invoice")]
+    [ForeignKey("InvoiceId")]
     public IEnumerable<ProductMovementDb> Items { get; set; }
     
     public string? Note { get; set; }

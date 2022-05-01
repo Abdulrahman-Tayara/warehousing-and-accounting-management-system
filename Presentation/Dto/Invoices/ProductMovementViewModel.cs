@@ -2,6 +2,7 @@
 using Domain.Entities;
 using wms.Dto.Common;
 using wms.Dto.CurrencyAmounts;
+using wms.Dto.Products;
 
 namespace wms.Dto.Invoices;
 
@@ -9,7 +10,7 @@ public class ProductMovementViewModel : IViewModel, IMapFrom<ProductMovement>
 {
     public int Id { get; set; }
     public int InvoiceId { get; set; }
-    public Product? Product { get; set; }
+    public ProductViewModel? Product { get; set; }
     public int PlaceId { get; set; }
     public int Quantity { get; set; }
     public double UnitPrice { get; set; }

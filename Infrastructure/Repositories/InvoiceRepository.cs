@@ -13,14 +13,4 @@ public class InvoiceRepository : RepositoryCrud<Invoice, InvoiceDb>, IInvoiceRep
     {
     }
 
-    protected override IQueryable<InvoiceDb> GetIncludedDbSet()
-    {
-        return dbSet.Include(i => i.Items)
-            .ThenInclude(item => item.CurrencyAmounts!.Where(c => c.Key.Equals(CurrencyAmountKey.Movement)))
-            .ThenInclude(c => c.Currency)
-            .Include(i => i.Items)
-            .ThenInclude(item => item.Product)
-            .Include(i => i.Items)
-            .ThenInclude(item => item.Currency);
-    }
 }
