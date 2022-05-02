@@ -6,6 +6,7 @@ using Application.Services.Settings;
 using Application.Settings;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
+using Infrastructure.Persistence.Database.Triggers;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +32,11 @@ public static class DependencyInjection
             services.AddSqlServer<ApplicationDbContext>(
                 configuration.GetValue<bool>("UseLocalDatabaseServer")
                     ? configuration.GetConnectionString("LocalConnection")
-                    : configuration.GetConnectionString("DefaultConnection")
+                    : configuration.GetConnectionString("DefaultConnection"),
+                optionsAction: options =>
+                {
+                    options.UseTriggers(triggersOptions => triggersOptions.AddTrigger<SoftDeleteTrigger>());
+                }
             );
         }
 
@@ -69,7 +74,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
         services.AddScoped<IProductMovementRepository, ProductMovementRepository>();
         services.AddScoped<ICurrencyAmountRepository, CurrencyAmountRepository>();
-        
+
         services.AddTransient<IUnitOfWork, UnitOfWork>();
     }
 
