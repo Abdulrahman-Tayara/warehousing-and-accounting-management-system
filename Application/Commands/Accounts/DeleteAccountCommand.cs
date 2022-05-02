@@ -1,25 +1,16 @@
-﻿using Application.Repositories;
-using MediatR;
+﻿using Application.Commands.Common;
+using Application.Repositories;
+using Domain.Entities;
 
 namespace Application.Commands.Accounts;
 
-public class DeleteAccountCommand : IRequest
+public class DeleteAccountCommand : DeleteEntityCommand<int>
 {
-    public int Id { get; set; }
 }
 
-public class DeleteAccountCommandHandler : AsyncRequestHandler<DeleteAccountCommand>
+public class DeleteAccountCommandHandler : DeleteEntityCommandHandler<DeleteAccountCommand, Account, int, IAccountRepository>
 {
-    private readonly IAccountRepository _accountRepository;
-
-    public DeleteAccountCommandHandler(IAccountRepository accountRepository)
+    public DeleteAccountCommandHandler(IAccountRepository repository) : base(repository)
     {
-        _accountRepository = accountRepository;
-    }
-
-    protected override async Task Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
-    {
-        await _accountRepository.DeleteAsync(request.Id);
-        await _accountRepository.SaveChanges();
     }
 }
