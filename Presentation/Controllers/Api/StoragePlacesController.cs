@@ -35,10 +35,11 @@ public class StoragePlacesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceViewModel>>>> GetAll(int warehouseId,
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] StoragePlacesRequestParams request)
     {
         var places = await Mediator.Send(
-            request.AsQuery(new GetAllStoragePlacesQuery {WarehouseId = warehouseId})
+            request.AsQuery(new GetAllStoragePlacesQuery
+                {WarehouseId = warehouseId, IsParent = request.IsParent, ContainerId = request.ContainerId})
         );
 
         return Ok(places.ToViewModel<StoragePlaceViewModel>(Mapper));

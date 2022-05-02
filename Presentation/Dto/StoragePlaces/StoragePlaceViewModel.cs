@@ -12,7 +12,7 @@ public class StoragePlaceViewModel : IViewModel, IMapFrom<StoragePlace>
     
     public Warehouse? Warehouse { get; set; }
 
-    public StoragePlace? Container { get; set; }
+    public int? ContainerId { get; set; }
     
     public string? Description { get; set; }
     
