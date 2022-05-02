@@ -58,4 +58,10 @@ public class CurrenciesController : ApiControllerBase
 
         return await GetCurrency(id);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task DeleteCurrency(int id)
+    {
+        await Mediator.Send(new DeleteCurrencyCommand() {key = id});
+    }
 }

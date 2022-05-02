@@ -65,4 +65,10 @@ public class StoragePlacesController : ApiControllerBase
 
         return await Get(placeId);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task Delete(int id)
+    {
+        await Mediator.Send(new DeleteStoragePlaceCommand() {key = id});
+    }
 }

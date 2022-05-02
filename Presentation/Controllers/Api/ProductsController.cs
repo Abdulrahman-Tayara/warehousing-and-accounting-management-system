@@ -70,4 +70,10 @@ public class ProductsController : ApiControllerBase
 
         return await GetProduct(id);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task DeleteProduct(int id)
+    {
+        await Mediator.Send(new DeleteProductCommand() {key = id});
+    }
 }

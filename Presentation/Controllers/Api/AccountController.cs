@@ -11,7 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
-// [Authorize]
+[Authorize]
 public class AccountController : ApiControllerBase
 {
     public AccountController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -65,6 +65,6 @@ public class AccountController : ApiControllerBase
     [HttpDelete("{id}")]
     public async Task DeleteAccount(int id)
     {
-        await Mediator.Send(new DeleteAccountCommand {Id = id});
+        await Mediator.Send(new DeleteAccountCommand {key = id});
     }
 }

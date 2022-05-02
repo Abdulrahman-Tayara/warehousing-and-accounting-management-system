@@ -25,5 +25,6 @@ public abstract class
     protected override async Task Handle(TRequest request, CancellationToken cancellationToken)
     {
         await _repository.DeleteAsync(request.key);
+        await _repository.SaveChanges();
     }
 }

@@ -62,4 +62,9 @@ public class ManufacturersController : ApiControllerBase
         return await GetManufacturer(id);
     }
 
+    [HttpDelete("{id}")]
+    public async Task DeleteManufacturer(int id)
+    {
+        await Mediator.Send(new DeleteManufacturerCommand() {key = id});
+    }
 }

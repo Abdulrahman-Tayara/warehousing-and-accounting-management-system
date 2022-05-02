@@ -57,4 +57,10 @@ public class WarehousesController : ApiControllerBase
 
         return Ok(warehouse.ToViewModel<WarehouseViewModel>(Mapper));
     }
+    
+    [HttpDelete("{id}")]
+    public async Task Delete(int id)
+    {
+        await Mediator.Send(new DeleteWarehouseCommand() {key = id});
+    }
 }
