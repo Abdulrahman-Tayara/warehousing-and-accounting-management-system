@@ -51,7 +51,7 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<AccountViewModel>>> CreateAccount(UpdateAccountRequest request,
+    public async Task<ActionResult<BaseResponse<AccountViewModel>>> UpdateAccount(UpdateAccountRequest request,
         int id)
     {
         var command = Mapper.Map<UpdateAccountCommand>(request);

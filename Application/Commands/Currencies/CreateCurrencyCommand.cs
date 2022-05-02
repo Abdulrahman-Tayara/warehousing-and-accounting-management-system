@@ -2,7 +2,7 @@
 using Application.Repositories;
 using Domain.Entities;
 
-namespace Application.Commands.Currencies.CreateCurrency;
+namespace Application.Commands.Currencies;
 
 public class CreateCurrencyCommand : ICreateEntityCommand<int>
 {

@@ -50,7 +50,7 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> CreateCategory(UpdateCategoryRequest request,
+    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> UpdateCategory(UpdateCategoryRequest request,
         int id)
     {
         var command = Mapper.Map<UpdateCategoryCommand>(request);
