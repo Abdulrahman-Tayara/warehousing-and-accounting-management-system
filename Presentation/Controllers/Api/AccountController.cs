@@ -11,7 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
-[Authorize]
+// [Authorize]
 public class AccountController : ApiControllerBase
 {
     public AccountController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -23,9 +23,9 @@ public class AccountController : ApiControllerBase
     {
         var command = Mapper.Map<CreateAccountCommand>(request);
 
-        var unitId = await Mediator.Send(command);
+        var id = await Mediator.Send(command);
 
-        return await GetAccount(unitId);
+        return await GetAccount(id);
     }
 
     [HttpGet("{id}")]
@@ -60,5 +60,11 @@ public class AccountController : ApiControllerBase
         var updatedAccountId = await Mediator.Send(command);
 
         return await GetAccount(updatedAccountId);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task DeleteAccount(int id)
+    {
+        await Mediator.Send(new DeleteAccountCommand {Id = id});
     }
 }

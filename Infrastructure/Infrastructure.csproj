@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="EntityFrameworkCore.Triggered" Version="3.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
