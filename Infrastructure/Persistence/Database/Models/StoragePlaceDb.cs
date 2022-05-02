@@ -16,9 +16,11 @@ public class StoragePlaceDb : IDbModel, IMapFrom<StoragePlace>
     
     public int WarehouseId { get; set; }
     [ForeignKey("WarehouseId")]
-    public WarehouseDb? Warehouse { get; set; } 
-    
+    public WarehouseDb? Warehouse { get; set; }
+
     public int? ContainerId { get; set; }
     [ForeignKey("ContainerId")]
     public StoragePlaceDb? Container { get; set; }
+    
+    public string? Description { get; set; }
 }

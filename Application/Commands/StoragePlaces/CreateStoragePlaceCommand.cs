@@ -1,7 +1,6 @@
 ﻿using Application.Commands.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Commands.StoragePlaces;
 
@@ -12,6 +11,8 @@ public class CreateStoragePlaceCommand : ICreateEntityCommand<int>
     public int WarehouseId { get; set; }
     
     public int? ContainerId { get; set; }
+    
+    public string? Description { get; set; }
 }
 
 public class CreateStoragePlaceCommandHandler : CreateEntityCommandHandler<CreateStoragePlaceCommand, StoragePlace, int,
@@ -27,7 +28,8 @@ public class CreateStoragePlaceCommandHandler : CreateEntityCommandHandler<Creat
         {
             WarehouseId = request.WarehouseId,
             ContainerId = request.ContainerId,
-            Name = request.Name
+            Name = request.Name,
+            Description = request.Description
         };
     }
 }

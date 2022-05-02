@@ -14,5 +14,7 @@ public class StoragePlaceViewModel : IViewModel, IMapFrom<StoragePlace>
 
     public StoragePlace? Container { get; set; }
     
+    public string? Description { get; set; }
+    
     public bool HasContainer { get; set; }
 }
