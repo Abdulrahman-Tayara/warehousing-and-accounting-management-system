@@ -1,9 +1,9 @@
-using Application.Commands.Manufacturers;
+﻿using Application.Commands.Manufacturers;
 using Application.Common.Mappings;
 
 namespace wms.Dto.Manufacturers;
 
-public class CreateManufacturerRequest : IMapFrom<CreateManufacturerCommand>
+public class UpdateManufacturerRequest : IMapFrom<UpdateManufacturerCommand>
 {
     public string Name { get; set; }
     

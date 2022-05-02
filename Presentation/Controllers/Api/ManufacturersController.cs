@@ -1,4 +1,4 @@
-using Application.Commands.Manufacturers.CreateManufacturer;
+using Application.Commands.Manufacturers;
 using Application.Queries.Manufacturers;
 using AutoMapper;
 using MediatR;
@@ -49,4 +49,13 @@ public class ManufacturersController : ApiControllerBase
 
         return Ok(manufacturers.ToViewModel<ManufacturerViewModel>(Mapper));
     }
+    
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<ManufacturerViewModel>>> UpdateManufacturer(int id, UpdateManufacturerRequest request)
+    {
+        var _ = await Mediator.Send(Mapper.Map<UpdateManufacturerCommand>(request));
+        
+        return await GetManufacturer(id);
+    }
+
 }

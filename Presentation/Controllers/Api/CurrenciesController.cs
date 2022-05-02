@@ -11,7 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
-// [Authorize]
+[Authorize]
 public class CurrenciesController : ApiControllerBase
 {
     public CurrenciesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
