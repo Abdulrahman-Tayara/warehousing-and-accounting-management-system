@@ -22,6 +22,8 @@ public class UpdateProductCommand : IUpdateEntityCommand<int>
     public double Price { get; init; }
 
     public int CurrencyId { get; init; }
+    
+    public int? MinLevel { get; init; }
 }
 
 public class UpdateProductCommandHandler
@@ -43,6 +45,7 @@ public class UpdateProductCommandHandler
             Barcode = request.Barcode,
             Price = request.Price,
             CurrencyId = request.CurrencyId,
+            MinLevel = request.MinLevel ?? 0,
         };
     }
 }

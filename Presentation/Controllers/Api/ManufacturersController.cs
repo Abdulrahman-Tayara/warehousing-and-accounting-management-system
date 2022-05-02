@@ -11,6 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
+[Authorize]
 public class ManufacturersController : ApiControllerBase
 {
     public ManufacturersController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -53,7 +54,10 @@ public class ManufacturersController : ApiControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<BaseResponse<ManufacturerViewModel>>> UpdateManufacturer(int id, UpdateManufacturerRequest request)
     {
-        var _ = await Mediator.Send(Mapper.Map<UpdateManufacturerCommand>(request));
+        var command = Mapper.Map<UpdateManufacturerCommand>(request);
+        command.Id = id;
+        
+        var _ = await Mediator.Send(command);
         
         return await GetManufacturer(id);
     }

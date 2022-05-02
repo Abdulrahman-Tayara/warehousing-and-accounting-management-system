@@ -59,4 +59,15 @@ public class ProductsController : ApiControllerBase
             ProductQuantities = new[] {new CheckProductQuantityDto {ProductId = id, Quantity = quantity}}
         });
     }
+    
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<ProductJoinedViewModel>>> UpdateProduct(int id, UpdateProductRequest request)
+    {
+        var command = Mapper.Map<UpdateProductCommand>(request);
+        command.Id = id;
+
+        var _ = await Mediator.Send(command);
+
+        return await GetProduct(id);
+    }
 }

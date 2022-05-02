@@ -19,4 +19,6 @@ public class UpdateProductRequest : IMapFrom<UpdateProductCommand>
     [Required] public double Price { get; set; }
 
     [Required] public int CurrencyId { get; set; }
+    
+    public int? MinLevel { get; set; }
 }
