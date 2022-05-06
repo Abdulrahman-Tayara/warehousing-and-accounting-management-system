@@ -1,9 +1,8 @@
 using Application.Commands.Common;
 using Application.Repositories;
 using Domain.Entities;
-using MediatR;
 
-namespace Application.Commands.Manufacturers.CreateManufacturer;
+namespace Application.Commands.Manufacturers;
 
 public class CreateManufacturerCommand : ICreateEntityCommand<int>
 {

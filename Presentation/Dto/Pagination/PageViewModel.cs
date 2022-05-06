@@ -10,4 +10,5 @@ public class PageViewModel<T>
 
     public int PagesCount { get; set; }
 
+    public int RowsCount { get; set; }
 }

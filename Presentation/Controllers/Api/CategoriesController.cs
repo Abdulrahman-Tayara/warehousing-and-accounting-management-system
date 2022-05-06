@@ -11,7 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
-[Authorize]
+// [Authorize]
 public class CategoriesController : ApiControllerBase
 {
     public CategoriesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -50,7 +50,7 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> CreateCategory(UpdateCategoryRequest request,
+    public async Task<ActionResult<BaseResponse<CategoryViewModel>>> UpdateCategory(UpdateCategoryRequest request,
         int id)
     {
         var command = Mapper.Map<UpdateCategoryCommand>(request);
@@ -59,5 +59,11 @@ public class CategoriesController : ApiControllerBase
         var updatedCategoryId = await Mediator.Send(command);
 
         return await GetCategory(updatedCategoryId);
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task DeleteCategory(int id)
+    {
+        await Mediator.Send(new DeleteCategoryCommand() {key = id});
     }
 }

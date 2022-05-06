@@ -1,4 +1,4 @@
-using Application.Commands.Manufacturers.CreateManufacturer;
+using Application.Commands.Manufacturers;
 using Application.Queries.Manufacturers;
 using AutoMapper;
 using MediatR;
@@ -11,6 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
+[Authorize]
 public class ManufacturersController : ApiControllerBase
 {
     public ManufacturersController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -48,5 +49,22 @@ public class ManufacturersController : ApiControllerBase
         });
 
         return Ok(manufacturers.ToViewModel<ManufacturerViewModel>(Mapper));
+    }
+    
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<ManufacturerViewModel>>> UpdateManufacturer(int id, UpdateManufacturerRequest request)
+    {
+        var command = Mapper.Map<UpdateManufacturerCommand>(request);
+        command.Id = id;
+        
+        var _ = await Mediator.Send(command);
+        
+        return await GetManufacturer(id);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task DeleteManufacturer(int id)
+    {
+        await Mediator.Send(new DeleteManufacturerCommand() {key = id});
     }
 }

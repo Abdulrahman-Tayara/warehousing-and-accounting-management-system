@@ -8,8 +8,8 @@ public class Invoice : BaseEntity<int>
     public int WarehouseId { get; set; }
     public Warehouse Warehouse { get; set; }
     
-    public int CurrencyId { get; set; }
-    public Currency Currency { get; set; }
+    public int? CurrencyId { get; set; }
+    public Currency? Currency { get; set; }
     
     public double TotalPrice { get; set; }
     public string? Note { get; set; }

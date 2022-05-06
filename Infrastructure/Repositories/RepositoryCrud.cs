@@ -5,6 +5,7 @@ using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
+using Infrastructure.Persistence.Database.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -26,20 +27,20 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     where TModel : class, IDbModel
     where TKey : IEquatable<TKey>
 {
-    protected readonly IMapper mapper;
-    protected readonly DbSet<TModel> dbSet;
+    protected readonly IMapper Mapper;
+    protected readonly DbSet<TModel> DbSet;
 
     public RepositoryCrudBase(TContext dbContext, IMapper mapper) : base(dbContext)
     {
-        this.mapper = mapper;
-        dbSet = dbContext.Set<TModel>();
+        this.Mapper = mapper;
+        DbSet = dbContext.Set<TModel>();
     }
 
     public async Task<SaveAction<Task<TEntity>>> CreateAsync(TEntity entity)
     {
         var model = MapEntityToModel(entity);
 
-        var result = await dbSet.AddAsync(model);
+        var result = await DbSet.AddAsync(model);
 
         return async () =>
         {
@@ -51,13 +52,13 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
     public async Task<SaveAction<Task<IEnumerable<TEntity>>>> CreateAllAsync(IEnumerable<TEntity> entities)
     {
-        var models = entities.Select(entity => MapEntityToModel(entity));
+        var models = entities.Select(MapEntityToModel);
 
 
         IList<EntityEntry<TModel>> results = new List<EntityEntry<TModel>>();
         foreach (var model in models)
         {
-            results.Add(await dbSet.AddAsync(model));
+            results.Add(await DbSet.AddAsync(model));
         }
 
         return async () =>
@@ -70,9 +71,11 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
     public IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
     {
-        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
+        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
 
-        IQueryable<TEntity> entitiesSet = set.ProjectTo<TEntity>(mapper.ConfigurationProvider);
+        set = set.FilterSoftDeletedModels();
+
+        IQueryable<TEntity> entitiesSet = set.ProjectTo<TEntity>(Mapper.ConfigurationProvider);
 
         if (options is {Filter: { }})
         {
@@ -98,7 +101,9 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
 
     private Task<TModel> _findByIdAsync(TKey id, FindOptions? options = default)
     {
-        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : dbSet;
+        IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
+
+        set = set.FilterSoftDeletedModels();
 
         return set.FirstAsync(model => model.Id.Equals(id));
     }
@@ -125,7 +130,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         try
         {
             var model = await _findByIdAsync(id);
-            dbSet.Remove(model);
+            DbSet.Remove(model);
         }
         catch (InvalidOperationException e)
         {
@@ -135,10 +140,10 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     }
 
     protected TModel MapEntityToModel(TEntity entity) =>
-        mapper.Map<TModel>(entity);
+        Mapper.Map<TModel>(entity);
 
     protected TEntity MapModelToEntity(TModel model) =>
-        mapper.Map<TEntity>(model);
+        Mapper.Map<TEntity>(model);
 
-    protected virtual IQueryable<TModel> GetIncludedDbSet() => dbSet.AsQueryable();
+    protected virtual IQueryable<TModel> GetIncludedDbSet() => DbSet.AsQueryable();
 }

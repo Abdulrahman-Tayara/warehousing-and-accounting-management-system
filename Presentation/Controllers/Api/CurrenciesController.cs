@@ -1,4 +1,4 @@
-﻿using Application.Commands.Currencies.CreateCurrency;
+﻿using Application.Commands.Currencies;
 using Application.Queries.Currencies;
 using AutoMapper;
 using MediatR;
@@ -45,5 +45,23 @@ public class CurrenciesController : ApiControllerBase
         var currencies = await Mediator.Send(new GetCurrencyQuery {Id = id});
 
         return Ok(currencies.ToViewModel<CurrencyViewModel>(Mapper));
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<CurrencyViewModel>>> UpdateCurrency(int id,
+        UpdateCurrencyRequest request)
+    {
+        var command = Mapper.Map<UpdateCurrencyCommand>(request);
+        command.Id = id;
+
+        var _ = await Mediator.Send(command);
+
+        return await GetCurrency(id);
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task DeleteCurrency(int id)
+    {
+        await Mediator.Send(new DeleteCurrencyCommand() {key = id});
     }
 }

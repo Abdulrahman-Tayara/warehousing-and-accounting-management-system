@@ -2,6 +2,7 @@
 using Application.Queries.Invoicing;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
@@ -11,6 +12,7 @@ using StatusCodes = Domain.Exceptions.StatusCodes;
 
 namespace wms.Controllers.Api;
 
+[Authorize]
 public class InvoicesController : ApiControllerBase
 {
     public InvoicesController(IMediator mediator, IMapper mapper) :

@@ -17,7 +17,7 @@ public class ProductRepository : RepositoryCrud<Product, ProductDb>, IProductRep
     
     protected override IQueryable<ProductDb> GetIncludedDbSet()
     {
-        return dbSet
+        return DbSet
             .Include(p => p.Category)
             .Include(p => p.Currency)
             .Include(p => p.Manufacturer)

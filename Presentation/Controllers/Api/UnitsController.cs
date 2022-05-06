@@ -60,4 +60,10 @@ public class UnitsController : ApiControllerBase
 
         return await GetUnit(updatedUnitId);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task DeleteUnit(int id)
+    {
+        await Mediator.Send(new DeleteUnitCommand() {key = id});
+    }
 }

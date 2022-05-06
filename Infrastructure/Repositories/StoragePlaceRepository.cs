@@ -15,8 +15,7 @@ public class StoragePlaceRepository : RepositoryCrud<StoragePlace, StoragePlaceD
     
     protected override IQueryable<StoragePlaceDb> GetIncludedDbSet()
     {
-        return dbSet
-            .Include(p => p.Container)
+        return DbSet
             .Include(p => p.Warehouse);
     }
 }

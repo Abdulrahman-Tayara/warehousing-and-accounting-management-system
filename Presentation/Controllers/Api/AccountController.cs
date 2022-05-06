@@ -23,9 +23,9 @@ public class AccountController : ApiControllerBase
     {
         var command = Mapper.Map<CreateAccountCommand>(request);
 
-        var unitId = await Mediator.Send(command);
+        var id = await Mediator.Send(command);
 
-        return await GetAccount(unitId);
+        return await GetAccount(id);
     }
 
     [HttpGet("{id}")]
@@ -51,7 +51,7 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<AccountViewModel>>> CreateAccount(UpdateAccountRequest request,
+    public async Task<ActionResult<BaseResponse<AccountViewModel>>> UpdateAccount(UpdateAccountRequest request,
         int id)
     {
         var command = Mapper.Map<UpdateAccountCommand>(request);
@@ -60,5 +60,11 @@ public class AccountController : ApiControllerBase
         var updatedAccountId = await Mediator.Send(command);
 
         return await GetAccount(updatedAccountId);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task DeleteAccount(int id)
+    {
+        await Mediator.Send(new DeleteAccountCommand {key = id});
     }
 }

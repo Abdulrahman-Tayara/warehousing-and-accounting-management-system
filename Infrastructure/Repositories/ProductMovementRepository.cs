@@ -16,7 +16,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
 
     public IQueryable<AggregateProductQuantity> AggregateProductsQuantities(IList<int> productIds)
     {
-        return dbSet
+        return DbSet
             .Include(movement => movement.Product)
             .Select(movement => new
                 {movement.Id, movement.ProductId, movement.Product, movement.Quantity, movement.Type})
@@ -24,7 +24,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
             .GroupBy(movement => movement.ProductId)
             .Select(movementsGrouping => new AggregateProductQuantity()
             {
-                Product = mapper.Map<Product>(movementsGrouping.FirstOrDefault()!.Product),
+                Product = Mapper.Map<Product>(movementsGrouping.FirstOrDefault()!.Product),
                 QuantitySum = movementsGrouping.Sum(movement =>
                     movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity)
             });
@@ -32,7 +32,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
 
     protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
     {
-        return dbSet.Include(item =>
+        return DbSet.Include(item =>
                 item.CurrencyAmounts!.Where(c => c.Key.Equals(CurrencyAmountKey.Movement)))
             .ThenInclude(currencyAmount => currencyAmount.Currency)
             .Include(item => item.Product)
