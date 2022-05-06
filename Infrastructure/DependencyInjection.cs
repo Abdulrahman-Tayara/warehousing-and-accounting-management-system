@@ -69,6 +69,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
         services.AddScoped<IProductMovementRepository, ProductMovementRepository>();
         services.AddScoped<ICurrencyAmountRepository, CurrencyAmountRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
         
         services.AddTransient<IUnitOfWork, UnitOfWork>();
     }

@@ -3,7 +3,6 @@ namespace Domain.Entities;
 public class Payment : BaseEntity<int>
 {
     public int InvoiceId { get; set; }
-    public Invoice? Invoice { get; set; }
 
     public string? Note { get; set; }
 
