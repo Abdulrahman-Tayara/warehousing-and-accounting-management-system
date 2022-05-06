@@ -27,13 +27,11 @@ public class CheckInvoicePaymentQueryHandler : IRequestHandler<CheckInvoicePayme
 
     public async Task<Unit> Handle(CheckInvoicePaymentQuery request, CancellationToken cancellationToken)
     {
-        var paymentsSumTask = _paymentRepository.AmountSumByInvoiceIdAsync(request.InvoiceId);
-        var invoiceTask = _invoiceRepository.FindByIdAsync(request.InvoiceId);
-
-        await Task.WhenAll();
-
-        double paymentsSum = paymentsSumTask.Result;
-        Invoice invoice = invoiceTask.Result;
+        double paymentsSum = _paymentRepository.GetAll()
+            .Where(payment => payment.Id == request.InvoiceId)
+            .Sum(payment => payment.Amount);
+        
+        Invoice invoice = await _invoiceRepository.FindByIdAsync(request.InvoiceId);
 
         if (request.Amount + paymentsSum > invoice.TotalPrice)
         {
