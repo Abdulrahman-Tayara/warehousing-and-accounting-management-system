@@ -69,6 +69,8 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
         var saveCurrencyAmountsAction = await unitOfWork.CurrencyAmountRepository.CreateAllAsync(currencyAmounts);
         var _ = await saveCurrencyAmountsAction();
 
+        await unitOfWork.CommitAsync();
+
         return payment.Id;
     }
 }
