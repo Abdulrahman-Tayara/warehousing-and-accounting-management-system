@@ -14,5 +14,6 @@ public class CurrencyAmount : BaseEntity<int>
 
 public enum CurrencyAmountKey
 {
-    Movement
+    Movement,
+    Payment
 }
