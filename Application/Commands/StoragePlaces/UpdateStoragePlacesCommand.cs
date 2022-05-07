@@ -13,6 +13,8 @@ public class UpdateStoragePlaceCommand : IUpdateEntityCommand<int>
     public int WarehouseId { get; set; }
     
     public int? ContainerId { get; set; }
+    
+    public string? Description { get; set; }
 }
 
 public class UpdateStoragePlaceCommandHandler : UpdateEntityCommandHandler<UpdateStoragePlaceCommand, StoragePlace, int,
@@ -29,7 +31,8 @@ public class UpdateStoragePlaceCommandHandler : UpdateEntityCommandHandler<Updat
             Id = request.Id,
             WarehouseId = request.WarehouseId,
             ContainerId = request.ContainerId,
-            Name = request.Name
+            Name = request.Name,
+            Description = request.Description
         };
     }
 }
