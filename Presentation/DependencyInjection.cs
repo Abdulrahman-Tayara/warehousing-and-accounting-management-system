@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
 using wms.Dto.Common.Responses.Validation;
 using wms.Filters;
 using wms.Utils;
@@ -13,6 +14,7 @@ public static class DependencyInjection
             .AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
             .AddJsonOptions(options =>
             {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
             })
             .ConfigureApiBehaviorOptions(options =>
