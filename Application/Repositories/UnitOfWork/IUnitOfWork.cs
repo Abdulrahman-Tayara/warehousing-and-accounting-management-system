@@ -1,3 +1,5 @@
+using Application.Repositories.Aggregates;
+
 namespace Application.Repositories.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
@@ -14,6 +16,10 @@ public interface IUnitOfWork : IDisposable
     public IUnitRepository UnitRepository { get; }
     public IUserRepository UserRepository { get; }
     public IWarehouseRepository WarehouseRepository { get; }
+    
+    public IPaymentRepository PaymentRepository { get; }
+    
+    public IInvoicePaymentsRepository InvoicePaymentsRepository { get; }
 
     public void Commit();
 

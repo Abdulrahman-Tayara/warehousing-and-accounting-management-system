@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<ProductMovementDb> ProductMovements { get; set; }
     public DbSet<CurrencyAmountDb> CurrencyAmounts { get; set; }
     public DbSet<InvoiceDb> Invoices { get; set; }
+    public DbSet<PaymentDb> payments { get; set; }
     
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {

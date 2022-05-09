@@ -19,6 +19,11 @@ public class Invoice : BaseEntity<int>
     public InvoiceStatus Status { get; set; }
 
     public InvoiceType Type { get; set; }
+
+    public bool IsClosed()
+    {
+        return Status == InvoiceStatus.Closed;
+    }
 }
 
 public enum InvoiceStatus

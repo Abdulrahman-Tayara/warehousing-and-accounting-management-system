@@ -28,6 +28,8 @@
     <ItemGroup>
       <Compile Remove="Migrations\20220404211154_InitialCreate.cs" />
       <Compile Remove="Migrations\20220404211154_InitialCreate.Designer.cs" />
+      <Compile Remove="Migrations\20220506202055_AddPayments.cs" />
+      <Compile Remove="Migrations\20220506202055_AddPayments.Designer.cs" />
     </ItemGroup>
 
     <ItemGroup>

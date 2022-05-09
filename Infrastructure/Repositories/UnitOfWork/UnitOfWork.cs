@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Application.Repositories.Aggregates;
 using Application.Repositories.UnitOfWork;
 using Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -19,6 +20,9 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IUnitRepository> _unitRepository;
     private readonly Lazy<IUserRepository> _userRepository;
     private readonly Lazy<IWarehouseRepository> _warehouseRepository;
+    private readonly Lazy<IPaymentRepository> _paymentRepository;
+
+    private readonly Lazy<IInvoicePaymentsRepository> _invoicePaymentRepository;
 
     private readonly IDbContextTransaction _transaction;
 
@@ -27,7 +31,9 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IInvoiceRepository> invoiceRepository, Lazy<IManufacturerRepository> manufacturerRepository,
         Lazy<IProductMovementRepository> productMovementRepository, Lazy<IProductRepository> productRepository,
         Lazy<IStoragePlaceRepository> storagePlaceRepository, Lazy<IUnitRepository> unitRepository,
-        Lazy<IUserRepository> userRepository, Lazy<IWarehouseRepository> warehouseRepository, ApplicationDbContext dbContext)
+        Lazy<IUserRepository> userRepository, Lazy<IWarehouseRepository> warehouseRepository,
+        Lazy<IPaymentRepository> paymentRepository, Lazy<IInvoicePaymentsRepository> invoicePaymentRepository,
+        ApplicationDbContext dbContext)
     {
         _accountRepository = accountRepository;
         _categoryRepository = categoryRepository;
@@ -41,6 +47,8 @@ public class UnitOfWork : IUnitOfWork
         _unitRepository = unitRepository;
         _userRepository = userRepository;
         _warehouseRepository = warehouseRepository;
+        _paymentRepository = paymentRepository;
+        _invoicePaymentRepository = invoicePaymentRepository;
         _transaction = dbContext.Database.BeginTransaction();
     }
 
@@ -67,6 +75,10 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository UserRepository => _userRepository.Value;
 
     public IWarehouseRepository WarehouseRepository => _warehouseRepository.Value;
+
+    public IPaymentRepository PaymentRepository => _paymentRepository.Value;
+
+    public IInvoicePaymentsRepository InvoicePaymentsRepository => _invoicePaymentRepository.Value;
 
     public void Commit()
     {
