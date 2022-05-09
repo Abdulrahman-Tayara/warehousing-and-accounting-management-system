@@ -5,6 +5,7 @@ using Domain.Entities;
 
 namespace Infrastructure.Persistence.Database.Models;
 
+[Table("Payments")]
 public class PaymentDb : IDbModel, IMapFrom<Payment>
 {
     [Key]
@@ -26,7 +27,7 @@ public class PaymentDb : IDbModel, IMapFrom<Payment>
     public CurrencyDb? Currency { get; set; }
     
     [ForeignKey("ObjectId")]
-    public IEnumerable<CurrencyAmount> CurrencyAmounts { get; set; }
+    public IEnumerable<CurrencyAmountDb> CurrencyAmounts { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }

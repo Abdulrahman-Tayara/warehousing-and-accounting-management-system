@@ -1,6 +1,6 @@
 using Application.Common.Dtos;
-using Application.Queries.Payments;
 using Application.Repositories.UnitOfWork;
+using Domain.Aggregations;
 using Domain.Entities;
 using MediatR;
 
@@ -21,16 +21,14 @@ public class CreatePaymentCommand : IRequest<int>
     public PaymentIoType PaymentIoType { get; set; }
 
     public IEnumerable<CurrencyAmountDto> CurrencyAmounts { get; set; }
-
-    public DateTime CreatedAt { get; set; }
 }
 
 public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, int>
 {
     private readonly Lazy<IUnitOfWork> _unitOfWork;
-    private readonly Mediator _mediator;
+    private readonly IMediator _mediator;
 
-    public CreatePaymentCommandHandler(Lazy<IUnitOfWork> unitOfWork, Mediator mediator)
+    public CreatePaymentCommandHandler(Lazy<IUnitOfWork> unitOfWork, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
         _mediator = mediator;
@@ -38,12 +36,11 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 
     public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
-        var checkInvoicePaymentQuery = new CheckInvoicePaymentQuery
-            {InvoiceId = request.InvoiceId, Amount = request.Amount};
-        await _mediator.Send(checkInvoicePaymentQuery, cancellationToken);
-
         using var unitOfWork = _unitOfWork.Value;
-        Payment payment = new Payment
+
+        InvoicePayments invoicePayments = await unitOfWork.InvoicePaymentsRepository.FindByInvoiceId(request.InvoiceId);
+
+        invoicePayments.AddPayment(new Payment
         {
             InvoiceId = request.InvoiceId,
             Note = request.Note,
@@ -52,15 +49,18 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             Amount = request.Amount,
             CurrencyId = request.CurrencyId,
             CreatedAt = DateTime.Now
-        };
+        });
 
-        var savePaymentAction = await unitOfWork.PaymentRepository.CreateAsync(payment);
-        var savedPayment = await savePaymentAction();
+        var saveAction = await unitOfWork.InvoicePaymentsRepository.CreatePayments(invoicePayments);
+        var savedInvoicePayments = await saveAction();
+
+        var addedPayments = savedInvoicePayments.Payments.Except(invoicePayments.Payments);
+        var addedPayment = addedPayments.First();
 
         var currencyAmounts = request.CurrencyAmounts
             .Select(c => new CurrencyAmount
             {
-                ObjectId = savedPayment.Id,
+                ObjectId = addedPayment.Id,
                 Key = CurrencyAmountKey.Payment,
                 Amount = c.Value,
                 CurrencyId = c.CurrencyId
@@ -71,6 +71,6 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 
         await unitOfWork.CommitAsync();
 
-        return payment.Id;
+        return addedPayment.Id;
     }
 }

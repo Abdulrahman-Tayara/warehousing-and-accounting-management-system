@@ -15,7 +15,7 @@ public class PaymentRepository : RepositoryCrud<Payment, PaymentDb>, IPaymentRep
 
     protected override IQueryable<PaymentDb> GetIncludedDbSet()
     {
-        return dbSet
+        return DbSet
             .Include(payment => payment.Currency)
             .Include(payment => payment.CurrencyAmounts);
     }

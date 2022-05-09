@@ -22,8 +22,9 @@ public class GetAllPaymentsQueryHandler : PaginatedQueryHandler<GetAllPaymentsQu
         CancellationToken cancellationToken)
     {
         return Task.FromResult(
-            _paymentRepository.GetAll(new GetAllOptions<Payment> {IncludeRelations = true})
-                .Where(payment => payment.InvoiceId == request.InvoiceId)
+            _paymentRepository
+                .GetAll(new GetAllOptions<Payment> {IncludeRelations = true})
+                .Where(payment => payment.InvoiceId == request.InvoiceId || request.InvoiceId == default)
         );
     }
 }

@@ -1,5 +1,6 @@
 using System.Reflection;
 using Application.Repositories;
+using Application.Repositories.Aggregates;
 using Application.Repositories.UnitOfWork;
 using Application.Services.Identity;
 using Application.Services.Settings;
@@ -8,6 +9,7 @@ using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Persistence.Database.Triggers;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.Aggregates;
 using Infrastructure.Repositories.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +77,8 @@ public static class DependencyInjection
         services.AddScoped<IProductMovementRepository, ProductMovementRepository>();
         services.AddScoped<ICurrencyAmountRepository, CurrencyAmountRepository>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+        services.AddScoped<IInvoicePaymentsRepository, InvoicePaymentsRepository>();
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
     }
