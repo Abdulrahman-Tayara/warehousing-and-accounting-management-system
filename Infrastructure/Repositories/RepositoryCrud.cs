@@ -98,6 +98,11 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         return set.FirstAsync(model => model.Id.Equals(id));
     }
 
+    public Task<bool> IsExistsById(TKey id)
+    {
+        return DbSet.AnyAsync(model => model.Id.Equals(id));
+    }
+    
     public async Task<TEntity> Update(TEntity entity)
     {
         try
