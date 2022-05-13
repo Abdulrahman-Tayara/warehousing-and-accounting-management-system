@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Domain.Exceptions;
+using FluentValidation;
 using wms.Dto.Common.Responses;
 using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
@@ -20,6 +21,7 @@ public class ExceptionFilter : ExceptionFilterAttribute
         _logger = logger;
         _exceptionMap = new Dictionary<Type, Action<ExceptionContext>>
         {
+            {typeof(ValidationException), HandleValidationException},
             {typeof(ProductMinLevelExceededException), HandleProductMinLevelExceededException}
         };
     }
@@ -46,7 +48,6 @@ public class ExceptionFilter : ExceptionFilterAttribute
 
     private void HandleUnknownException(ExceptionContext context)
     {
-        
         if (_hostEnvironment.IsDevelopment() || _hostEnvironment.IsStaging())
         {
             _logger.LogError(context.Exception, null);
@@ -80,6 +81,19 @@ public class ExceptionFilter : ExceptionFilterAttribute
             new ResponseMetaData {message = exception!.Message}, exception.ProductsWithExceededMinLevel);
 
         context.Result = new ObjectResult(responseBody) {StatusCode = exception.Code};
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleValidationException(ExceptionContext context)
+    {
+        var exception = (ValidationException) context.Exception;
+
+        var responseBody = new NoDataResponse(
+            String.Join("\n", exception.Errors.Select(e => e.ErrorMessage))
+        );
+
+        context.Result = new ObjectResult(responseBody) {StatusCode = StatusCodes.Status400BadRequest};
 
         context.ExceptionHandled = true;
     }

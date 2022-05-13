@@ -1,6 +1,8 @@
 using System.Reflection;
+using Application.Common.Behaviours;
 using Application.Common.Mappings;
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,9 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         return services
+            .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
             .AddMediatR(Assembly.GetExecutingAssembly())
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>))
             .AddLazyDi();
     }
 
