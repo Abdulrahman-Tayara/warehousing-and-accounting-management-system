@@ -1,8 +1,7 @@
-﻿using System.Reflection.Metadata;
+﻿using Application.Common.Dtos;
 using Application.Queries.Invoicing.Dto;
 using Application.Repositories;
 using Domain.Aggregations;
-using Domain.Entities;
 using Domain.Exceptions;
 using MediatR;
 
@@ -36,13 +35,18 @@ public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuant
             .OrderBy(i => i.ProductId)
             .ToList();
 
+        var productIds = productQuantities.Select(dto => dto.ProductId).ToList();
+        
         IEnumerable<int> productIdsExceedsMinLevel = _productMovementRepository
-            .AggregateProductsQuantities(productQuantities.Select(dto => dto.ProductId).ToList())
+            .AggregateProductsQuantities(new ProductMovementFilters
+            {
+                ProductIds = productIds
+            })
             .ToList()
-            .OrderBy(dto => dto.Product.Id)
+            .OrderBy(dto => dto.Product!.Id)
             .Zip(productQuantities)
             .Where(entry => _exceedsProductMinLevel(entry.First, entry.Second))
-            .Select(entry => entry.First.Product.Id)
+            .Select(entry => entry.First.Product!.Id)
             .ToList();
 
         if (productIdsExceedsMinLevel.Any())
