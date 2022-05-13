@@ -10,6 +10,8 @@ public class ProductMovementDb : IDbModel, IMapFrom<ProductMovement>
     public int Id { get; set; }
     
     public int InvoiceId { get; set; }
+    [ForeignKey("InvoiceId")]
+    public InvoiceDb Invoice { get; set; }
     
     public int? ProductId { get; set; }
     [ForeignKey("ProductId")]

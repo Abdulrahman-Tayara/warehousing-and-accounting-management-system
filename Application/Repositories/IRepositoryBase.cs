@@ -36,6 +36,4 @@ public class FindOptions
 public class GetAllOptions<TEntity>
 {
     public bool IncludeRelations { get; set; } = false;
-
-    public Expression<Func<TEntity, bool>>? Filter { get; set; } = null;
 }

@@ -23,9 +23,10 @@ public class GetProductMovementsQueryHandler : PaginatedQueryHandler<GetProductM
     {
         return Task.FromResult(
             _productMovementRepository.GetAll(new GetAllOptions<ProductMovement>
-            {
-                IncludeRelations = true,
-                Filter = movement => request.InvoiceId == null || movement.InvoiceId.Equals(request.InvoiceId)
-            }));
+                {
+                    IncludeRelations = true,
+                })
+                .Where(movement => request.InvoiceId == null || movement.InvoiceId.Equals(request.InvoiceId))
+        );
     }
 }

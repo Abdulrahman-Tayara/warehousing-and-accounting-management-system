@@ -54,7 +54,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.ApplicationIdentityUser", b =>
@@ -137,7 +137,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Key");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.CategoryDb", b =>
@@ -154,7 +154,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.CurrencyAmountDb", b =>
@@ -183,7 +183,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ObjectId");
 
-                    b.ToTable("CurrencyAmounts");
+                    b.ToTable("CurrencyAmounts", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.CurrencyDb", b =>
@@ -207,7 +207,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.InvoiceDb", b =>
@@ -250,7 +250,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.ManufacturerDb", b =>
@@ -270,7 +270,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.ProductDb", b =>
@@ -317,7 +317,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.ProductMovementDb", b =>
@@ -368,7 +368,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Movements");
+                    b.ToTable("Movements", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.StoragePlaceDb", b =>
@@ -398,7 +398,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("StoragePlaces");
+                    b.ToTable("StoragePlaces", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.UnitDb", b =>
@@ -418,7 +418,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units");
+                    b.ToTable("Units", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.WarehouseDb", b =>
@@ -439,7 +439,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Warehouses");
+                    b.ToTable("Warehouses", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
