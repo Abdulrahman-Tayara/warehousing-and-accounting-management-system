@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Application.Common.Mappings;
 using Domain.Entities;
 
@@ -6,6 +7,8 @@ namespace Infrastructure.Persistence.Database.Models;
 
 public class InvoiceDb : IDbModel, IMapFrom<Invoice>
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
     public int AccountId { get; set; }
