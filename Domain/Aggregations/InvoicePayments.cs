@@ -5,9 +5,9 @@ namespace Domain.Aggregations;
 
 public class InvoicePayments : AggregateRoot
 {
-    public Invoice Invoice { get; set; }
-    
-    public IEnumerable<Payment> Payments { get; set; }
+    public Invoice Invoice { get; set; } = default!;
+
+    public IEnumerable<Payment> Payments { get; set; } = default!;
 
     public IList<Payment> PendingPayments { get; } = new List<Payment>();
 
@@ -23,15 +23,33 @@ public class InvoicePayments : AggregateRoot
             throw new IncompatiblePaymentIoTypeException();
         }
 
-
-        double paymentsSum = Payments.Sum(p => p.Amount);
-
-        if (payment.Amount + paymentsSum > Invoice.TotalPrice)
+        if (AddedPaymentOverpaysInvoice(payment))
         {
             throw new OverPayedException();
         }
 
         PendingPayments.Add(payment);
+
+        if (AddedPaymentWouldCloseInvoice(payment))
+        {
+            Invoice.Status = InvoiceStatus.Closed;
+            Invoice.Edited = true; //TODO change to domain event-based
+        }
+    }
+
+    private bool AddedPaymentOverpaysInvoice(Payment payment)
+    {
+        double paymentsSum = Payments.Sum(p => p.Amount);
+        
+        return payment.Amount + paymentsSum > Invoice.TotalPrice;
+    }
+
+    private bool AddedPaymentWouldCloseInvoice(Payment payment)
+    {
+        double paymentsSum = Payments.Sum(p => p.Amount);
+        
+        // Direct comparison will make loss of precision
+        return Math.Abs(payment.Amount + paymentsSum - Invoice.TotalPrice) < 0.001;
     }
     
     private bool IsCompatibleWithPaymentType(PaymentIoType paymentIoType)

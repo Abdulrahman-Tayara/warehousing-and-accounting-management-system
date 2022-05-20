@@ -24,6 +24,8 @@ public class Invoice : BaseEntity<int>
     {
         return Status == InvoiceStatus.Closed;
     }
+
+    public bool Edited { get; set; } //TODO change to domain event-based
 }
 
 public enum InvoiceStatus
