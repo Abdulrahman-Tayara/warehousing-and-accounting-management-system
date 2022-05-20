@@ -10,7 +10,7 @@ namespace wms.Dto.Invoices;
 public class InvoiceViewModel : IViewModel, IMapFrom<Invoice>
 {
     public int Id { get; set; }
-    public AccountViewModel Account { get; set; } = default!;
+    public AccountViewModel? Account { get; set; } = default!;
     public WarehouseViewModel Warehouse { get; set; } = default!;
     public CurrencyViewModel? Currency { get; set; }
     public double TotalPrice { get; set; }

@@ -2,8 +2,8 @@
 
 public class Invoice : BaseEntity<int>
 {
-    public int AccountId { get; set; }
-    public Account Account { get; set; }
+    public int? AccountId { get; set; }
+    public Account? Account { get; set; }
     
     public int WarehouseId { get; set; }
     public Warehouse Warehouse { get; set; }

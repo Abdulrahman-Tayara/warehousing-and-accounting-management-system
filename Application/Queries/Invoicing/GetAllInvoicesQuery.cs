@@ -6,6 +6,7 @@ namespace Application.Queries.Invoicing;
 
 public class GetAllInvoicesQuery : GetPaginatedQuery<Invoice>
 {
+    public InvoiceType? Type { get; set; }
     public int AccountId { get; set; } = default;
     public int WarehouseId { get; set; } = default;
 }

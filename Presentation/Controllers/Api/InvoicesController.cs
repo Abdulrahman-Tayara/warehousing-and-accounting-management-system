@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Invoicing;
 using Application.Queries.Invoicing;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,11 +42,28 @@ public class InvoicesController : ApiControllerBase
         return Ok(invoice.ToViewModel<InvoiceViewModel>(Mapper));
     }
 
-    [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAll(
-        [FromQuery] InvoicesQueryParams requestQueryParams)
+    [HttpGet("purchases")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllPurchasesInvoices(
+        [FromQuery] PaginationRequestParams request)
     {
-        var query = Mapper.Map<GetAllInvoicesQuery>(requestQueryParams);
+        var query = request.AsQuery(new GetAllInvoicesQuery
+        {
+            Type = InvoiceType.In
+        });
+
+        var invoices = await Mediator.Send(query);
+
+        return Ok(invoices.ToViewModel<InvoiceViewModel>(Mapper));
+    }
+    
+    [HttpGet("sales")]
+    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllSalesInvoices(
+        [FromQuery] PaginationRequestParams request)
+    {
+        var query = request.AsQuery(new GetAllInvoicesQuery
+        {
+            Type = InvoiceType.Out
+        });
 
         var invoices = await Mediator.Send(query);
 
