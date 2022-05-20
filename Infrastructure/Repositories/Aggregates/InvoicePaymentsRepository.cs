@@ -1,6 +1,7 @@
 using Application.Repositories;
 using Application.Repositories.Aggregates;
 using Domain.Aggregations;
+using Domain.Entities;
 using Infrastructure.Persistence.Database;
 
 namespace Infrastructure.Repositories.Aggregates;
@@ -43,9 +44,15 @@ public class InvoicePaymentsRepository : RepositoryBase<ApplicationDbContext>, I
         {
             var savedPayments = await saveAction();
 
+            Invoice invoice = invoicePayments.Invoice;
+            if (invoice.Edited)
+            {
+                invoice = await _invoiceRepository.Update(invoice);
+            }
+
             return new InvoicePayments
             {
-                Invoice = invoicePayments.Invoice,
+                Invoice = invoice,
                 Payments = invoicePayments.Payments.Concat(savedPayments)
             };
         };
