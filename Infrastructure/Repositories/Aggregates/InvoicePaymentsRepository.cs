@@ -36,7 +36,7 @@ public class InvoicePaymentsRepository : RepositoryBase<ApplicationDbContext>, I
         };
     }
 
-    public async Task<SaveAction<Task<InvoicePayments>>> CreatePayments(InvoicePayments invoicePayments)
+    public async Task<SaveAction<Task<InvoicePayments>>> Save(InvoicePayments invoicePayments)
     {
         var saveAction = await _paymentRepository.CreateAllAsync(invoicePayments.PendingPayments);
 
@@ -44,15 +44,11 @@ public class InvoicePaymentsRepository : RepositoryBase<ApplicationDbContext>, I
         {
             var savedPayments = await saveAction();
 
-            Invoice invoice = invoicePayments.Invoice;
-            if (invoice.Edited)
-            {
-                invoice = await _invoiceRepository.Update(invoice);
-            }
+            Invoice updatedInvoice = await _invoiceRepository.Update(invoicePayments.Invoice);
 
             return new InvoicePayments
             {
-                Invoice = invoice,
+                Invoice = updatedInvoice,
                 Payments = invoicePayments.Payments.Concat(savedPayments)
             };
         };

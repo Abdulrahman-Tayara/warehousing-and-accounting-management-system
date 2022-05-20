@@ -32,8 +32,7 @@ public class InvoicePayments : AggregateRoot
 
         if (AddedPaymentWouldCloseInvoice(payment))
         {
-            Invoice.Status = InvoiceStatus.Closed;
-            Invoice.Edited = true; //TODO change to domain event-based
+            Invoice.Close();
         }
     }
 

@@ -51,7 +51,7 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
             CreatedAt = DateTime.Now
         });
 
-        var saveAction = await unitOfWork.InvoicePaymentsRepository.CreatePayments(invoicePayments);
+        var saveAction = await unitOfWork.InvoicePaymentsRepository.Save(invoicePayments);
         var savedInvoicePayments = await saveAction();
 
         var addedPayments = savedInvoicePayments.Payments.Except(invoicePayments.Payments);
