@@ -44,12 +44,10 @@ public class InvoicesController : ApiControllerBase
 
     [HttpGet("purchases")]
     public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllPurchasesInvoices(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] InvoicesQueryParams request)
     {
-        var query = request.AsQuery(new GetAllInvoicesQuery
-        {
-            Type = InvoiceType.In
-        });
+        var query = request.AsQuery<GetAllInvoicesQuery>(Mapper);
+        query.Type = InvoiceType.In;
 
         var invoices = await Mediator.Send(query);
 
@@ -58,12 +56,10 @@ public class InvoicesController : ApiControllerBase
     
     [HttpGet("sales")]
     public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllSalesInvoices(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] InvoicesQueryParams request)
     {
-        var query = request.AsQuery(new GetAllInvoicesQuery
-        {
-            Type = InvoiceType.Out
-        });
+        var query = request.AsQuery<GetAllInvoicesQuery>(Mapper);
+        query.Type = InvoiceType.Out;
 
         var invoices = await Mediator.Send(query);
 

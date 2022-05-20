@@ -19,6 +19,12 @@ public static class PaginationParamsExtension
         return requestParams.AsQuery(Activator.CreateInstance<T>());
     }
     
+    public static T AsQuery<T>(this PaginationRequestParams requestParams, IMapper mapper)
+        where T : IGetPaginatedQuery
+    {
+        return mapper.Map<T>(requestParams);
+    }
+    
     public static T AsQuery<T>(this PaginationRequestParams requestParams, T query)
         where T : IGetPaginatedQuery
     {
