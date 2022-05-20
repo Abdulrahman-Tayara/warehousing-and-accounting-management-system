@@ -43,9 +43,9 @@ public class InvoicesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAll(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] InvoicesQueryParams requestQueryParams)
     {
-        var query = request.AsQuery<GetAllInvoicesQuery>();
+        var query = Mapper.Map<GetAllInvoicesQuery>(requestQueryParams);
 
         var invoices = await Mediator.Send(query);
 

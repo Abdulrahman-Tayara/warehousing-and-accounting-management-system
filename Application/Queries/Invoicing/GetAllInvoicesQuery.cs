@@ -6,6 +6,8 @@ namespace Application.Queries.Invoicing;
 
 public class GetAllInvoicesQuery : GetPaginatedQuery<Invoice>
 {
+    public int AccountId { get; set; } = default;
+    public int WarehouseId { get; set; } = default;
 }
 
 public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQuery, Invoice>
@@ -21,6 +23,10 @@ public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQu
         CancellationToken cancellationToken)
     {
         return Task.FromResult(
-            _invoiceRepository.GetAll(new GetAllOptions<Invoice> {IncludeRelations = true}));
+            _invoiceRepository
+                .GetAll(new GetAllOptions<Invoice> {IncludeRelations = true})
+                .Where(invoice => invoice.WarehouseId == request.WarehouseId || request.WarehouseId == default)
+                .Where(invoice => invoice.AccountId == request.AccountId || request.AccountId == default)
+        );
     }
 }
