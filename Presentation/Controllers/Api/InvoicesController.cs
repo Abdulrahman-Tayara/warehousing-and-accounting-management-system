@@ -42,24 +42,11 @@ public class InvoicesController : ApiControllerBase
         return Ok(invoice.ToViewModel<InvoiceViewModel>(Mapper));
     }
 
-    [HttpGet("purchases")]
-    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllPurchasesInvoices(
+    [HttpGet]
+    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAll(
         [FromQuery] InvoicesQueryParams request)
     {
         var query = request.AsQuery<GetAllInvoicesQuery>(Mapper);
-        query.Type = InvoiceType.In;
-
-        var invoices = await Mediator.Send(query);
-
-        return Ok(invoices.ToViewModel<InvoiceViewModel>(Mapper));
-    }
-    
-    [HttpGet("sales")]
-    public async Task<ActionResult<BaseResponse<IEnumerable<InvoiceViewModel>>>> GetAllSalesInvoices(
-        [FromQuery] InvoicesQueryParams request)
-    {
-        var query = request.AsQuery<GetAllInvoicesQuery>(Mapper);
-        query.Type = InvoiceType.Out;
 
         var invoices = await Mediator.Send(query);
 
