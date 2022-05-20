@@ -21,4 +21,6 @@ public class ProductJoinedViewModel : IViewModel, IMapFrom<Product>
     public double Price { get; set; }
 
     public Currency Currency { get; set; }
+    
+    public int MinLevel { get; set; }
 }
