@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Application.Common.Mappings;
 using Domain.Entities;
 
@@ -7,6 +8,8 @@ namespace Infrastructure.Persistence.Database.Models;
 [Table("CurrencyAmounts")]
 public class CurrencyAmountDb : IDbModel, IMapFrom<CurrencyAmount>
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
     public int? ObjectId { get; set; }

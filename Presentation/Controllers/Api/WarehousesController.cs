@@ -1,17 +1,20 @@
 ﻿using Application.Commands.Warehouses;
+using Application.Common.Dtos;
 using Application.Queries.Warehouses;
 using AutoMapper;
+using Domain.Aggregations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 using wms.Dto.Pagination;
+using wms.Dto.ProductQuantity;
 using wms.Dto.Warehouses;
 
 namespace wms.Controllers.Api;
 
-[Authorize]
+// [Authorize]
 public class WarehousesController : ApiControllerBase
 {
     public WarehousesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -57,10 +60,22 @@ public class WarehousesController : ApiControllerBase
 
         return Ok(warehouse.ToViewModel<WarehouseViewModel>(Mapper));
     }
-    
+
     [HttpDelete("{id}")]
     public async Task Delete(int id)
     {
         await Mediator.Send(new DeleteWarehouseCommand() {key = id});
+    }
+
+    [HttpGet("inventory")]
+    public async Task<ActionResult<BaseResponse<PageViewModel<ProductQuantityViewModel>>>> InventoryWarehouse(
+        [FromQuery] PaginationRequestParams paginationParams,
+        [FromQuery] ProductMovementFilters filters)
+    {
+        var query = paginationParams.AsQuery(new InventoryWarehouseQuery {Filters = filters});
+
+        var productQuantities = await Mediator.Send(query);
+
+        return Ok(productQuantities.ToViewModel<ProductQuantityViewModel>(Mapper));
     }
 }

@@ -13,4 +13,11 @@ public class InvoiceRepository : RepositoryCrud<Invoice, InvoiceDb>, IInvoiceRep
     {
     }
 
+    protected override IQueryable<InvoiceDb> GetIncludedDbSet()
+    {
+        return base.GetIncludedDbSet()
+            .Include(invoice => invoice.Account)
+            .Include(invoice => invoice.Currency)
+            .Include(invoice => invoice.Warehouse);
+    }
 }

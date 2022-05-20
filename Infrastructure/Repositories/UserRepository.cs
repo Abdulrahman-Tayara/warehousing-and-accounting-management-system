@@ -6,6 +6,7 @@ using Domain.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -63,6 +64,11 @@ public class UserRepository : IUserRepository
     public Task<User> FindIncludedByIdAsync(int id)
     {
         throw new NotImplementedException();
+    }
+
+    public Task<bool> IsExistsById(int id)
+    {
+        return _userManager.Users.AnyAsync(user => user.Id == id);
     }
 
     public async Task DeleteAsync(int id)

@@ -5,7 +5,6 @@ using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
-using Infrastructure.Persistence.Database.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -72,15 +71,8 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     public IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
-
-        set = set.FilterSoftDeletedModels();
-
+        
         IQueryable<TEntity> entitiesSet = set.ProjectTo<TEntity>(Mapper.ConfigurationProvider);
-
-        if (options is {Filter: { }})
-        {
-            entitiesSet = entitiesSet.Where(options.Filter);
-        }
 
         return entitiesSet;
     }
@@ -102,12 +94,15 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     private Task<TModel> _findByIdAsync(TKey id, FindOptions? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
-
-        set = set.FilterSoftDeletedModels();
-
+        
         return set.FirstAsync(model => model.Id.Equals(id));
     }
 
+    public Task<bool> IsExistsById(TKey id)
+    {
+        return DbSet.AnyAsync(model => model.Id.Equals(id));
+    }
+    
     public async Task<TEntity> Update(TEntity entity)
     {
         try

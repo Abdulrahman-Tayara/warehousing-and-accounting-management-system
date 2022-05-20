@@ -21,6 +21,8 @@ public interface IRepositoryCrud<TEntity, TKey> : IRepositoryBase where TEntity 
     /// <exception cref="NotFoundException"></exception>
     Task<TEntity> FindByIdAsync(TKey id, FindOptions? options = default);
 
+    Task<bool> IsExistsById(TKey id);
+
     Task<TEntity> Update(TEntity entity);
 
     Task DeleteAsync(TKey id);
@@ -36,6 +38,4 @@ public class FindOptions
 public class GetAllOptions<TEntity>
 {
     public bool IncludeRelations { get; set; } = false;
-
-    public Expression<Func<TEntity, bool>>? Filter { get; set; } = null;
 }

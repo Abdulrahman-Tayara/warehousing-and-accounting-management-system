@@ -4,6 +4,7 @@ using Domain.Entities;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Z.EntityFramework.Plus;
 
 namespace Infrastructure.Repositories;
 
@@ -17,6 +18,6 @@ public class PaymentRepository : RepositoryCrud<Payment, PaymentDb>, IPaymentRep
     {
         return DbSet
             .Include(payment => payment.Currency)
-            .Include(payment => payment.CurrencyAmounts);
+            .IncludeFilter(payment => payment.CurrencyAmounts.Where(p => p.Key == CurrencyAmountKey.Payment));
     }
 }
