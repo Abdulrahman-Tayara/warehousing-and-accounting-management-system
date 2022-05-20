@@ -6,6 +6,7 @@ namespace Application.Queries.Invoicing;
 
 public class GetAllInvoicesQuery : GetPaginatedQuery<Invoice>
 {
+    public InvoiceType? Type { get; set; }
 }
 
 public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQuery, Invoice>
@@ -20,7 +21,14 @@ public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQu
     protected override Task<IQueryable<Invoice>> GetQuery(GetAllInvoicesQuery request,
         CancellationToken cancellationToken)
     {
-        return Task.FromResult(
-            _invoiceRepository.GetAll(new GetAllOptions<Invoice> {IncludeRelations = true}));
+        var query = _invoiceRepository.GetAll(new GetAllOptions<Invoice> {IncludeRelations = true});
+
+        if (request.Type is not null)
+        {
+            query = query
+                .Where(i => i.Type == request.Type);
+        }
+        
+        return Task.FromResult(query);
     }
 }

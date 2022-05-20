@@ -87,7 +87,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
         catch (InvalidOperationException e)
         {
             Console.WriteLine(e.StackTrace);
-            throw new NotFoundException();
+            throw new NotFoundException(id.ToString() ?? "", typeof(TEntity).Name);
         }
     }
 
