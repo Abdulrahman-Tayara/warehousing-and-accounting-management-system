@@ -38,7 +38,7 @@ public class InvoicesController : ApiControllerBase
     {
         var invoice = await Mediator.Send(new GetInvoiceQuery {Id = id});
 
-        return Ok(invoice.ToViewModel<GetInvoiceByIdViewModel>(Mapper));
+        return Ok(invoice.ToViewModel<InvoiceViewModel>(Mapper));
     }
 
     [HttpGet]
