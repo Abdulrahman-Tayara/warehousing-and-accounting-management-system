@@ -40,9 +40,9 @@ public class UnitsController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<UnitViewModel>>>> GetUnits(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] UnitsQueryParams request)
     {
-        var query = request.AsQuery<GetAllUnitsQuery>();
+        var query = request.AsQuery<GetAllUnitsQuery>(Mapper);
 
         var unitEntities = await Mediator.Send(query);
 

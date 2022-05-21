@@ -34,7 +34,7 @@ public abstract class PaginatedQueryHandler<TRequest, TEntity> : IRequestHandler
 
     protected abstract Task<IQueryable<TEntity>> GetQuery(TRequest request, CancellationToken cancellationToken);
 
-    protected IQueryable<TEntity> ApplyFilters(IQueryable<TEntity> query, TRequest request)
+    protected virtual IQueryable<TEntity> ApplyFilters(IQueryable<TEntity> query, TRequest request)
     {
         return query.WhereFilters(request);
     }

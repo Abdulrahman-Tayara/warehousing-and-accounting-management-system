@@ -11,7 +11,7 @@ using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
 
-// [Authorize]
+[Authorize]
 public class CategoriesController : ApiControllerBase
 {
     public CategoriesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -40,9 +40,9 @@ public class CategoriesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<CategoryViewModel>>>> GetCategories(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] CategoriesQueryParams request)
     {
-        var query = request.AsQuery<GetAllCategoriesQuery>();
+        var query = request.AsQuery<GetAllCategoriesQuery>(Mapper);
 
         var categoryEntities = await Mediator.Send(query);
 

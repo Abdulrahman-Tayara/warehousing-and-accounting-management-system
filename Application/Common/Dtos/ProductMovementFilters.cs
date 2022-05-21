@@ -6,7 +6,7 @@ namespace Application.Common.Dtos;
 public class ProductMovementFilters
 {
     [QueryFilter(QueryFilterCompareType.InArray, FieldName = "ProductId")]
-    public IList<int> ProductIds { get; set; }
+    public IList<int>? ProductIds { get; set; }
 
     [QueryFilter(QueryFilterCompareType.Equal)]
     public int? CategoryId { get; set; }

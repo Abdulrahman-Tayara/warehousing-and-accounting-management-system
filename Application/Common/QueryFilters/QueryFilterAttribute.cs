@@ -17,5 +17,5 @@ public class QueryFilterAttribute : Attribute
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class QueryFiltersConcatAttribute : Attribute
 {
-    public QueryFilterConcatType ConcatType = QueryFilterConcatType.Or;
+    public QueryFilterConcatType ConcatType = QueryFilterConcatType.And;
 }

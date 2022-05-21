@@ -33,9 +33,9 @@ public class ManufacturersController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<ManufacturerViewModel>>>> GetManufacturers(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] ManufacturersQueryParams request)
     {
-        var manufacturers = await Mediator.Send(request.AsQuery<GetAllManufacturersQuery>());
+        var manufacturers = await Mediator.Send(request.AsQuery<GetAllManufacturersQuery>(Mapper));
 
         return Ok(manufacturers.ToViewModel<ManufacturerViewModel>(Mapper));
     }

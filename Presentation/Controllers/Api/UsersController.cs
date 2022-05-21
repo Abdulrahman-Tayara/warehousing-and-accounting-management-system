@@ -41,9 +41,9 @@ public class UsersController : ApiControllerBase
     [HttpGet]
     [Authorize]
     public async Task<ActionResult<BaseResponse<PageViewModel<UserViewModel>>>> GetUsers(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] UsersQueryParams request)
     {
-        var result = await Mediator.Send(request.AsQuery<GetAllUsersQuery>());
+        var result = await Mediator.Send(request.AsQuery<GetAllUsersQuery>(Mapper));
 
         return Ok(result.ToViewModel<UserViewModel>(Mapper));
     }

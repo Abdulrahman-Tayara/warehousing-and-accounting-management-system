@@ -1,3 +1,4 @@
+using Application.Common.QueryFilters;
 using Application.Queries.Common;
 using Application.Repositories;
 using Unit = Domain.Entities.Unit;
@@ -6,6 +7,8 @@ namespace Application.Queries.Units;
 
 public class GetAllUnitsQuery : GetPaginatedQuery<Unit>
 {
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? Name {get; set; }
 }
 
 public class GetAllUnitsQueryHandler : PaginatedQueryHandler<GetAllUnitsQuery, Unit>
