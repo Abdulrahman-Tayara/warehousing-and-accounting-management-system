@@ -65,8 +65,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
 
     protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
     {
-        return DbSet.Include(item =>
-                item.CurrencyAmounts!.Where(c => c.Key.Equals(CurrencyAmountKey.Movement)))
+        return DbSet.Include(item => item.CurrencyAmounts)!
             .ThenInclude(currencyAmount => currencyAmount.Currency)
             .Include(item => item.Product)
             .Include(item => item.Currency);

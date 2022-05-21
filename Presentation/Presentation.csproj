@@ -30,4 +30,8 @@
         <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Controllers\Api\TestController.cs" />
+    </ItemGroup>
+
 </Project>
