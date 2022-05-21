@@ -39,7 +39,7 @@ public class Invoice : BaseEntity<int>
 
     private bool AddedProductOpensInvoice() => TotalPrice != 0 && Status == InvoiceStatus.Closed;
 
-    public bool IsProductExists(int productId) => Items.Any(i => i.ProductId == productId);
+    public bool ProductExists(int productId) => Items.Any(i => i.ProductId == productId);
 
     public bool IsClosed()
     {
