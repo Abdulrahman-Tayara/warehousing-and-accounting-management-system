@@ -34,15 +34,7 @@ public class Invoice : BaseEntity<int>
             Open();
         }
         
-        if (IsProductExists(item.ProductId))
-        {
-            var existsItem = Items.First(i => i.ProductId == item.ProductId);
-            existsItem.IncreaseQuantity(item.Quantity);
-        }
-        else
-        {
-            Items.Add(item);
-        }
+        Items.Add(item);
     }
 
     private bool AddedProductOpensInvoice() => TotalPrice != 0 && Status == InvoiceStatus.Closed;
