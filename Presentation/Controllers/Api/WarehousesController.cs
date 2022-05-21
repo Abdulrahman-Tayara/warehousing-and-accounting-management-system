@@ -46,9 +46,9 @@ public class WarehousesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<WarehouseViewModel>>>> GetAll(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] WarehousesQueryParams request)
     {
-        var warehouses = await Mediator.Send(request.AsQuery<GetAllWarehousesQuery>());
+        var warehouses = await Mediator.Send(request.AsQuery<GetAllWarehousesQuery>(Mapper));
 
         return Ok(warehouses.ToViewModel<WarehouseViewModel>(Mapper));
     }
