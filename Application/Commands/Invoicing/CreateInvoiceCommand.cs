@@ -55,7 +55,6 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             Note = request.Note,
             CreatedAt = DateTime.Now,
             Type = request.Type,
-            Status = InvoiceStatus.Opened
         };
 
         var invoiceItems = request.Items.Select(
