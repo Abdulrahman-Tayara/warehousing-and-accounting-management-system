@@ -12,8 +12,6 @@ public class CurrencyAmountDb : IDbModel, IMapFrom<CurrencyAmount>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
-    public int? ObjectId { get; set; }
-    
     public CurrencyAmountKey Key { get; set; }
     
     public double Amount { get; set; }

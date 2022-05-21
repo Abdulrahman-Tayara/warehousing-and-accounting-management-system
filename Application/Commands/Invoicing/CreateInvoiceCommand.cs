@@ -47,70 +47,54 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             await _mediator.Send(checkProductQuantityQuery, cancellationToken);
         }
 
-        using var unitOfWork = _unitOfWork.Value;
-        Invoice invoice = new Invoice
+        var invoice = new Invoice
         {
             AccountId = request.AccountId,
             WarehouseId = request.WarehouseId,
             CurrencyId = request.CurrencyId,
-            TotalPrice = request.Items.Sum(item => item.UnitPrice * item.Quantity),
             Note = request.Note,
             CreatedAt = DateTime.Now,
             Type = request.Type,
             Status = InvoiceStatus.Opened
         };
 
-        var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
-        var savedInvoiceEntity = await saveInvoiceAction.Invoke();
-
-        
-        var productMovements = request.Items.Select(
-            dto => new ProductMovement
-            {
-                InvoiceId = savedInvoiceEntity.Id,
-                ProductId = dto.ProductId,
-                PlaceId = dto.PlaceId,
-                Quantity = dto.Quantity,
-                UnitPrice = dto.UnitPrice,
-                TotalPrice = dto.UnitPrice * dto.Quantity,
-                CurrencyId = dto.CurrencyId,
-                Note = dto.Note,
-                Type = ProductMovement.TypeFromInvoice(request.Type),
-                CreatedAt = DateTime.Now
-            }
+        var invoiceItems = request.Items.Select(
+            dto => _buildItem(dto, request.Type)
         );
 
-        var saveMovementsAction = await unitOfWork.ProductMovementRepository.CreateAllAsync(productMovements);
-        var savedProductMovementEntities = await saveMovementsAction.Invoke();
+        foreach (var item in invoiceItems)
+        {
+            invoice.AddItem(item);
+        }
 
-        var currencyAmounts = new List<CurrencyAmount>();
+        using var unitOfWork = _unitOfWork.Value;
 
-        savedProductMovementEntities.ToList().Zip(request.Items)
-            .Where(entry => entry.Second.HasCurrencyAmount)
-            .ToList()
-            .ForEach(entry =>
-            {
-                var (savedProductMovementEntity, requestInvoiceItem) = entry;
-
-                var currencyAmountsForEachInvoiceItem = requestInvoiceItem.CurrencyAmounts!
-                    .Select(
-                        dto => new CurrencyAmount
-                        {
-                            ObjectId = savedProductMovementEntity.Id,
-                            Key = CurrencyAmountKey.Movement,
-                            Amount = dto.Value,
-                            CurrencyId = dto.CurrencyId
-                        }
-                    );
-
-                currencyAmounts.AddRange(currencyAmountsForEachInvoiceItem);
-            });
-
-        var saveCurrencyAmountsAction = await unitOfWork.CurrencyAmountRepository.CreateAllAsync(currencyAmounts);
-        var _ = await saveCurrencyAmountsAction.Invoke();
-
-        await unitOfWork.CommitAsync();
+        var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
+        invoice = await saveInvoiceAction.Invoke();
         
-        return savedInvoiceEntity.Id;
+        await unitOfWork.CommitAsync();
+
+        return invoice.Id;
+    }
+
+    private static ProductMovement _buildItem(InvoiceItemDto dto, InvoiceType invoiceType)
+    {
+        return new ProductMovement
+        {
+            ProductId = dto.ProductId,
+            PlaceId = dto.PlaceId,
+            Quantity = dto.Quantity,
+            UnitPrice = dto.UnitPrice,
+            CurrencyId = dto.CurrencyId,
+            Note = dto.Note,
+            Type = ProductMovement.TypeFromInvoice(invoiceType),
+            CreatedAt = DateTime.Now,
+            CurrencyAmounts = dto.CurrencyAmounts?.Select(currencyAmountDto => new CurrencyAmount
+            {
+                Amount = currencyAmountDto.Value,
+                CurrencyId = currencyAmountDto.CurrencyId,
+                Key = CurrencyAmountKey.Movement
+            })
+        };
     }
 }

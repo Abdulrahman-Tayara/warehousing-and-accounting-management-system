@@ -26,7 +26,6 @@ public class PaymentDb : IDbModel, IMapFrom<Payment>
     [ForeignKey("CurrencyId")]
     public CurrencyDb? Currency { get; set; }
     
-    [ForeignKey("ObjectId")]
     public IEnumerable<CurrencyAmountDb> CurrencyAmounts { get; set; }
 
     public DateTime CreatedAt { get; set; }

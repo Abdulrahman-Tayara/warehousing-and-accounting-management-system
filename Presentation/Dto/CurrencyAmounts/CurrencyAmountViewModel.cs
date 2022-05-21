@@ -6,8 +6,6 @@ namespace wms.Dto.CurrencyAmounts;
 
 public class CurrencyAmountViewModel : IViewModel, IMapFrom<CurrencyAmount>
 {
-    public int ObjectId { get; set; }
-    
     public CurrencyAmountKey Key { get; set; }
     
     public double Amount { get; set; }
