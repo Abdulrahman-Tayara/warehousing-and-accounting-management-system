@@ -33,6 +33,7 @@ public class Payment : BaseEntity<int>
 public enum PaymentType
 {
     Normal,
+    Discount
 }
 
 public enum PaymentIoType
