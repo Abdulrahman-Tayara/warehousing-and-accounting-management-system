@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.Common.QueryFilters;
+using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
@@ -7,6 +8,9 @@ namespace Application.Queries.StoragePlaces;
 public class GetStoragePlaceQuery : IRequest<StoragePlace>
 {
     public int Id { get; set; }
+    
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? Name {get; set; }
 }
 
 public class GetStoragePlaceQueryHandler : IRequestHandler<GetStoragePlaceQuery, StoragePlace>

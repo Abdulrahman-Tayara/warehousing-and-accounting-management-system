@@ -24,9 +24,9 @@ public class ProductsController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<ProductJoinedViewModel>>>> GetAllProducts(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] ProductsQueryParams request)
     {
-        var productEntities = await Mediator.Send(request.AsQuery<GetAllProductsQuery>());
+        var productEntities = await Mediator.Send(request.AsQuery<GetAllProductsQuery>(Mapper));
 
         return Ok(productEntities.ToViewModel<ProductJoinedViewModel>(Mapper));
     }

@@ -1,4 +1,5 @@
-﻿using Application.Queries.Common;
+﻿using Application.Common.QueryFilters;
+using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
@@ -6,7 +7,8 @@ namespace Application.Queries.Warehouses;
 
 public class GetAllWarehousesQuery : GetPaginatedQuery<Warehouse>
 {
-    
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? Name { get; set; }
 }
 
 public class GetAllWarehousesQueryHandler : PaginatedQueryHandler<GetAllWarehousesQuery, Warehouse>

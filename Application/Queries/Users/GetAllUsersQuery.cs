@@ -1,3 +1,4 @@
+using Application.Common.QueryFilters;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
@@ -6,6 +7,8 @@ namespace Application.Queries.Users;
 
 public class GetAllUsersQuery : GetPaginatedQuery<User>
 {
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? UserName {get; set; }
 }
 
 public class GetAllUsersQueryHandler : PaginatedQueryHandler<GetAllUsersQuery, User>

@@ -32,9 +32,9 @@ public class CurrenciesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<CurrencyViewModel>>>> GetAll(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] CurrenciesQueryParams request)
     {
-        var currencies = await Mediator.Send(request.AsQuery<GetAllCurrenciesQuery>());
+        var currencies = await Mediator.Send(request.AsQuery<GetAllCurrenciesQuery>(Mapper));
 
         return Ok(currencies.ToViewModel<CurrencyViewModel>(Mapper));
     }

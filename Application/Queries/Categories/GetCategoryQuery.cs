@@ -1,3 +1,4 @@
+using Application.Common.QueryFilters;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
@@ -7,6 +8,9 @@ namespace Application.Queries.Categories;
 public class GetCategoryQuery : IRequest<Category>
 {
     public int Id { get; init; }
+    
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? Name {get; set; }
 }
 
 public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, Category>

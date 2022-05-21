@@ -1,3 +1,4 @@
+using Application.Common.QueryFilters;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
@@ -6,6 +7,8 @@ namespace Application.Queries.Products;
 
 public class GetAllProductsQuery : GetPaginatedQuery<Product>
 {
+    [QueryFilter(QueryFilterCompareType.StringContains)]
+    public string? Name {get; set; }
 }
 
 public class GetAllProductsQueryHandler : PaginatedQueryHandler<GetAllProductsQuery, Product>

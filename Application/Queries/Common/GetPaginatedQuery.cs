@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Application.Common.QueryFilters;
 using Domain.Entities;
 using MediatR;
 
@@ -26,8 +27,15 @@ public abstract class PaginatedQueryHandler<TRequest, TEntity> : IRequestHandler
     {
         var query = await GetQuery(request, cancellationToken);
 
+        query = ApplyFilters(query, request);
+        
         return query.AsPaginatedQuery(request.Page, request.PageSize);
     }
 
     protected abstract Task<IQueryable<TEntity>> GetQuery(TRequest request, CancellationToken cancellationToken);
+
+    protected virtual IQueryable<TEntity> ApplyFilters(IQueryable<TEntity> query, TRequest request)
+    {
+        return query.WhereFilters(request);
+    }
 }

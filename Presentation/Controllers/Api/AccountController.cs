@@ -40,10 +40,10 @@ public class AccountController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<AccountViewModel>>>> GetAccounts(
-        [FromQuery] PaginationRequestParams request
+        [FromQuery] AccountsQueryParams request
     )
     {
-        var query = request.AsQuery<GetAllAccountsQuery>();
+        var query = request.AsQuery<GetAllAccountsQuery>(Mapper);
 
         var accountsPage = await Mediator.Send(query);
 

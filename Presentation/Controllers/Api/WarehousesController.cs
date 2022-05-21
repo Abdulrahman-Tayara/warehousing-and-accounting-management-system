@@ -2,7 +2,6 @@
 using Application.Common.Dtos;
 using Application.Queries.Warehouses;
 using AutoMapper;
-using Domain.Aggregations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ using wms.Dto.Warehouses;
 
 namespace wms.Controllers.Api;
 
-// [Authorize]
+[Authorize]
 public class WarehousesController : ApiControllerBase
 {
     public WarehousesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
@@ -46,9 +45,9 @@ public class WarehousesController : ApiControllerBase
 
     [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<WarehouseViewModel>>>> GetAll(
-        [FromQuery] PaginationRequestParams request)
+        [FromQuery] WarehousesQueryParams request)
     {
-        var warehouses = await Mediator.Send(request.AsQuery<GetAllWarehousesQuery>());
+        var warehouses = await Mediator.Send(request.AsQuery<GetAllWarehousesQuery>(Mapper));
 
         return Ok(warehouses.ToViewModel<WarehouseViewModel>(Mapper));
     }
