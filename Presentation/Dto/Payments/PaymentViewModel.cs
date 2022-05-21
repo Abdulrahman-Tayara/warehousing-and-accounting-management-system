@@ -6,6 +6,8 @@ namespace wms.Dto.Payments;
 
 public class PaymentViewModel : IMapFrom<Payment>, IViewModel
 {
+    public int Id { get; set; }
+    
     public int InvoiceId { get; set; }
 
     public string? Note { get; set; }
