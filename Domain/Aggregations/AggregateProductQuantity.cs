@@ -12,4 +12,10 @@ public class AggregateProductQuantity : AggregateRoot
 
     public bool ExceedsMinLevel(int requestedQuantity) =>
         Product!.HasMinLevel && (QuantitySum - requestedQuantity < Product.MinLevel);
+
+    public AggregateProductQuantity AddProduct(Product product)
+    {
+        Product = product;
+        return this;
+    }
 }
