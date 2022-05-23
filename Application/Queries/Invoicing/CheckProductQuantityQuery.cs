@@ -9,11 +9,14 @@ namespace Application.Queries.Invoicing;
 
 public class CheckProductQuantityQuery : IRequest
 {
-    public IEnumerable<CheckProductQuantityDto> ProductQuantities;
+    public IEnumerable<CheckProductQuantityDto> ProductQuantities { get; init; } = null!;
+
+    public bool IgnoreMinLevelWarnings { get; set; }
 }
 
 /// <summary>
 /// <exception cref="ProductMinLevelExceededException"></exception>
+/// <exception cref="ZeroLevelExceededException"></exception>
 /// </summary>
 public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuantityQuery>
 {
@@ -28,7 +31,7 @@ public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuant
     {
         Handle(query);
     }
-    
+
     protected override void Handle(CheckProductQuantityQuery request)
     {
         IList<CheckProductQuantityDto> productQuantities = request.ProductQuantities
@@ -36,8 +39,8 @@ public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuant
             .ToList();
 
         var productIds = productQuantities.Select(dto => dto.ProductId).ToList();
-        
-        IEnumerable<int> productIdsExceedsMinLevel = _productMovementRepository
+
+        var aggregatesAndProductQuantities = _productMovementRepository
             .AggregateProductsQuantities(new ProductMovementFilters
             {
                 ProductIds = productIds
@@ -45,6 +48,22 @@ public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuant
             .ToList()
             .OrderBy(dto => dto.Product!.Id)
             .Zip(productQuantities)
+            .ToList();
+
+        IEnumerable<int> productIdsExceedsZeroLevel = aggregatesAndProductQuantities
+            .Where(entry => _exceedsZeroLevel(entry.First, entry.Second))
+            .Select(entry => entry.First.Product!.Id)
+            .ToList();
+
+        if (productIdsExceedsZeroLevel.Any())
+        {
+            throw new ZeroLevelExceededException(productIdsExceedsZeroLevel.ToList());
+        }
+
+        if (request.IgnoreMinLevelWarnings)
+            return;
+
+        IEnumerable<int> productIdsExceedsMinLevel = aggregatesAndProductQuantities
             .Where(entry => _exceedsProductMinLevel(entry.First, entry.Second))
             .Select(entry => entry.First.Product!.Id)
             .ToList();
@@ -58,5 +77,10 @@ public class CheckProductQuantityQueryHandler : RequestHandler<CheckProductQuant
     private bool _exceedsProductMinLevel(AggregateProductQuantity aggregate, CheckProductQuantityDto dto)
     {
         return aggregate.ExceedsMinLevel(dto.Quantity);
+    }
+
+    private bool _exceedsZeroLevel(AggregateProductQuantity aggregate, CheckProductQuantityDto dto)
+    {
+        return aggregate.ExceedsZeroLevel(dto.Quantity);
     }
 }

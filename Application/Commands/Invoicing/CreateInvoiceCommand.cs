@@ -15,6 +15,8 @@ public class CreateInvoiceCommand : IRequest<int>
     public string? Note { get; set; }
     public InvoiceType Type { get; set; }
     public IEnumerable<InvoiceItemDto> Items { get; set; }
+
+    public bool IgnoreMinLevelWarnings { get; set; }
 }
 
 public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand, int>
@@ -41,7 +43,8 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
                             ProductId = item.ProductId,
                             Quantity = item.Quantity
                         }
-                    )
+                    ),
+                IgnoreMinLevelWarnings = request.IgnoreMinLevelWarnings
             };
 
             await _mediator.Send(checkProductQuantityQuery, cancellationToken);

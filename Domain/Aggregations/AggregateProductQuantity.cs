@@ -12,4 +12,6 @@ public class AggregateProductQuantity : AggregateRoot
 
     public bool ExceedsMinLevel(int requestedQuantity) =>
         Product!.HasMinLevel && (QuantitySum - requestedQuantity < Product.MinLevel);
+
+    public bool ExceedsZeroLevel(int requestedQuantity) => QuantitySum - requestedQuantity < 0;
 }
