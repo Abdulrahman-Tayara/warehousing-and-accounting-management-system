@@ -18,7 +18,8 @@ public class Invoice : BaseEntity<int>
 
     public DateTime CreatedAt { get; set; }
 
-    public InvoiceStatus Status { get; set; }
+    // An invoice is closed until products are added
+    public InvoiceStatus Status { get; set; } = InvoiceStatus.Closed;
 
     public InvoiceType Type { get; set; }
 
@@ -27,19 +28,18 @@ public class Invoice : BaseEntity<int>
     public void AddItem(ProductMovement item)
     {
         TotalPrice += item.TotalPrice;
+
+        if (AddedProductOpensInvoice())
+        {
+            Open();
+        }
         
-        if (IsProductExists(item.ProductId))
-        {
-            var existsItem = Items.First(i => i.ProductId == item.ProductId);
-            existsItem.IncreaseQuantity(item.Quantity);
-        }
-        else
-        {
-            Items.Add(item);
-        }
+        Items.Add(item);
     }
 
-    public bool IsProductExists(int productId) => Items.Any(i => i.ProductId == productId);
+    private bool AddedProductOpensInvoice() => TotalPrice != 0 && Status == InvoiceStatus.Closed;
+
+    public bool ProductExists(int productId) => Items.Any(i => i.ProductId == productId);
 
     public bool IsClosed()
     {
@@ -54,6 +54,16 @@ public class Invoice : BaseEntity<int>
         }
 
         Status = InvoiceStatus.Closed;
+    }
+
+    public void Open()
+    {
+        if (Status == InvoiceStatus.Opened)
+        {
+            throw new InvoiceOpenedException();
+        }
+
+        Status = InvoiceStatus.Opened;
     }
 }
 
