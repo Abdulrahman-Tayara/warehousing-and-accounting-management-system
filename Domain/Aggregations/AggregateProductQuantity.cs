@@ -18,4 +18,6 @@ public class AggregateProductQuantity : AggregateRoot
         Product = product;
         return this;
     }
+
+    public bool ExceedsZeroLevel(int requestedQuantity) => QuantitySum - requestedQuantity < 0;
 }

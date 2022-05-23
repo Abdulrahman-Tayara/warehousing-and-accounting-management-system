@@ -20,4 +20,6 @@ public class CreateInvoiceRequest : IMapFrom<CreateInvoiceCommand>
     [Required]
     [MinLength(1)]
     public IEnumerable<InvoiceItemDto> Items { get; set; }
+
+    public bool IgnoreMinLevelWarnings { get; set; } = false;
 }
