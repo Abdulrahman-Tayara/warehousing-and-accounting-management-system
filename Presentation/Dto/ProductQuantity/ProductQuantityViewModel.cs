@@ -7,7 +7,7 @@ namespace wms.Dto.ProductQuantity;
 
 public class ProductQuantityViewModel : IViewModel, IMapFrom<AggregateProductQuantity>
 {
-    public ProductViewModel? Product { get; set; }
+    public ProductJoinedViewModel? Product { get; set; }
 
     public int InputQuantities { get; set; }
 
