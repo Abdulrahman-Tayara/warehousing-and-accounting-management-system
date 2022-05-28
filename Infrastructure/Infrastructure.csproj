@@ -33,8 +33,4 @@
       <Compile Remove="Migrations\20220506202055_AddPayments.Designer.cs" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Migrations" />
-    </ItemGroup>
-
 </Project>

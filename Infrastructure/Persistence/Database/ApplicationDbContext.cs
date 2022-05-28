@@ -1,3 +1,4 @@
+using Domain.Entities;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Persistence.Database.Models.Common;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +23,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<CurrencyAmountDb> CurrencyAmounts { get; set; }
     public DbSet<InvoiceDb> Invoices { get; set; }
     public DbSet<PaymentDb> Payments { get; set; }
+    public DbSet<NotificationDb> Notifications { get; set; }
     
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
