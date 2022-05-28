@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using wms.Dto.Common.Responses.Validation;
 using wms.Filters;
 using wms.Utils;
@@ -22,9 +23,10 @@ public static class DependencyInjection
                 options.InvalidModelStateResponseFactory =
                     actionContext => new BadRequestObjectResult(actionContext.ModelState);
             });
-        
+
         return services;
     }
+
     public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -40,15 +42,18 @@ public static class DependencyInjection
                 In = ParameterLocation.Header,
                 Description = "JWT Authorization header using the Bearer scheme."
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    new OpenApiSecurityScheme {
-                        Reference = new OpenApiReference {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
                         }
                     },
-                    new string[] {}
+                    new string[] { }
                 }
             });
         });
@@ -60,8 +65,8 @@ public static class DependencyInjection
     {
         // if (app.Environment.IsDevelopment())
         // {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+        app.UseSwagger();
+        app.UseSwaggerUI(options => options.DocExpansion(DocExpansion.None));
         // }
     }
 }
