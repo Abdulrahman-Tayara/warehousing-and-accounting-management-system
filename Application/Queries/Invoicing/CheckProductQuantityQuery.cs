@@ -11,7 +11,7 @@ public class CheckProductQuantityQuery : IRequest
 {
     public IEnumerable<CheckProductQuantityDto> ProductQuantities { get; init; } = null!;
 
-    public bool IgnoreMinLevelWarnings { get; set; }
+    public bool IgnoreMinLevelWarnings { get; set; } = true;
 }
 
 /// <summary>
