@@ -1,15 +1,12 @@
-using Application.Commands.Categories;
 using Application.Commands.CountryOrigins;
-using Application.Queries.Categories;
 using Application.Queries.CountryOrigins;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using wms.Dto.Categories;
+using wms.Dto.CountryOrigins;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
-using wms.Dto.CountryOrigins;
 using wms.Dto.Pagination;
 
 namespace wms.Controllers.Api;
@@ -42,10 +39,10 @@ public class CountryOriginsController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<PageViewModel<CountryOriginViewModel>>>> GetCategories(
-        [FromQuery] CategoriesQueryParams request)
+    public async Task<ActionResult<BaseResponse<PageViewModel<CountryOriginViewModel>>>> CountryOrigins(
+        [FromQuery] CountryOriginsQueryParams request)
     {
-        var query = request.AsQuery<GetAllCategoriesQuery>(Mapper);
+        var query = request.AsQuery<GetAllCountryOriginsQuery>(Mapper);
 
         var countryOriginEntities = await Mediator.Send(query);
 
