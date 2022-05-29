@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Invoicing.Dto;
+using Application.EventNotifications.Invoices;
 using Application.Queries.Invoicing;
 using Application.Queries.Invoicing.Dto;
 using Application.Repositories.UnitOfWork;
@@ -65,12 +66,15 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             .ToList()
             .ForEach(movement => invoice.AddItem(movement));
 
-        using var unitOfWork = _unitOfWork.Value;
+        using (var unitOfWork = _unitOfWork.Value)
+        {
+            var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
+            invoice = await saveInvoiceAction.Invoke();
 
-        var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
-        invoice = await saveInvoiceAction.Invoke();
-        
-        await unitOfWork.CommitAsync();
+            await unitOfWork.CommitAsync();
+        }
+
+        await _mediator.Publish(new InvoiceCreatedNotification(invoice), cancellationToken);
 
         return invoice.Id;
     }

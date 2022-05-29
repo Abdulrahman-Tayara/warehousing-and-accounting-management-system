@@ -2,6 +2,7 @@ using Application.Common.Dtos;
 using Application.Common.QueryFilters;
 using Application.Repositories;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Aggregations;
 using Domain.Entities;
 using Infrastructure.Persistence.Database;
@@ -41,7 +42,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
             select = select.WhereFilters(filters);
         }
 
-        var query = select
+        var aggregatesQuery = select
             .GroupBy(movement => new
             {
                 movement.ProductId,
@@ -62,7 +63,25 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
                     .Sum(movement => movement.Quantity),
             });
 
-        return query;
+        var aggregates = aggregatesQuery.ToList();
+
+        var productIds = aggregates
+            .Select(aggregate => aggregate.Product!.Id);
+
+        var products = dbContext.Products.AsQueryable()
+            .Include(p => p.Category)
+            .Include(p => p.Currency)
+            .Include(p => p.Manufacturer)
+            .Include(p => p.Unit)
+            .Where(product => productIds.Any(id => product.Id == id))
+            .ProjectTo<Product>(Mapper.ConfigurationProvider)
+            .ToList();
+
+        var aggregatesWithFullProduct = aggregates
+            .Zip(products)
+            .Select(entry => entry.First.AddProduct(entry.Second));
+
+        return aggregatesWithFullProduct.AsQueryable();
     }
 
     protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
