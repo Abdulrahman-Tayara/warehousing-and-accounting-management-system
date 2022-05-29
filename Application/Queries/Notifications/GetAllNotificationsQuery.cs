@@ -10,7 +10,7 @@ public class GetAllNotificationsQuery : GetPaginatedQuery<Notification>
 
     public NotificationType? NotificationType { get; set; } = default;
 
-    public bool IsValid { get; set; } = false;
+    public bool IsValid { get; set; } = true;
 }
 
 public class GetNotificationsQueryHandler : PaginatedQueryHandler<GetAllNotificationsQuery, Notification>

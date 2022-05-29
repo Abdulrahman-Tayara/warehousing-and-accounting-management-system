@@ -6,7 +6,7 @@ public class Notification : BaseEntity<int>
 
     public NotificationType NotificationType { get; set; }
 
-    public bool IsValid { get; set; } = false;
+    public bool IsValid { get; set; } = true;
 }
 
 public enum NotificationType
