@@ -69,6 +69,7 @@ public static class DependencyInjection
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
         services.AddScoped<IUnitRepository, UnitRepository>();
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        services.AddScoped<ICountryOriginRepository, CountryOriginRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IWarehouseRepository, WarehouseRepository>();
         services.AddScoped<IStoragePlaceRepository, StoragePlaceRepository>();

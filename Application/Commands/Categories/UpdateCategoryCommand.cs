@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.Commands.Categories;
 
-public class UpdateCategoryCommand : IUpdateEntityCommand<int>
+public partial class UpdateCategoryCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }
 

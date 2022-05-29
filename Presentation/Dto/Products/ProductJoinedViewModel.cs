@@ -13,6 +13,8 @@ public class ProductJoinedViewModel : IViewModel, IMapFrom<Product>
     public Category Category { get; set; }
 
     public Manufacturer Manufacturer { get; set; }
+    
+    public CountryOrigin CountryOrigin { get; set; }
 
     public Unit Unit { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Application.Common.QueryFilters;
+using Domain.Entities;
 
 namespace Application.Common.Dtos;
 
@@ -25,6 +26,9 @@ public class ProductMovementFilters
 
     [QueryFilter(QueryFilterCompareType.Equal)]
     public int? ManufacturerId { get; set; }
+    
+    [QueryFilter(QueryFilterCompareType.Equal)]
+    public int? CountryOriginId { get; set; }
 
     [QueryFilter(QueryFilterCompareType.Equal)]
     public int? StoragePlaceId { get; set; }

@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<CategoryDb> Categories { get; set; } = null!;
     public DbSet<UnitDb> Units { get; set; } = null!;
     public DbSet<CurrencyDb> Currencies { get; set; } = null!;
+    public DbSet<CountryOriginDb> CountryOrigins { get; set; } = null!;
     public DbSet<ApplicationSettingDb> Settings { get; set; } = null!;
     public DbSet<ProductDb> Products { get; set; } = null!;
     public DbSet<WarehouseDb> Warehouses { get; set; }

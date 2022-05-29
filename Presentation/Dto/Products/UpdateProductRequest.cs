@@ -11,6 +11,8 @@ public class UpdateProductRequest : IMapFrom<UpdateProductCommand>
     [Required] public int CategoryId { get; set; }
 
     [Required] public int ManufacturerId { get; set; }
+    
+    [Required] public int CountryOriginId { get; set; }
 
     [Required] public int UnitId { get; set; }
 

@@ -9,6 +9,9 @@ public class Product : BaseEntity<int>
 
     public int ManufacturerId { get; set; }
     public Manufacturer? Manufacturer { get; set; }
+    
+    public int CountryOriginId { get; set; }
+    public CountryOrigin? CountryOrigin { get; set; }
 
     public int UnitId { get; set; }
     public Unit? Unit { get; set; }

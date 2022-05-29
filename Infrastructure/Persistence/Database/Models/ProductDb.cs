@@ -21,6 +21,10 @@ public class ProductDb : IDbModel, IMapFrom<Product>
     public int ManufacturerId { get; set; } = default;
     [ForeignKey("ManufacturerId")]
     public ManufacturerDb? Manufacturer { get; set; } = default!;
+    
+    public int CountryOriginId { get; set; } = default;
+    [ForeignKey("CountryOriginId")]
+    public CountryOriginDb? CountryOrigin { get; set; } = default!;
 
     public int UnitId { get; set; } = default;
     [ForeignKey("UnitId")]

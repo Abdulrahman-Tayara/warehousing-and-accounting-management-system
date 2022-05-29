@@ -13,6 +13,8 @@ public class ProductViewModel : IViewModel, IMapFrom<Domain.Entities.Product>
     public int CategoryId { get; set; }
 
     public int ManufacturerId { get; set; }
+    
+    public int CountryOriginId { get; set; }
 
     public int UnitId { get; set; }
 

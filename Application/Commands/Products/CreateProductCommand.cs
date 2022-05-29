@@ -12,6 +12,8 @@ public class CreateProductCommand : ICreateEntityCommand<int>
     public int CategoryId { get; init; }
 
     public int ManufacturerId { get; init; }
+    
+    public int CountryOriginId { get; init; }
 
     public int UnitId { get; init; }
 
@@ -38,6 +40,7 @@ public class
             Name = request.Name,
             CategoryId = request.CategoryId,
             ManufacturerId = request.ManufacturerId,
+            CountryOriginId = request.CountryOriginId,
             UnitId = request.UnitId,
             Barcode = request.Barcode,
             Price = request.Price,
