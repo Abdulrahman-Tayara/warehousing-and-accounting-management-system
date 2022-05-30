@@ -54,7 +54,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
         var aggregates = aggregatesQuery.ToList();
 
         var productIds = aggregates
-            .Select(aggregate => aggregate.Product!.Id);
+            .Select(aggregate => aggregate.ProductId);
 
         var products = dbContext.Products.AsQueryable()
             .Include(p => p.Category)
