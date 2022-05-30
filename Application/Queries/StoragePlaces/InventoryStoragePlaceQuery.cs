@@ -11,11 +11,14 @@ public class InventoryStoragePlaceQuery : GetPaginatedQuery<AggregateStoragePlac
     public int ProductId { get; }
     
     public int WarehouseId { get; }
+    
+    public int StoragePlaceId { get; }
 
-    public InventoryStoragePlaceQuery(int productId, int warehouseId)
+    public InventoryStoragePlaceQuery(int productId, int warehouseId, int storagePlaceId)
     {
         ProductId = productId;
         WarehouseId = warehouseId;
+        StoragePlaceId = storagePlaceId;
     }
 }
 
@@ -33,7 +36,7 @@ public class GetStoragePlaceInventoryQueryHandler
     public Task<IPaginatedEnumerable<AggregateStoragePlaceQuantity>> Handle(InventoryStoragePlaceQuery request, CancellationToken cancellationToken)
     {
         return Task.FromResult(
-            _productMovementRepository.AggregateStoragePlacesQuantities(request.ProductId, request.WarehouseId)
+            _productMovementRepository.AggregateStoragePlacesQuantities(request.ProductId, request.WarehouseId, request.StoragePlaceId)
                 .AsPaginatedQuery(request.Page, request.PageSize)
         );
     }

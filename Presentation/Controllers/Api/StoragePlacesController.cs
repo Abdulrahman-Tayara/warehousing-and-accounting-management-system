@@ -75,11 +75,14 @@ public class StoragePlacesController : ApiControllerBase
     }
 
     [HttpGet("inventory")]
-    public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceQuantityViewModel>>>> InventoryWarehouse(
+    public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceQuantityViewModel>>>> Inventory(
         [FromQuery] PaginationRequestParams paginationParams,
-        [FromQuery] int productId, int warehouseId)
+        [FromQuery] int productId,
+        [FromQuery] int storagePlaceId,
+        int warehouseId
+    )
     {
-        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(productId, warehouseId));
+        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(productId, warehouseId, storagePlaceId));
 
         var storagePlaceQuantities = await Mediator.Send(query);
 

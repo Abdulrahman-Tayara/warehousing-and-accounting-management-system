@@ -72,14 +72,15 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
         return aggregatesWithFullProduct.AsQueryable();
     }
 
-    public IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId)
+    public IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId, int storagePlaceId)
     {
         var list = DbSet
             .Include(movement => movement.Product)
             .Include(movement => movement.Place)
             .ThenInclude(storagePlace => storagePlace!.Warehouse)
-            .Where(movement => movement.ProductId == productId)
-            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId)
+            .Where(movement => movement.ProductId == productId || productId == default)
+            .Where(movement => movement.Place!.Id == storagePlaceId || storagePlaceId == default)
+            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || storagePlaceId == default)
             .ToList(); //TODO what's up with this? if you remove it, properties won't be included??
 
         return list
