@@ -12,7 +12,7 @@ public class CreateProductCommand : ICreateEntityCommand<int>
     public int CategoryId { get; init; }
 
     public int ManufacturerId { get; init; }
-    
+
     public int CountryOriginId { get; init; }
 
     public int UnitId { get; init; }
@@ -35,17 +35,17 @@ public class
 
     protected override Product CreateEntity(CreateProductCommand request)
     {
-        return new Product
-        {
-            Name = request.Name,
-            CategoryId = request.CategoryId,
-            ManufacturerId = request.ManufacturerId,
-            CountryOriginId = request.CountryOriginId,
-            UnitId = request.UnitId,
-            Barcode = request.Barcode,
-            Price = request.Price,
-            CurrencyId = request.CurrencyId,
-            MinLevel = request.MinLevel ?? 0
-        };
+        return new Product(
+            id: default,
+            name: request.Name,
+            categoryId: request.CategoryId,
+            manufacturerId: request.ManufacturerId,
+            countryOriginId: request.CountryOriginId,
+            unitId: request.UnitId,
+            barcode: request.Barcode,
+            price: request.Price,
+            currencyId: request.CurrencyId,
+            minLevel: request.MinLevel ?? 0
+        );
     }
 }

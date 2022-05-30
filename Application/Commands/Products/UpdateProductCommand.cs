@@ -14,7 +14,7 @@ public class UpdateProductCommand : IUpdateEntityCommand<int>
     public int CategoryId { get; init; }
 
     public int ManufacturerId { get; init; }
-    
+
     public int CountryOriginId { get; init; }
 
     public int UnitId { get; init; }
@@ -24,7 +24,7 @@ public class UpdateProductCommand : IUpdateEntityCommand<int>
     public double Price { get; init; }
 
     public int CurrencyId { get; init; }
-    
+
     public int? MinLevel { get; init; }
 }
 
@@ -37,18 +37,17 @@ public class UpdateProductCommandHandler
 
     protected override Product GetEntityToUpdate(UpdateProductCommand request)
     {
-        return new Product
-        {
-            Id = request.Id,
-            Name = request.Name,
-            CategoryId = request.CategoryId,
-            ManufacturerId = request.ManufacturerId,
-            CountryOriginId = request.CountryOriginId,
-            UnitId = request.UnitId,
-            Barcode = request.Barcode,
-            Price = request.Price,
-            CurrencyId = request.CurrencyId,
-            MinLevel = request.MinLevel ?? 0,
-        };
+        return new Product(
+            id: request.Id,
+            name: request.Name,
+            categoryId: request.CategoryId,
+            manufacturerId: request.ManufacturerId,
+            countryOriginId: request.CountryOriginId,
+            unitId: request.UnitId,
+            barcode: request.Barcode,
+            price: request.Price,
+            currencyId: request.CurrencyId,
+            minLevel: request.MinLevel ?? 0
+        );
     }
 }

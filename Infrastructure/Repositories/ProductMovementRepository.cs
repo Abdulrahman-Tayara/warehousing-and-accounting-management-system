@@ -20,13 +20,11 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
     public IQueryable<AggregateProductQuantity> AggregateProductsQuantities(ProductMovementFilters? filters = default)
     {
         var select = DbSet
-            .Include(movement => movement.Product)
             .Include(movement => movement.Invoice)
             .Select(movement => new AggregateProductMovement
             {
                 Id = movement.Id,
                 ProductId = movement.Product!.Id,
-                Product = movement.Product,
                 CategoryId = movement.Product.CategoryId,
                 ManufacturerId = movement.Product.ManufacturerId,
                 Quantity = movement.Quantity,
@@ -43,20 +41,10 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
         }
 
         var aggregatesQuery = select
-            .GroupBy(movement => new
-            {
-                movement.ProductId,
-                ProductName = movement.Product!.Name,
-                ProductCode = movement.Product.Barcode,
-            })
+            .GroupBy(movement => movement.ProductId)
             .Select(movementsGrouping => new AggregateProductQuantity
             {
-                Product = new Product
-                {
-                    Id = (int) movementsGrouping.Key.ProductId!,
-                    Name = movementsGrouping.Key.ProductName,
-                    Barcode = movementsGrouping.Key.ProductCode,
-                },
+                ProductId = movementsGrouping.Key,
                 InputQuantities = movementsGrouping.Where(movement => movement.Type == ProductMovementType.In)
                     .Sum(movement => movement.Quantity),
                 OutputQuantities = movementsGrouping.Where(movement => movement.Type == ProductMovementType.Out)
@@ -98,7 +86,6 @@ public record AggregateProductMovement
     public int Id { get; set; }
     public int ProductId { get; set; }
     public ProductDb? Product { get; set; }
-    
     public int? CategoryId { get; set; }
     public int? ManufacturerId { get; set; }
     public int? AccountId { get; set; }

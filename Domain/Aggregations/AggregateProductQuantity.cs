@@ -4,6 +4,7 @@ namespace Domain.Aggregations;
 
 public class AggregateProductQuantity : AggregateRoot
 {
+    public int ProductId { get; set; }
     public Product? Product { get; set; }
     public int InputQuantities { get; set; }
     public int OutputQuantities { get; set; }
