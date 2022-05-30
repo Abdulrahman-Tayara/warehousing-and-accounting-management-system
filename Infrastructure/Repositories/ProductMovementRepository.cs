@@ -72,6 +72,43 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
         return aggregatesWithFullProduct.AsQueryable();
     }
 
+    public IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId)
+    {
+        var list = DbSet
+            .Include(movement => movement.Product)
+            .Include(movement => movement.Place)
+            .ThenInclude(storagePlace => storagePlace!.Warehouse)
+            .Where(movement => movement.ProductId == productId)
+            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId)
+            .ToList(); //TODO what's up with this? if you remove it, properties won't be included??
+
+        return list
+            .GroupBy(
+                movement => movement.PlaceId.GetValueOrDefault(),
+                movement => new
+                {
+                    Product = movement.Product,
+                    Quantity = movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity,
+                    StoragePlace = movement.Place
+                },
+                (placeId, obj) => new
+                {
+                    Product = obj.First().Product,
+                    Quantity = obj.Sum(o => o.Quantity),
+                    StoragePlace = obj.First().StoragePlace
+                }
+            )
+            .ToList()
+            .Select(obj =>
+                new AggregateStoragePlaceQuantity(
+                    Mapper.Map<Product>(obj.Product),
+                    obj.Quantity,
+                    Mapper.Map<StoragePlace>(obj.StoragePlace)
+                )
+            )
+            .AsQueryable();
+    }
+
     protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
     {
         return DbSet.Include(item => item.CurrencyAmounts)!

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 using wms.Dto.Pagination;
+using wms.Dto.StoragePlaceQuantity;
 using wms.Dto.StoragePlaces;
 
 namespace wms.Controllers.Api;
@@ -40,7 +41,7 @@ public class StoragePlacesController : ApiControllerBase
         var query = request.AsQuery<GetAllStoragePlacesQuery>(Mapper);
 
         query.WarehouseId = warehouseId;
-        
+
         var places = await Mediator.Send(query);
 
         return Ok(places.ToViewModel<StoragePlaceViewModel>(Mapper));
@@ -66,10 +67,22 @@ public class StoragePlacesController : ApiControllerBase
 
         return await Get(placeId);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task Delete(int id)
     {
         await Mediator.Send(new DeleteStoragePlaceCommand() {key = id});
+    }
+
+    [HttpGet("inventory")]
+    public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceQuantityViewModel>>>> InventoryWarehouse(
+        [FromQuery] PaginationRequestParams paginationParams,
+        [FromQuery] int productId, int warehouseId)
+    {
+        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(productId, warehouseId));
+
+        var storagePlaceQuantities = await Mediator.Send(query);
+
+        return Ok(storagePlaceQuantities.ToViewModel<StoragePlaceQuantityViewModel>(Mapper));
     }
 }
