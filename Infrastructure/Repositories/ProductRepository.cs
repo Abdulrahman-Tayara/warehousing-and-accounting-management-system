@@ -108,6 +108,65 @@ public class ProductRepository : RepositoryCrud<Product, ProductDb>, IProductRep
             .ProjectTo<Product>(Mapper.ConfigurationProvider);
     }
 
+    public IQueryable<Product> GetAllInStoragePlace(int storagePlaceId, bool includeStoragePlaceChildren)
+    {
+        var storagePlaces = dbContext.StoragePlaces.ToList();
+
+        var parentStoragePlace = storagePlaces.First(storagePlace => storagePlace.Id == storagePlaceId);
+
+        storagePlaces.Remove(parentStoragePlace);
+
+        var required = includeStoragePlaceChildren
+            ? _getDescendantStoragePlaces(storagePlaces, new List<StoragePlaceDb> {parentStoragePlace})
+            : new List<StoragePlaceDb> {parentStoragePlace};
+
+        var aggregates = dbContext.ProductMovements
+            .ToList()
+            .Where(movement => required.Any(requiredStoragePlace =>
+                requiredStoragePlace.Id == movement.PlaceId.GetValueOrDefault()))
+            .ToList();
+
+        var groupBy = aggregates
+            .GroupBy(
+                movement => new
+                {
+                    ProductId = movement.ProductId.GetValueOrDefault(),
+                    StoragePlaceId = movement.PlaceId.GetValueOrDefault()
+                },
+                movement => movement,
+                (key, movement) => new
+                {
+                    ProductId = key.ProductId,
+                    StoragePlaceId = key.StoragePlaceId,
+                    Quantity = movement.Sum(m => m.Type == ProductMovementType.In ? m.Quantity : -m.Quantity)
+                }
+            )
+            .ToList();
+
+        var products = GetIncludedDbSet()
+            .ToList()
+            .Where(product => groupBy.Any(a => a.ProductId == product.Id));
+
+        return products.AsQueryable().ProjectTo<Product>(Mapper.ConfigurationProvider);
+    }
+
+    private IList<StoragePlaceDb> _getDescendantStoragePlaces(
+        List<StoragePlaceDb> searchIn,
+        List<StoragePlaceDb> parents
+    )
+    {
+        var includes = searchIn.Where(storagePlace => parents.Any(parent => storagePlace.ContainerId == parent.Id))
+            .ToList();
+
+        if (includes.Any())
+        {
+            searchIn.RemoveAll(storagePlace => includes.Any(include => include.Id == storagePlace.Id));
+            return _getDescendantStoragePlaces(searchIn, parents.Concat(includes).ToList());
+        }
+
+        return parents.Concat(includes).ToList();
+    }
+
     protected override IQueryable<ProductDb> GetIncludedDbSet()
     {
         return DbSet

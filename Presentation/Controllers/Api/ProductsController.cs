@@ -31,6 +31,15 @@ public class ProductsController : ApiControllerBase
         return Ok(productEntities.ToViewModel<ProductJoinedViewModel>(Mapper));
     }
 
+    [HttpGet("inStoragePlace")]
+    public async Task<ActionResult<BaseResponse<PageViewModel<ProductJoinedViewModel>>>> GetAllProducts(
+        [FromQuery] GetProductsInStorageQueryParams request)
+    {
+        var productEntities = await Mediator.Send(request.AsQuery<GetAllProductsInStoragePlaceQuery>(Mapper));
+
+        return Ok(productEntities.ToViewModel<ProductJoinedViewModel>(Mapper));
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<BaseResponse<ProductJoinedViewModel>>> GetProduct(int id)
     {
@@ -59,9 +68,10 @@ public class ProductsController : ApiControllerBase
             ProductQuantities = new[] {new CheckProductQuantityDto {ProductId = id, Quantity = quantity}}
         });
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<ActionResult<BaseResponse<ProductJoinedViewModel>>> UpdateProduct(int id, UpdateProductRequest request)
+    public async Task<ActionResult<BaseResponse<ProductJoinedViewModel>>> UpdateProduct(int id,
+        UpdateProductRequest request)
     {
         var command = Mapper.Map<UpdateProductCommand>(request);
         command.Id = id;
@@ -70,7 +80,7 @@ public class ProductsController : ApiControllerBase
 
         return await GetProduct(id);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task DeleteProduct(int id)
     {
