@@ -2,11 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Common.Mappings;
 using Domain.Entities;
+using Domain.Events;
 
 namespace Infrastructure.Persistence.Database.Models;
 
 [Table("Products")]
-public class ProductDb : IDbModel, IMapFrom<Product>
+public class ProductDb : IDbModel, IMapFrom<Product>, IHasDomainEvents
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -39,4 +40,6 @@ public class ProductDb : IDbModel, IMapFrom<Product>
     public CurrencyDb? Currency { get; set; } = default!;
 
     public int MinLevel { get; set; } = default;
+
+    [NotMapped] public IList<DomainEvent> Events { get; set; }
 }

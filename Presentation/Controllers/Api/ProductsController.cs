@@ -78,7 +78,10 @@ public class ProductsController : ApiControllerBase
 
         var _ = await Mediator.Send(command);
 
-        return await GetProduct(id);
+        var query = new GetProductQuery {Id = id};
+        var productEntity = await Mediator.Send(query);
+
+        return Ok(productEntity.ToViewModel<ProductJoinedViewModel>(Mapper));
     }
 
     [HttpDelete("{id}")]

@@ -34,5 +34,9 @@ public class MappingProfiles : Profile
 
             mappingMethod?.Invoke(instance, new object[] {this});
         }
+
+        assembly.GetExportedTypes()
+            .ToList()
+            .ForEach(type => CreateMap(type, type));
     }
 }

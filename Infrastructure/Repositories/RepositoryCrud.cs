@@ -3,6 +3,7 @@ using Application.Repositories;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
+using Domain.Events;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
 using Microsoft.EntityFrameworkCore;
@@ -71,7 +72,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     public IQueryable<TEntity> GetAll(GetAllOptions<TEntity>? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
-        
+
         IQueryable<TEntity> entitiesSet = set.ProjectTo<TEntity>(Mapper.ConfigurationProvider);
 
         return entitiesSet;
@@ -94,7 +95,7 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     private Task<TModel> _findByIdAsync(TKey id, FindOptions? options = default)
     {
         IQueryable<TModel> set = options is {IncludeRelations: true} ? GetIncludedDbSet() : DbSet;
-        
+
         return set.FirstAsync(model => model.Id.Equals(id));
     }
 
@@ -102,14 +103,22 @@ public abstract class RepositoryCrudBase<TContext, TEntity, TKey, TModel> : Repo
     {
         return DbSet.AnyAsync(model => model.Id.Equals(id));
     }
-    
+
     public async Task<TEntity> Update(TEntity entity)
     {
         try
         {
             var modelInDb = await _findByIdAsync(entity.Id);
 
-            dbContext.Entry(modelInDb).CurrentValues.SetValues(entity);
+            TModel model = Mapper.Map<TEntity, TModel>(entity);
+
+            dbContext.Entry(modelInDb).CurrentValues.SetValues(model);
+
+            if (model is IHasDomainEvents)
+            {
+                dbContext.ChangeTracker.Entries<IHasDomainEvents>()
+                    .Last().Entity.Events = (model as IHasDomainEvents)!.Events;
+            }
 
             return entity;
         }

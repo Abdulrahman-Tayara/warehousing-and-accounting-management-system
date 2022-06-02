@@ -28,26 +28,33 @@ public class UpdateProductCommand : IUpdateEntityCommand<int>
     public int? MinLevel { get; init; }
 }
 
-public class UpdateProductCommandHandler
-    : UpdateEntityCommandHandler<UpdateProductCommand, Product, int, IProductRepository>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, int>
 {
-    public UpdateProductCommandHandler(IProductRepository repository) : base(repository)
+    private readonly IProductRepository _productRepository;
+
+    public UpdateProductCommandHandler(IProductRepository productRepository)
     {
+        _productRepository = productRepository;
     }
 
-    protected override Product GetEntityToUpdate(UpdateProductCommand request)
+    public async Task<int> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        return new Product(
-            id: request.Id,
-            name: request.Name,
-            categoryId: request.CategoryId,
-            manufacturerId: request.ManufacturerId,
-            countryOriginId: request.CountryOriginId,
-            unitId: request.UnitId,
-            barcode: request.Barcode,
-            price: request.Price,
-            currencyId: request.CurrencyId,
-            minLevel: request.MinLevel ?? 0
-        );
+        Product product = await _productRepository.FindByIdAsync(request.Id);
+
+        product.Name = request.Name;
+        product.CategoryId = request.CategoryId;
+        product.ManufacturerId = request.ManufacturerId;
+        product.CountryOriginId = request.CountryOriginId;
+        product.UnitId = request.UnitId;
+        product.Barcode = request.Barcode;
+        product.Price = request.Price;
+        product.CurrencyId = request.CurrencyId;
+        product.UpdateMinLevel(request.MinLevel ?? 0);
+
+        Product updatedProduct = await _productRepository.Update(product);
+
+        await _productRepository.SaveChanges();
+
+        return updatedProduct.Id;
     }
 }

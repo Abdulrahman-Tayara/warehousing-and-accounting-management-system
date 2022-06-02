@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Repositories;
 using Application.Repositories.Aggregates;
 using Application.Repositories.UnitOfWork;
+using Application.Services.Events;
 using Application.Services.Identity;
 using Application.Services.Settings;
 using Application.Settings;
@@ -31,14 +32,18 @@ public static class DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("wms_db"); });
         else
         {
-            services.AddSqlServer<ApplicationDbContext>(
-                configuration.GetValue<bool>("UseLocalDatabaseServer")
-                    ? configuration.GetConnectionString("LocalConnection")
-                    : configuration.GetConnectionString("DefaultConnection"),
-                optionsAction: options =>
+            services.AddDbContext<ApplicationDbContext>(
+                options =>
                 {
                     options.UseTriggers(triggersOptions => triggersOptions.AddTrigger<SoftDeleteTrigger>());
-                }
+
+                    options.UseSqlServer(
+                        configuration.GetValue<bool>("UseLocalDatabaseServer")
+                            ? configuration.GetConnectionString("LocalConnection")
+                            : configuration.GetConnectionString("DefaultConnection")
+                    );
+                },
+                ServiceLifetime.Transient
             );
         }
 
@@ -88,6 +93,7 @@ public static class DependencyInjection
     private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IEventPublisherService, EventPublisherService>();
     }
 
     private static void AddApplicationSettings(this IServiceCollection services)

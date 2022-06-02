@@ -1,4 +1,5 @@
-using Domain.Entities;
+using Application.Services.Events;
+using Domain.Events;
 using Infrastructure.Persistence.Database.Models;
 using Infrastructure.Persistence.Database.Models.Common;
 using Microsoft.AspNetCore.Identity;
@@ -25,9 +26,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<InvoiceDb> Invoices { get; set; }
     public DbSet<PaymentDb> Payments { get; set; }
     public DbSet<NotificationDb> Notifications { get; set; }
+
+    private readonly IEventPublisherService _eventPublisher;
     
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions options, IEventPublisherService eventPublisher) : base(options)
     {
+        _eventPublisher = eventPublisher;
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -35,5 +39,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
         base.OnModelCreating(builder);
         
         builder.ApplyGlobalFilters<ISoftDeletable>(e => !e.IsDeleted);
+    }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var events = ChangeTracker.Entries<IHasDomainEvents>()
+            .Select(x => x.Entity.Events)
+            .SelectMany(x => x)
+            .Where(domainEvent => !domainEvent.IsPublished)
+            .ToArray();
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        await DispatchEvents(events);
+
+        return result;
+    }
+
+    private async Task DispatchEvents(DomainEvent[] events)
+    {
+        foreach (var @event in events)
+        {
+            @event.IsPublished = true;
+            await _eventPublisher.Publish(@event);
+        }
     }
 }

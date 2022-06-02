@@ -1,15 +1,17 @@
+using Domain.Events;
+
 namespace Domain.Entities;
 
-public class Product : BaseEntity<int>
+public class Product : BaseEntity<int>, IHasDomainEvents
 {
     public string Name { get; set; }
-    
+
     public int CategoryId { get; set; }
     public Category? Category { get; set; }
 
     public int ManufacturerId { get; set; }
     public Manufacturer? Manufacturer { get; set; }
-    
+
     public int CountryOriginId { get; set; }
     public CountryOrigin? CountryOrigin { get; set; }
 
@@ -19,24 +21,26 @@ public class Product : BaseEntity<int>
     public string Barcode { get; set; }
 
     public double Price { get; set; }
-    
+
     public int CurrencyId { get; set; }
     public Currency? Currency { get; set; }
 
-    private int _minLevel;
+    public int MinLevel { get; set; }
 
-    public int MinLevel
+    public void UpdateMinLevel(int value)
     {
-        get => _minLevel;
-        set
+        if (MinLevel == value)
         {
-            int oldMinLevel = _minLevel;
-            _minLevel = value;
-            // Events.Add(new ProductMinLevelUpdated(oldMinLevel, _minLevel));
+            return;
         }
+
+        int oldMinLevel = MinLevel;
+        MinLevel = value;
+        Events.Add(new ProductMinLevelUpdated(Id, oldMinLevel, MinLevel));
     }
-    
-    public Product(int id, string name, int categoryId, int manufacturerId, int countryOriginId, int unitId, string barcode, double price, int currencyId, int minLevel)
+
+    public Product(int id, string name, int categoryId, int manufacturerId, int countryOriginId, int unitId,
+        string barcode, double price, int currencyId, int minLevel)
     {
         Id = id;
         Name = name;
@@ -50,7 +54,9 @@ public class Product : BaseEntity<int>
         MinLevel = minLevel;
     }
 
-    public Product(int id, string name, int categoryId, Category? category, int manufacturerId, Manufacturer? manufacturer, int countryOriginId, CountryOrigin? countryOrigin, int unitId, Unit? unit, string barcode, double price, int currencyId, Currency? currency)
+    public Product(int id, string name, int categoryId, Category? category, int manufacturerId,
+        Manufacturer? manufacturer, int countryOriginId, CountryOrigin? countryOrigin, int unitId, Unit? unit,
+        string barcode, double price, int currencyId, Currency? currency)
     {
         Id = id;
         Name = name;
@@ -69,4 +75,6 @@ public class Product : BaseEntity<int>
     }
 
     public bool HasMinLevel => MinLevel > 0;
+
+    public IList<DomainEvent> Events { get; set; } = new List<DomainEvent>();
 }
