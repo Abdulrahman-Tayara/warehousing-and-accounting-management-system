@@ -10,7 +10,7 @@ public class GetAllNotificationsQuery : GetPaginatedQuery<Notification>
 
     public NotificationType? NotificationType { get; set; } = default;
 
-    public bool IsValid { get; set; } = true;
+    public bool? IsValid { get; set; }
 }
 
 public class GetNotificationsQueryHandler : PaginatedQueryHandler<GetAllNotificationsQuery, Notification>
@@ -31,7 +31,7 @@ public class GetNotificationsQueryHandler : PaginatedQueryHandler<GetAllNotifica
                                    !request.ObjectIds.Any())
             .Where(notification => notification.NotificationType == request.NotificationType ||
                                    request.NotificationType == default)
-            .Where(notification => notification.IsValid == request.IsValid || !request.IsValid);
+            .Where(notification => notification.IsValid == request.IsValid || !request.IsValid.GetValueOrDefault(true));
 
         return Task.FromResult(query);
     }
