@@ -31,7 +31,9 @@ public class GetNotificationsQueryHandler : PaginatedQueryHandler<GetAllNotifica
                                    !request.ObjectIds.Any())
             .Where(notification => notification.NotificationType == request.NotificationType ||
                                    request.NotificationType == default)
-            .Where(notification => notification.IsValid == request.IsValid || !request.IsValid.GetValueOrDefault(true));
+            .Where(notification => notification.IsValid == request.IsValid || !request.IsValid.GetValueOrDefault(true))
+            .OrderByDescending(notification => notification.Id)
+            .AsQueryable();
 
         return Task.FromResult(query);
     }
