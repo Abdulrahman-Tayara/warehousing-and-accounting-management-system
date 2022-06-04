@@ -80,7 +80,7 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
             .ThenInclude(storagePlace => storagePlace!.Warehouse)
             .Where(movement => movement.ProductId == productId || productId == default)
             .Where(movement => movement.Place!.Id == storagePlaceId || storagePlaceId == default)
-            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || storagePlaceId == default)
+            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || warehouseId == default)
             .ToList(); //TODO what's up with this? if you remove it, properties won't be included??
 
         return list
