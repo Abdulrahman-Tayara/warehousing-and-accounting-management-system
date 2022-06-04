@@ -1,39 +1,45 @@
-﻿using Domain.Exceptions;
+﻿using Domain.Events;
+using Domain.Exceptions;
 
 namespace Domain.Entities;
 
 public class Invoice : BaseEntity<int>
 {
-    public int? AccountId { get; set; }
-    public Account? Account { get; set; }
+    public int? AccountId { get; }
+    public Account? Account { get; }
 
-    public int WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; }
+    public int WarehouseId { get; }
+    public Warehouse Warehouse { get; }
 
-    public int? CurrencyId { get; set; }
-    public Currency? Currency { get; set; }
+    public int? CurrencyId { get; }
+    public Currency? Currency { get; }
 
-    public double TotalPrice { get; set; }
-    public string? Note { get; set; }
+    private double _totalPrice { get; set; }
+    public double TotalPrice => _totalPrice;
+    
+    public string? Note { get; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; }
 
-    // An invoice is closed until products are added
-    public InvoiceStatus Status { get; set; }
+    
+    private InvoiceStatus _status { get; set; }
+    public InvoiceStatus Status => _status;
 
-    public InvoiceType Type { get; set; }
+    public InvoiceType Type { get; }
 
-    public IList<ProductMovement> Items { get; set; }
+    public IList<ProductMovement> Items { get; }
+
+    public IList<DomainEvent> Events { get; set; }
 
     public Invoice(int? accountId, int warehouseId, int? currencyId, string? note, DateTime createdAt, InvoiceType type, IList<ProductMovement> items)
     {
         AccountId = accountId;
         WarehouseId = warehouseId;
         CurrencyId = currencyId;
-        TotalPrice = 0;
+        _totalPrice = 0;
         Note = note;
         CreatedAt = createdAt;
-        Status = InvoiceStatus.Closed;
+        _status = InvoiceStatus.Closed;
         Type = type;
         Items = new List<ProductMovement>();
         items.ToList().ForEach(item => AddItem(item));
@@ -41,7 +47,7 @@ public class Invoice : BaseEntity<int>
 
     public void AddItem(ProductMovement item)
     {
-        TotalPrice += item.TotalPrice;
+        _totalPrice += item.TotalPrice;
 
         if (AddedProductOpensInvoice())
         {
@@ -67,7 +73,7 @@ public class Invoice : BaseEntity<int>
             throw new InvoiceClosedException();
         }
 
-        Status = InvoiceStatus.Closed;
+        _status = InvoiceStatus.Closed;
     }
 
     public void Open()
@@ -77,7 +83,7 @@ public class Invoice : BaseEntity<int>
             throw new InvoiceOpenedException();
         }
 
-        Status = InvoiceStatus.Opened;
+        _status = InvoiceStatus.Opened;
     }
 }
 
