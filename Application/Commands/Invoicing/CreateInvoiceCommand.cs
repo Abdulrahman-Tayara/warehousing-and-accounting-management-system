@@ -51,20 +51,15 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             await _mediator.Send(checkProductQuantityQuery, cancellationToken);
         }
 
-        var invoice = new Invoice
-        {
-            AccountId = request.AccountId,
-            WarehouseId = request.WarehouseId,
-            CurrencyId = request.CurrencyId,
-            Note = request.Note,
-            CreatedAt = DateTime.Now,
-            Type = request.Type,
-        };
-
-        request.Items
-            .Select(dto => _buildItem(dto, request.Type))
-            .ToList()
-            .ForEach(movement => invoice.AddItem(movement));
+        var invoice = new Invoice(
+            accountId: request.AccountId,
+            warehouseId: request.WarehouseId,
+            currencyId: request.CurrencyId,
+            note: request.Note,
+            createdAt: DateTime.Now,
+            type: request.Type,
+            items: request.Items.Select(dto => _buildItem(dto, request.Type)).ToList()
+        );
 
         using (var unitOfWork = _unitOfWork.Value)
         {
