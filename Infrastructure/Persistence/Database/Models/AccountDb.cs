@@ -20,8 +20,6 @@ public class AccountDb : IMapFrom<Account>, IDbModel, ISoftDeletable
     public string Phone { get; set; } = default!;
 
     public string City { get; set; } = default!;
-    
-    public AccountType Type { get; set; }
 
     public bool IsDeleted { get; set; } = false;
     
