@@ -1,4 +1,5 @@
 using Application.Common.Dtos;
+using Application.EventNotifications.Payments.PaymentCreated;
 using Application.Repositories.UnitOfWork;
 using Domain.Entities;
 using MediatR;
@@ -26,9 +27,12 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 {
     private readonly Lazy<IUnitOfWork> _unitOfWork;
 
-    public CreatePaymentCommandHandler(Lazy<IUnitOfWork> unitOfWork)
+    private readonly IMediator _mediator;
+
+    public CreatePaymentCommandHandler(Lazy<IUnitOfWork> unitOfWork, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
+        _mediator = mediator;
     }
 
     public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
@@ -60,6 +64,8 @@ public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand,
 
         var addedPayments = savedInvoicePayments.Payments.Except(invoicePayments.Payments);
         var addedPayment = addedPayments.First();
+
+        await _mediator.Publish(new PaymentCreatedNotification(addedPayment), cancellationToken);
         
         await unitOfWork.CommitAsync();
 
