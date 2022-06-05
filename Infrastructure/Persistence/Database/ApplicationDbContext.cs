@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, I
     public DbSet<WarehouseDb> Warehouses { get; set; }
     public DbSet<StoragePlaceDb> StoragePlaces { get; set; }
     public DbSet<AccountDb> Accounts { get; set; } = null!;
+    public DbSet<JournalDb> JournalDbs { get; set; }
 
     public DbSet<ProductMovementDb> ProductMovements { get; set; }
     public DbSet<CurrencyAmountDb> CurrencyAmounts { get; set; }

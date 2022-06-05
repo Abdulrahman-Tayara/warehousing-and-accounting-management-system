@@ -1,9 +1,10 @@
 ﻿using Application.Commands.Invoicing.Dto;
-using Application.EventNotifications.Invoices;
+using Application.EventNotifications.Invoices.InvoiceCreated;
 using Application.Queries.Invoicing;
 using Application.Queries.Invoicing.Dto;
 using Application.Repositories.UnitOfWork;
 using Domain.Entities;
+using Domain.Factories;
 using MediatR;
 
 namespace Application.Commands.Invoicing;
@@ -66,6 +67,8 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             var saveInvoiceAction = await unitOfWork.InvoiceRepository.CreateAsync(invoice);
             invoice = await saveInvoiceAction.Invoke();
 
+            await _mediator.Publish(new InvoiceCreatedNotification(invoice), cancellationToken);
+            
             await unitOfWork.CommitAsync();
         }
 
