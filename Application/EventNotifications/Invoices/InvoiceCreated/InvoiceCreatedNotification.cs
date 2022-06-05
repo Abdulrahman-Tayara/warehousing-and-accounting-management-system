@@ -1,8 +1,7 @@
+using Domain.Entities;
 using MediatR;
 
-using Domain.Entities;
-
-namespace Application.EventNotifications.Invoices;
+namespace Application.EventNotifications.Invoices.InvoiceCreated;
 
 public class InvoiceCreatedNotification : INotification
 {

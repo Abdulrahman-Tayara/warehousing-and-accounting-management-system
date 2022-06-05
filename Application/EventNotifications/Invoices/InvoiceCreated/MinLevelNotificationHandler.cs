@@ -6,7 +6,7 @@ using Application.Queries.Notifications;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.EventNotifications.Invoices;
+namespace Application.EventNotifications.Invoices.InvoiceCreated;
 
 public class MinLevelNotificationHandler : INotificationHandler<InvoiceCreatedNotification>
 {
