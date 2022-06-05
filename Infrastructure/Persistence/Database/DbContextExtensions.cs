@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Services.Settings;
 using Infrastructure.Persistence.Database.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -23,5 +24,6 @@ public static class DbContextExtensions
         }
     }
 
-    public static void Seed(this ApplicationDbContext dbContext, IDatabaseSeeder dbSeeder) => dbSeeder.Seed(dbContext);
+    public static void Seed(this ApplicationDbContext dbContext, IDatabaseSeeder dbSeeder,
+        IApplicationSettingsProvider settingsProvider) => dbSeeder.Seed(dbContext, settingsProvider);
 }

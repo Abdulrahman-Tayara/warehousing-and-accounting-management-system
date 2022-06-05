@@ -1,3 +1,4 @@
+using Application.Services.Settings;
 using Infrastructure.Persistence.Database.Seeders.Accounts;
 
 namespace Infrastructure.Persistence.Database.Seeders;
@@ -18,10 +19,8 @@ public class DatabaseSeeder : IDatabaseSeeder
         };
     }
 
-    public void Seed(ApplicationDbContext dbContext)
+    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
-        _seeders.ForEach(seeder => seeder.Seed(dbContext));
-        
-        dbContext.SaveChanges();
+        _seeders.ForEach(seeder => seeder.Seed(dbContext, settingsProvider));
     }
 }

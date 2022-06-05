@@ -1,25 +1,40 @@
-using Domain.Entities;
+using Application.Services.Settings;
+
 using Infrastructure.Persistence.Database.Models;
 
 namespace Infrastructure.Persistence.Database.Seeders.Accounts;
 
 public class MainPurchasesSeeder : ISeeder
 {
-    public void Seed(ApplicationDbContext dbContext)
+    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
-        var mainPurchases = dbContext.Accounts
-            .FirstOrDefault(account => account.Type == AccountType.MainSales);
+        var settings = settingsProvider.Get();
 
-        if (mainPurchases == null)
+        var mainPurchases = dbContext.Accounts
+            .FirstOrDefault(account => account.Id == settings.DefaultPurchasesAccountId);
+        
+        if (mainPurchases != null)
         {
-            dbContext.Accounts.Add(new AccountDb
+            return;
+        }
+        
+        using (var transaction = dbContext.Database.BeginTransaction())
+        {
+            var entry = dbContext.Accounts.Add(new AccountDb
             {
                 Name = "Main Purchases",
                 Code = "MPu",
                 City = "",
-                Phone = "",
-                Type = AccountType.MainPurchases
+                Phone = ""
             });
+
+            dbContext.SaveChanges();
+
+            settings.DefaultPurchasesAccountId = entry.Entity.Id;
+            
+            settingsProvider.Configure(settings);
+            
+            transaction.Commit();
         }
     }
 }

@@ -1,25 +1,39 @@
-using Domain.Entities;
+using Application.Services.Settings;
 using Infrastructure.Persistence.Database.Models;
 
 namespace Infrastructure.Persistence.Database.Seeders.Accounts;
 
 public class MainCashDrawerSeeder : ISeeder
 {
-    public void Seed(ApplicationDbContext dbContext)
+    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
-        var mainCashDrawer = dbContext.Accounts
-            .FirstOrDefault(account => account.Type == AccountType.MainCashDrawer);
+        var settings = settingsProvider.Get();
 
-        if (mainCashDrawer == null)
+        var mainCashDrawer = dbContext.Accounts
+            .FirstOrDefault(account => account.Id == settings.DefaultMainCashDrawerAccountId);
+
+        if (mainCashDrawer != null)
         {
-            dbContext.Accounts.Add(new AccountDb
+            return;
+        }
+        
+        using (var transaction = dbContext.Database.BeginTransaction())
+        {
+            var entry = dbContext.Accounts.Add(new AccountDb
             {
                 Name = "Main Cash Drawer",
                 Code = "MCD",
                 City = "",
-                Phone = "",
-                Type = AccountType.MainCashDrawer
+                Phone = ""
             });
+
+            dbContext.SaveChanges();
+
+            settings.DefaultMainCashDrawerAccountId = entry.Entity.Id;
+            
+            settingsProvider.Configure(settings);
+            
+            transaction.Commit();
         }
     }
 }

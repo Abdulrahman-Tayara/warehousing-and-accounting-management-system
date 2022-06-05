@@ -4,7 +4,6 @@ using Application.Repositories.Aggregates;
 using Application.Repositories.UnitOfWork;
 using Application.Services.Events;
 using Application.Services.Identity;
-using Application.Services.Settings;
 using Application.Settings;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
@@ -20,6 +19,7 @@ using Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IApplicationSettingsProvider = Application.Services.Settings.IApplicationSettingsProvider;
 
 namespace Infrastructure;
 
@@ -110,12 +110,13 @@ public static class DependencyInjection
         {
             var services = scope.ServiceProvider;
             var dbSeeder = services.GetRequiredService<IDatabaseSeeder>();
-            
+            var settingsProvider = services.GetRequiredService<IApplicationSettingsProvider>();
+
             using (var dbContext = services.GetRequiredService<ApplicationDbContext>())
             {
                 dbContext.Database.Migrate();
                 dbContext.Database.EnsureCreated();
-                dbContext.Seed(dbSeeder);
+                dbContext.Seed(dbSeeder, settingsProvider);
             }
         }
     }

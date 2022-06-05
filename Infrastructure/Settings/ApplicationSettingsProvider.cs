@@ -27,15 +27,32 @@ public class ApplicationSettingsProvider : IApplicationSettingsProvider
     {
         foreach (var property in typeof(ApplicationSettings).GetProperties())
         {
-            var settingAlreadyCreated = _context.Settings.Any(setting => setting.Key.Equals(property));
-
-            ApplicationSettingDb settingDb = new ApplicationSettingDb
+            if (property.GetValue(settings)!.Equals(default))
             {
-                Key = property.Name,
-                Value = property.GetValue(settings)!.ToString()!,
-            };
+                return;
+            }
 
-            _context.Entry(settingDb).State = settingAlreadyCreated ? EntityState.Modified : EntityState.Added;
+            var settingAlreadyCreated = _context.Settings.FirstOrDefault(setting => setting.Key.Equals(property.Name));
+
+            if (settingAlreadyCreated != null)
+            {
+                if (settingAlreadyCreated.Value.Equals(property.GetValue(settings)!.ToString()!))
+                {
+                    continue;
+                }
+
+                settingAlreadyCreated.Value = property.GetValue(settings)!.ToString()!;
+            }
+            else
+            {
+                ApplicationSettingDb settingDb = new ApplicationSettingDb
+                {
+                    Key = property.Name,
+                    Value = property.GetValue(settings)!.ToString()!,
+                };
+
+                _context.Add(settingDb);
+            }
 
             _context.SaveChanges();
         }
