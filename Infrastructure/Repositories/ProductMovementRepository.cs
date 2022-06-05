@@ -76,8 +76,11 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
     {
         var list = DbSet
             .Include(movement => movement.Product)
+                .ThenInclude(product => product!.Manufacturer)
+            .Include(movement => movement.Product)
+                .ThenInclude(product => product!.Unit)
             .Include(movement => movement.Place)
-            .ThenInclude(storagePlace => storagePlace!.Warehouse)
+                .ThenInclude(storagePlace => storagePlace!.Warehouse)
             .Where(movement => movement.ProductId == productId || productId == default)
             .Where(movement => movement.Place!.Id == storagePlaceId || storagePlaceId == default)
             .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || warehouseId == default)
