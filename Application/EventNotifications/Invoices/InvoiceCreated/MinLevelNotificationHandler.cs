@@ -29,7 +29,7 @@ public class MinLevelNotificationHandler : INotificationHandler<InvoiceCreatedNo
         }
         catch (Exception e)
         {
-            Debug.WriteLine(e.ToString());   
+            Debug.Fail(e.ToString());   
         }
     }
 
