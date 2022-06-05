@@ -69,8 +69,6 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             await unitOfWork.CommitAsync();
         }
 
-        await _mediator.Publish(new InvoiceCreatedNotification(invoice), cancellationToken);
-
         return invoice.Id;
     }
 

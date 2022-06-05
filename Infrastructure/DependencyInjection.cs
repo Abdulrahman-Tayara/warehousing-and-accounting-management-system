@@ -8,6 +8,7 @@ using Application.Services.Settings;
 using Application.Settings;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
+using Infrastructure.Persistence.Database.Seeders;
 using Infrastructure.Persistence.Database.Triggers;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.Aggregates;
@@ -92,6 +93,7 @@ public static class DependencyInjection
 
     private static void AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IEventPublisherService, EventPublisherService>();
     }
@@ -106,11 +108,14 @@ public static class DependencyInjection
     {
         using (var scope = app.Services.CreateScope())
         {
-            using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+            var services = scope.ServiceProvider;
+            var dbSeeder = services.GetRequiredService<IDatabaseSeeder>();
+            
+            using (var dbContext = services.GetRequiredService<ApplicationDbContext>())
             {
                 dbContext.Database.Migrate();
                 dbContext.Database.EnsureCreated();
-                //Seeding the data base too.                
+                dbContext.Seed(dbSeeder);
             }
         }
     }
