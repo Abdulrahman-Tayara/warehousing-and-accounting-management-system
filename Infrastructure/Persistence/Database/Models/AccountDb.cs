@@ -23,5 +23,5 @@ public class AccountDb : IMapFrom<Account>, IDbModel, ISoftDeletable
 
     public bool IsDeleted { get; set; } = false;
     
-    public DateTime DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

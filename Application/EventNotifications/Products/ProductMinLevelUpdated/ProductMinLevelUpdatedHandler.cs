@@ -6,22 +6,20 @@ using Application.Queries.Notifications;
 using Application.Queries.Warehouses;
 using Domain.Aggregations;
 using Domain.Entities;
-using Domain.Events;
 using MediatR;
 
-namespace Application.EventNotifications.Products;
+namespace Application.EventNotifications.Products.ProductMinLevelUpdated;
 
-public class
-    ProductMinLevelUpdatedNotificationHandler : INotificationHandler<DomainNotification<ProductMinLevelUpdated>>
+public class ProductMinLevelUpdatedHandler : INotificationHandler<DomainNotification<Domain.Events.ProductMinLevelUpdated>>
 {
     private readonly IMediator _mediator;
 
-    public ProductMinLevelUpdatedNotificationHandler(IMediator mediator)
+    public ProductMinLevelUpdatedHandler(IMediator mediator)
     {
         _mediator = mediator;
     }
 
-    public async Task Handle(DomainNotification<ProductMinLevelUpdated> notification,
+    public async Task Handle(DomainNotification<Domain.Events.ProductMinLevelUpdated> notification,
         CancellationToken cancellationToken)
     {
         var @event = notification.DomainEvent;
@@ -40,7 +38,7 @@ public class
         }
     }
 
-    private async Task _handleIncreased(ProductMinLevelUpdated @event)
+    private async Task _handleIncreased(Domain.Events.ProductMinLevelUpdated @event)
     {
         AggregateProductQuantity aggregate = await _aggregateTask(@event.ProductId);
 
@@ -59,7 +57,7 @@ public class
                 return;
             }
 
-            var createdNotificationDtos = new List<NotificationDto> 
+            var createdNotificationDtos = new List<NotificationDto>
             {
                 new(@event.ProductId, NotificationType.MinLevelExceeded)
             };
@@ -67,7 +65,7 @@ public class
         }
     }
 
-    private async Task _handleDecreased(ProductMinLevelUpdated @event)
+    private async Task _handleDecreased(Domain.Events.ProductMinLevelUpdated @event)
     {
         AggregateProductQuantity aggregate = await _aggregateTask(@event.ProductId);
 

@@ -22,11 +22,11 @@ public class
     {
     }
 
-    protected override Account CreateEntity(CreateAccountCommand request) => new()
-    {
-        Name = request.Name,
-        Code = request.Code,
-        Phone = request.Phone,
-        City = request.City
-    };
+    protected override Account CreateEntity(CreateAccountCommand request) => new(
+        id: default,
+        name: request.Name,
+        code: request.Code,
+        phone: request.Phone,
+        city: request.City
+    );
 }

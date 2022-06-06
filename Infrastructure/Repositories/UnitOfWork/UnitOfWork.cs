@@ -21,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IUserRepository> _userRepository;
     private readonly Lazy<IWarehouseRepository> _warehouseRepository;
     private readonly Lazy<IPaymentRepository> _paymentRepository;
+    private readonly Lazy<IJournalRepository> _journalRepository;
 
     private readonly Lazy<IInvoicePaymentsRepository> _invoicePaymentRepository;
 
@@ -33,7 +34,7 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IStoragePlaceRepository> storagePlaceRepository, Lazy<IUnitRepository> unitRepository,
         Lazy<IUserRepository> userRepository, Lazy<IWarehouseRepository> warehouseRepository,
         Lazy<IPaymentRepository> paymentRepository, Lazy<IInvoicePaymentsRepository> invoicePaymentRepository,
-        ApplicationDbContext dbContext)
+        Lazy<IJournalRepository> journalRepository, ApplicationDbContext dbContext)
     {
         _accountRepository = accountRepository;
         _categoryRepository = categoryRepository;
@@ -49,6 +50,7 @@ public class UnitOfWork : IUnitOfWork
         _warehouseRepository = warehouseRepository;
         _paymentRepository = paymentRepository;
         _invoicePaymentRepository = invoicePaymentRepository;
+        _journalRepository = journalRepository;
         _transaction = dbContext.Database.BeginTransaction();
     }
 
@@ -77,6 +79,8 @@ public class UnitOfWork : IUnitOfWork
     public IWarehouseRepository WarehouseRepository => _warehouseRepository.Value;
 
     public IPaymentRepository PaymentRepository => _paymentRepository.Value;
+
+    public IJournalRepository JournalRepository => _journalRepository.Value;
 
     public IInvoicePaymentsRepository InvoicePaymentsRepository => _invoicePaymentRepository.Value;
 

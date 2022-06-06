@@ -4,6 +4,7 @@ using Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220605084634_SoftDeletedAtOptional")]
+    partial class SoftDeletedAtOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,40 +277,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("Infrastructure.Persistence.Database.Models.JournalDb", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Credit")
-                        .HasColumnType("float");
-
-                    b.Property<int>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Debit")
-                        .HasColumnType("float");
-
-                    b.Property<int>("SourceAccountId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("SourceAccountId");
-
-                    b.ToTable("JournalDbs");
-                });
-
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.ManufacturerDb", b =>
                 {
                     b.Property<int>("Id")
@@ -548,9 +516,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CashDrawerAccountId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -741,33 +706,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("Infrastructure.Persistence.Database.Models.JournalDb", b =>
-                {
-                    b.HasOne("Infrastructure.Persistence.Database.Models.AccountDb", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Persistence.Database.Models.CurrencyDb", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Persistence.Database.Models.AccountDb", "SourceAccount")
-                        .WithMany()
-                        .HasForeignKey("SourceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("SourceAccount");
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Database.Models.PaymentDb", b =>

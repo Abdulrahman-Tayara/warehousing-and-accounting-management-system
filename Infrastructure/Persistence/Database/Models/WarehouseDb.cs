@@ -15,4 +15,6 @@ public class WarehouseDb : IDbModel, IMapFrom<Warehouse>
     public string Name { get; set; }
     
     public string Location { get; set; }
+    
+    public int CashDrawerAccountId { get; set; }
 }

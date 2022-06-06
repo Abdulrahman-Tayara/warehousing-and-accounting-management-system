@@ -6,7 +6,7 @@ using Application.Queries.Notifications;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.EventNotifications.Invoices;
+namespace Application.EventNotifications.Invoices.InvoiceCreated;
 
 public class MinLevelNotificationHandler : INotificationHandler<InvoiceCreatedNotification>
 {
@@ -29,7 +29,7 @@ public class MinLevelNotificationHandler : INotificationHandler<InvoiceCreatedNo
         }
         catch (Exception e)
         {
-            Debug.WriteLine(e.ToString());   
+            Debug.Fail(e.ToString());   
         }
     }
 
