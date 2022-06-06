@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence.Database;
 using Infrastructure.Persistence.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -29,5 +30,13 @@ public class JournalRepository : RepositoryCrud<Journal, JournalDb>, IJournalRep
 
             return (MapModelToEntity(resultCredit.Entity), MapModelToEntity(resultDebit.Entity));
         };
+    }
+
+    protected override IQueryable<JournalDb> GetIncludedDbSet()
+    {
+        return base.GetIncludedDbSet()
+            .Include(journal => journal.SourceAccount)
+            .Include(journal => journal.Account)
+            .Include(journal => journal.Currency);
     }
 }
