@@ -72,45 +72,44 @@ public class ProductMovementRepository : RepositoryCrud<ProductMovement, Product
         return aggregatesWithFullProduct.AsQueryable();
     }
 
-    public IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId, int storagePlaceId)
+    public IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId,
+        int storagePlaceId)
     {
-        var list = DbSet
-            .Include(movement => movement.Product)
-                .ThenInclude(product => product!.Manufacturer)
-            .Include(movement => movement.Product)
-                .ThenInclude(product => product!.Unit)
-            .Include(movement => movement.Place)
-                .ThenInclude(storagePlace => storagePlace!.Warehouse)
+        var filteredMovements = DbSet
             .Where(movement => movement.ProductId == productId || productId == default)
             .Where(movement => movement.Place!.Id == storagePlaceId || storagePlaceId == default)
-            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || warehouseId == default)
-            .ToList(); //TODO what's up with this? if you remove it, properties won't be included??
+            .Where(movement => movement.Place!.Warehouse!.Id == warehouseId || warehouseId == default);
 
-        return list
-            .GroupBy(
-                movement => movement.PlaceId.GetValueOrDefault(),
-                movement => new
-                {
-                    Product = movement.Product,
-                    Quantity = movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity,
-                    StoragePlace = movement.Place
-                },
-                (placeId, obj) => new
-                {
-                    Product = obj.First().Product,
-                    Quantity = obj.Sum(o => o.Quantity),
-                    StoragePlace = obj.First().StoragePlace
-                }
-            )
-            .ToList()
-            .Select(obj =>
-                new AggregateStoragePlaceQuantity(
-                    Mapper.Map<Product>(obj.Product),
-                    obj.Quantity,
-                    Mapper.Map<StoragePlace>(obj.StoragePlace)
-                )
-            )
-            .AsQueryable();
+        var groupByResult =
+            from m in filteredMovements
+            group m by new {PlaceId = m.PlaceId.GetValueOrDefault(), m.ProductId}
+            into g
+            select new
+            {
+                ProductId = g.Key.PlaceId,
+                Quantity = g.Sum(movement =>
+                    movement.Type == ProductMovementType.In ? movement.Quantity : -movement.Quantity),
+                StoragePlaceId = g.Key.PlaceId
+            };
+
+        var includedProducts = dbContext.Products
+            .Include(p => p.Manufacturer)
+            .Include(p => p.Unit);
+
+        var includedStoragePlaces = dbContext.StoragePlaces
+            .Include(sp => sp.Warehouse);
+
+        var joined =
+            from obj in groupByResult
+            join product in includedProducts on obj.ProductId equals product.Id
+            join storagePlace in includedStoragePlaces on obj.StoragePlaceId equals storagePlace.Id
+            select new AggregateStoragePlaceQuantity(
+                Mapper.Map<Product>(product),
+                obj.Quantity,
+                Mapper.Map<StoragePlace>(storagePlace)
+            );
+
+        return joined;
     }
 
     protected override IQueryable<ProductMovementDb> GetIncludedDbSet()
