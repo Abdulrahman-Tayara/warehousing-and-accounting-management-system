@@ -7,13 +7,15 @@ namespace wms.Dto.Products;
 public class ProductJoinedViewModel : IViewModel, IMapFrom<Product>
 {
     public int Id { get; set; }
-    
+
     public string Name { get; set; }
+
+    public string FullName => $"{Name} {Unit.Name} {Manufacturer.Name}";
 
     public Category Category { get; set; }
 
     public Manufacturer Manufacturer { get; set; }
-    
+
     public CountryOrigin CountryOrigin { get; set; }
 
     public Unit Unit { get; set; }
@@ -23,6 +25,6 @@ public class ProductJoinedViewModel : IViewModel, IMapFrom<Product>
     public double Price { get; set; }
 
     public Currency Currency { get; set; }
-    
+
     public int MinLevel { get; set; }
 }
