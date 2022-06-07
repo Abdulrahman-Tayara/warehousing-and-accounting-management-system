@@ -1,4 +1,5 @@
 using Application.Repositories;
+using Application.Settings;
 using Domain.Aggregations;
 using Domain.Entities;
 using MediatR;
@@ -21,12 +22,19 @@ public class GetAccountStatementQueryHandler : IRequestHandler<GetAccountStateme
     private readonly IAccountRepository _accountRepository;
     private readonly ICurrencyRepository _currencyRepository;
 
-    public GetAccountStatementQueryHandler(IJournalRepository journalRepository, IAccountRepository accountRepository,
-        ICurrencyRepository currencyRepository)
+    private readonly ApplicationSettings _applicationSettings;
+
+    public GetAccountStatementQueryHandler(
+        IJournalRepository journalRepository,
+        IAccountRepository accountRepository,
+        ICurrencyRepository currencyRepository,
+        ApplicationSettings applicationSettings
+    )
     {
         _journalRepository = journalRepository;
         _accountRepository = accountRepository;
         _currencyRepository = currencyRepository;
+        _applicationSettings = applicationSettings;
     }
 
     public async Task<AggregateAccountStatement> Handle(GetAccountStatementQuery request,
@@ -55,7 +63,7 @@ public class GetAccountStatementQueryHandler : IRequestHandler<GetAccountStateme
             .Where(account => detailEntries.Select(d => d.AccountId).Contains(account.Id))
             .ToList();
 
-        var currency = await _currencyRepository.FindByIdAsync(detailEntries.First().CurrencyId);
+        var currency = await _currencyRepository.FindByIdAsync(_applicationSettings.DefaultCurrencyId);
 
         var details = detailEntries
             .Zip(detailsAccounts)
