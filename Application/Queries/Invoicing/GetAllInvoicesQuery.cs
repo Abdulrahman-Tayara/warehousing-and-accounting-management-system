@@ -26,7 +26,8 @@ public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQu
         return Task.FromResult(
             _applyFilters(
                 _invoiceRepository
-                    .GetAll(new GetAllOptions<Invoice> {IncludeRelations = true}),
+                    .GetAll(new GetAllOptions<Invoice> {IncludeRelations = true})
+                    .OrderByDescending(invoice => invoice.CreatedAt),
                 request
             )
         );
