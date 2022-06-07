@@ -7,18 +7,15 @@ using wms.Dto.Common.Responses;
 
 namespace wms.Controllers.Api;
 
+[Authorize]
 public class SettingsController : ApiControllerBase
 {
-    private readonly ApplicationSettings settings;
-
-    public SettingsController(IMediator mediator, IMapper mapper, ApplicationSettings settings) : base(mediator, mapper)
+    public SettingsController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
     {
-        this.settings = settings;
     }
 
-
     [HttpGet]
-    public ActionResult<BaseResponse<ApplicationSettings>> Get()
+    public ActionResult<BaseResponse<ApplicationSettings>> Get([FromServices] ApplicationSettings settings)
     {
         return Ok(settings);
     }
