@@ -1,5 +1,6 @@
 using Application.Services.Settings;
 using Infrastructure.Persistence.Database.Seeders.Accounts;
+using Infrastructure.Persistence.Database.Seeders.Currencies;
 
 namespace Infrastructure.Persistence.Database.Seeders;
 
@@ -15,7 +16,8 @@ public class DatabaseSeeder : IDatabaseSeeder
     {
         _seeders = new List<ISeeder>
         {
-            new AccountsSeeder()
+            new AccountsSeeder(),
+            new CurrenciesSeeder()
         };
     }
 

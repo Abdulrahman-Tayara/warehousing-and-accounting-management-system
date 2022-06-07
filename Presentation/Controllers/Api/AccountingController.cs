@@ -1,4 +1,5 @@
 using Application.Queries.Accounting;
+using Application.Settings;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +21,17 @@ public class AccountingController : ApiControllerBase
     public async Task<ActionResult<BaseResponse<AccountStatementViewModel>>> AccountStatement([FromQuery] int accountId)
     {
         var accountStatement = await Mediator.Send(new GetAccountStatementQuery(accountId));
+
+        var viewmodel = accountStatement.ToViewModel<AccountStatementViewModel>(Mapper);
+
+        return Ok(viewmodel);
+    }
+
+    [HttpGet("accountStatement/cashDrawer")]
+    public async Task<ActionResult<BaseResponse<AccountStatementViewModel>>> AccountStatement(
+        [FromServices] ApplicationSettings settings)
+    {
+        var accountStatement = await Mediator.Send(new GetAccountStatementQuery(settings.DefaultMainCashDrawerAccountId));
 
         var viewmodel = accountStatement.ToViewModel<AccountStatementViewModel>(Mapper);
 

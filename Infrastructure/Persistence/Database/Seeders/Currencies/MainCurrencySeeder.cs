@@ -10,7 +10,7 @@ public class MainCurrencySeeder : ISeeder
         var settings = settingsProvider.Get();
 
         var mainCurrency = dbContext.Currencies
-            .FirstOrDefault(account => account.Id == settings.DefaultCurrencyId);
+            .FirstOrDefault(currency => currency.Id == settings.DefaultCurrencyId);
         
         if (mainCurrency != null)
         {
