@@ -17,7 +17,7 @@ public class NotificationsController : ApiControllerBase
     {
     }
     
-    [HttpPost]
+    [HttpGet]
     public async Task<ActionResult<BaseResponse<PageViewModel<NotificationViewModel>>>> GetAll(
         [FromQuery] GetNotificationsQueryParams queryParams
         )
