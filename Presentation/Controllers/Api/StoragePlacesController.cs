@@ -80,14 +80,14 @@ public class StoragePlacesController : ApiControllerBase
         [FromQuery] PaginationRequestParams paginationParams,
         [FromQuery] int? productId,
         [FromQuery] int? storagePlaceId,
-        int? warehouseId
+        int warehouseId
     )
     {
-        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(new ProductMovementFilters
+        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(new ProductMovementFilters()
         {
             ProductIds = productId != null ? new List<int> {productId.GetValueOrDefault()} : null,
-            StoragePlaceId = storagePlaceId,
-            WarehouseId = warehouseId
+            WarehouseId = warehouseId == 0 ? null : warehouseId,
+            StoragePlaceId = storagePlaceId
         }));
 
         var storagePlaceQuantities = await Mediator.Send(query);
