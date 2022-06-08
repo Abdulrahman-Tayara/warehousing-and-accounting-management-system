@@ -7,5 +7,7 @@ namespace Application.Repositories;
 public interface IProductMovementRepository : IRepositoryCrud<ProductMovement, int>
 {
     IQueryable<AggregateProductQuantity> AggregateProductsQuantities(ProductMovementFilters? filters = default);
-    IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(int productId, int warehouseId, int storagePlaceId);
+
+    IQueryable<AggregateStoragePlaceQuantity> AggregateStoragePlacesQuantities(
+        ProductMovementFilters? filters = default);
 }

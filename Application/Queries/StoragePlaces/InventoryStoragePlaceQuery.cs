@@ -1,3 +1,4 @@
+using Application.Common.Dtos;
 using Application.Common.Models;
 using Application.Queries.Common;
 using Application.Repositories;
@@ -8,24 +9,17 @@ namespace Application.Queries.StoragePlaces;
 
 public class InventoryStoragePlaceQuery : GetPaginatedQuery<AggregateStoragePlaceQuantity>
 {
-    public int ProductId { get; }
-    
-    public int WarehouseId { get; }
-    
-    public int StoragePlaceId { get; }
+    public ProductMovementFilters? Filters { get; set; }
 
-    public InventoryStoragePlaceQuery(int productId, int warehouseId, int storagePlaceId)
+    public InventoryStoragePlaceQuery(ProductMovementFilters? filters)
     {
-        ProductId = productId;
-        WarehouseId = warehouseId;
-        StoragePlaceId = storagePlaceId;
+        Filters = filters;
     }
 }
 
 public class GetStoragePlaceInventoryQueryHandler
     : IRequestHandler<InventoryStoragePlaceQuery, IPaginatedEnumerable<AggregateStoragePlaceQuantity>>
 {
-
     private readonly IProductMovementRepository _productMovementRepository;
 
     public GetStoragePlaceInventoryQueryHandler(IProductMovementRepository productMovementRepository)
@@ -33,10 +27,11 @@ public class GetStoragePlaceInventoryQueryHandler
         _productMovementRepository = productMovementRepository;
     }
 
-    public Task<IPaginatedEnumerable<AggregateStoragePlaceQuantity>> Handle(InventoryStoragePlaceQuery request, CancellationToken cancellationToken)
+    public Task<IPaginatedEnumerable<AggregateStoragePlaceQuantity>> Handle(InventoryStoragePlaceQuery request,
+        CancellationToken cancellationToken)
     {
         return Task.FromResult(
-            _productMovementRepository.AggregateStoragePlacesQuantities(request.ProductId, request.WarehouseId, request.StoragePlaceId)
+            _productMovementRepository.AggregateStoragePlacesQuantities(request.Filters)
                 .AsPaginatedQuery(request.Page, request.PageSize)
         );
     }

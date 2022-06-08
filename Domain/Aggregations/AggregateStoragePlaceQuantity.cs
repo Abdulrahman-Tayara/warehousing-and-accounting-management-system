@@ -10,9 +10,9 @@ public class AggregateStoragePlaceQuantity : AggregateRoot
 {
     public Product Product { get; }
 
-    public int Quantity { get; }
-
     public StoragePlace StoragePlace { get; }
+
+    public int Quantity { get; }
 
     public AggregateStoragePlaceQuantity(Product product, int quantity, StoragePlace storagePlace)
     {

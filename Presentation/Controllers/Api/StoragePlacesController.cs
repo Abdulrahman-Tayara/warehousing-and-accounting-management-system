@@ -1,4 +1,5 @@
 ﻿using Application.Commands.StoragePlaces;
+using Application.Common.Dtos;
 using Application.Queries.StoragePlaces;
 using AutoMapper;
 using MediatR;
@@ -77,12 +78,17 @@ public class StoragePlacesController : ApiControllerBase
     [HttpGet("inventory")]
     public async Task<ActionResult<BaseResponse<PageViewModel<StoragePlaceQuantityViewModel>>>> Inventory(
         [FromQuery] PaginationRequestParams paginationParams,
-        [FromQuery] int productId,
-        [FromQuery] int storagePlaceId,
-        int warehouseId
+        [FromQuery] int? productId,
+        [FromQuery] int? storagePlaceId,
+        int? warehouseId
     )
     {
-        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(productId, warehouseId, storagePlaceId));
+        var query = paginationParams.AsQuery(new InventoryStoragePlaceQuery(new ProductMovementFilters
+        {
+            ProductIds = productId != null ? new List<int> {productId.GetValueOrDefault()} : null,
+            StoragePlaceId = storagePlaceId,
+            WarehouseId = warehouseId
+        }));
 
         var storagePlaceQuantities = await Mediator.Send(query);
 
