@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, IdentityRole<int>, int>
+public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, ApplicationRole, int>
 {
     public DbSet<ManufacturerDb> Manufacturers { get; set; } = null!;
     public DbSet<CategoryDb> Categories { get; set; } = null!;

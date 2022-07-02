@@ -4,5 +4,5 @@ namespace Infrastructure.Persistence.Database.Seeders;
 
 public interface ISeeder
 {
-    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider);
+    public Task Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider);
 }

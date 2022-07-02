@@ -5,7 +5,7 @@ namespace Infrastructure.Persistence.Database.Seeders.Currencies;
 
 public class MainCurrencySeeder : ISeeder
 {
-    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
+    public Task Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
         var settings = settingsProvider.Get();
 
@@ -14,7 +14,7 @@ public class MainCurrencySeeder : ISeeder
         
         if (mainCurrency != null)
         {
-            return;
+            return Task.CompletedTask;
         }
         
         using (var transaction = dbContext.Database.BeginTransaction())
@@ -34,5 +34,7 @@ public class MainCurrencySeeder : ISeeder
             
             transaction.Commit();
         }
+        
+        return Task.CompletedTask;
     }
 }

@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Domain.Exceptions;
@@ -22,7 +23,8 @@ public class ExceptionFilter : ExceptionFilterAttribute
         _exceptionMap = new Dictionary<Type, Action<ExceptionContext>>
         {
             {typeof(ValidationException), HandleValidationException},
-            {typeof(ProductMinLevelExceededException), HandleProductMinLevelExceededException}
+            {typeof(ProductMinLevelExceededException), HandleProductMinLevelExceededException},
+            {typeof(ForbiddenAccessException), HandleForbiddenAccessException}
         };
     }
 
@@ -94,6 +96,17 @@ public class ExceptionFilter : ExceptionFilterAttribute
         );
 
         context.Result = new ObjectResult(responseBody) {StatusCode = StatusCodes.Status400BadRequest};
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleForbiddenAccessException(ExceptionContext context)
+    {
+        var exception = (ForbiddenAccessException) context.Exception;
+
+        var responseBody = new NoDataResponse(exception.Message);
+
+        context.Result = new ObjectResult(responseBody) {StatusCode = StatusCodes.Status403Forbidden};
 
         context.ExceptionHandled = true;
     }
