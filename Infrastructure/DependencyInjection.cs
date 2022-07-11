@@ -93,6 +93,7 @@ public static class DependencyInjection
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IJournalRepository, JournalRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 
         services.AddScoped<IInvoicePaymentsRepository, InvoicePaymentsRepository>();
 

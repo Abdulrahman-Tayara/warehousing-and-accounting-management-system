@@ -20,4 +20,14 @@ public class Role
         Name = name;
         Permissions = permissions;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Role role)
+        {
+            return role.Id == Id;
+        }
+
+        return false;
+    }
 }

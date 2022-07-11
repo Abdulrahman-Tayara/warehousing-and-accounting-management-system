@@ -2,7 +2,7 @@
 using Application.Common.Security;
 using wms.Dto.Common;
 
-namespace wms.Dto.Policies;
+namespace wms.Dto.Authorization.Policies;
 
 public class PolicyViewModel : IViewModel, IMapFrom<Policy>
 {

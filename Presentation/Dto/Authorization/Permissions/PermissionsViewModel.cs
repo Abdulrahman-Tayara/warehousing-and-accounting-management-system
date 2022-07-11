@@ -1,8 +1,8 @@
 ﻿using Application.Common.Mappings;
+using wms.Dto.Authorization.Policies;
 using wms.Dto.Common;
-using wms.Dto.Policies;
 
-namespace wms.Dto.Permissions;
+namespace wms.Dto.Authorization.Permissions;
 
 public class PermissionsViewModel : IViewModel, IMapFrom<Application.Common.Security.Permissions>
 {

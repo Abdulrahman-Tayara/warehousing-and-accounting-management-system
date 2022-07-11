@@ -1,9 +1,9 @@
 ﻿using Application.Common.Mappings;
 using Application.Common.Security;
+using wms.Dto.Authorization.Permissions;
 using wms.Dto.Common;
-using wms.Dto.Permissions;
 
-namespace wms.Dto.Roles;
+namespace wms.Dto.Authorization.Roles;
 
 public class RoleViewModel : IViewModel, IMapFrom<Role>
 {

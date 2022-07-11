@@ -3,13 +3,14 @@ using Application.Queries.Roles;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using wms.Dto.Authorization.Roles;
 using wms.Dto.Common;
 using wms.Dto.Common.Responses;
 using wms.Dto.Pagination;
-using wms.Dto.Roles;
 
-namespace wms.Controllers.Api;
+namespace wms.Controllers.Api.Authorization;
 
+[Route("api/authorization/[controller]")]
 public class RolesController : ApiControllerBase
 {
     public RolesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)

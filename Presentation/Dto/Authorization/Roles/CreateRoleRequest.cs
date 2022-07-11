@@ -1,8 +1,8 @@
 ﻿using Application.Commands.Roles;
 using Application.Common.Mappings;
-using wms.Dto.Permissions;
+using wms.Dto.Authorization.Permissions;
 
-namespace wms.Dto.Roles;
+namespace wms.Dto.Authorization.Roles;
 
 public class CreateRoleRequest : IMapFrom<CreateRoleCommand>
 {
