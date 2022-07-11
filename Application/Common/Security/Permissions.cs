@@ -8,7 +8,7 @@ public class Permissions
     public bool AllPermissions { get; set; }
     public bool None { get; set; }
 
-    public readonly IList<Policy> Policies = new List<Policy>();
+    public IList<Policy> Policies { get; set; } = new List<Policy>();
 
     public void AddPolicy(Policy policy)
     {
@@ -20,26 +20,41 @@ public class Permissions
 
     public void Merge(Permissions permissions)
     {
-        AllPermissions = AllPermissions || permissions.AllPermissions;
-        None = None || permissions.None;
-        foreach (var permissionsPolicy in permissions.Policies)
+        if (permissions.AllPermissions)
+            AllPermissions = true;
+        else if (permissions.None)
+            None = true;
+        else
         {
-            AddPolicy(permissionsPolicy);
+            foreach (var permissionsPolicy in permissions.Policies)
+            {
+                AddPolicy(permissionsPolicy);
+            }
         }
     }
 
-    public static Permissions From(string permission)
+    public static Permissions From(string? permission)
     {
         var permissions = new Permissions();
+
+        if (permission == null)
+            return permissions;
 
         foreach (var policy in permission.Split(PolicyHelper.PoliciesSeparator))
         {
             if (policy.Equals(AllPermissionKey, StringComparison.OrdinalIgnoreCase))
+            {
                 permissions.AllPermissions = true;
-            else if (policy.Equals(NonePermissionKey, StringComparison.OrdinalIgnoreCase))
+                break;
+            }
+
+            if (policy.Equals(NonePermissionKey, StringComparison.OrdinalIgnoreCase))
+            {
                 permissions.None = true;
-            else
-                permissions.AddPolicy(PolicyHelper.CreatePolicyFromString(policy));
+                break;
+            }
+
+            permissions.AddPolicy(PolicyHelper.CreatePolicyFromString(policy));
         }
 
         return permissions;
@@ -51,11 +66,12 @@ public class Permissions
         {
             return AllPermissionKey;
         }
-        else if (None)
+
+        if (None)
         {
             return NonePermissionKey;
         }
-        
+
         return string.Join(PolicyHelper.PoliciesSeparator, PolicyHelper.PoliciesToString(Policies));
     }
 }
