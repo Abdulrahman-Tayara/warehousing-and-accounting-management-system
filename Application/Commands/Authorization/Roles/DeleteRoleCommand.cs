@@ -1,7 +1,7 @@
 ﻿using Application.Repositories;
 using MediatR;
 
-namespace Application.Commands.Roles;
+namespace Application.Commands.Authorization.Roles;
 
 public class DeleteRoleCommand : IRequest
 {

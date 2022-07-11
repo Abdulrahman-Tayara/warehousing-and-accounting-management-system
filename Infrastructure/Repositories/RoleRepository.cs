@@ -34,8 +34,16 @@ public class RoleRepository : IRoleRepository
 
     public async Task<Role> Update(Role role)
     {
-        var applicationRole = _mapper.Map<Role, ApplicationRole>(role);
+        var applicationRole = await _roleManager.FindByIdAsync(role.Id.ToString());
 
+        if (applicationRole == null)
+        {
+            throw new NotFoundException();
+        }
+
+        applicationRole.Permissions = role.Permissions.ToString();
+        applicationRole.Name = role.Name;
+        
         var result = await _roleManager.UpdateAsync(applicationRole);
 
         if (result.Succeeded)

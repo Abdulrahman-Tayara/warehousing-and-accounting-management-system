@@ -2,7 +2,7 @@
 using Application.Queries.Common;
 using Application.Repositories;
 
-namespace Application.Queries.Roles;
+namespace Application.Queries.Authorization.Roles;
 
 public class GetAllRolesQuery : GetPaginatedQuery<Role>
 {

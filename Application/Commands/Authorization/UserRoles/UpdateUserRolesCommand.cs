@@ -4,7 +4,7 @@ using Application.Repositories;
 using Application.Repositories.Aggregates;
 using MediatR;
 
-namespace Application.Commands.UserRoles;
+namespace Application.Commands.Authorization.UserRoles;
 
 public class UpdateUserRolesCommand : IRequest
 {

@@ -2,7 +2,7 @@
 using Application.Repositories;
 using MediatR;
 
-namespace Application.Queries.Roles;
+namespace Application.Queries.Authorization.Roles;
 
 public class GetRoleQuery : IRequest<Role>
 {

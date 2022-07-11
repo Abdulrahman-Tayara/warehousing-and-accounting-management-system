@@ -1,5 +1,5 @@
-﻿using Application.Commands.UserRoles;
-using Application.Queries.UserRoles;
+﻿using Application.Commands.Authorization.UserRoles;
+using Application.Queries.Authorization.UserRoles;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

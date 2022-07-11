@@ -1,5 +1,5 @@
-﻿using Application.Commands.Roles;
-using Application.Queries.Roles;
+﻿using Application.Commands.Authorization.Roles;
+using Application.Queries.Authorization.Roles;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +35,19 @@ public class RolesController : ApiControllerBase
         var roles = await Mediator.Send(new GetAllRolesQuery());
 
         return Ok(roles.ToViewModel<RoleViewModel>(Mapper));
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<BaseResponse<RoleViewModel>>> Create(int id, UpdateRoleRequest request)
+    {
+        var command = Mapper.Map<UpdateRoleRequest, UpdateRoleCommand>(request);
+        command.Id = id;
+        
+        var roleId = await Mediator.Send(command);
+
+        var role = await Mediator.Send(new GetRoleQuery {Id = roleId});
+        
+        return Ok(role.ToViewModel<RoleViewModel>(Mapper));
     }
 
     [HttpDelete("{id}")]
