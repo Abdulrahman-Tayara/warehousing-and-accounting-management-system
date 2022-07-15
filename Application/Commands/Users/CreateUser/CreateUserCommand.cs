@@ -11,7 +11,7 @@ namespace Application.Commands.Users.CreateUser;
 public class CreateUserCommand : ICreateEntityCommand<int>
 {
     public string Username { get; set; }
-    
+
     public string Password { get; set; }
     
     [QueryFilter(QueryFilterCompareType.InArray, FieldName = "Id")]
@@ -33,16 +33,16 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
         using var unitOfWork = _unitOfWork.Value;
         _openedUnitOfWork = unitOfWork;
 
-        var user = await _createUser(request);
+        var user = await CreateUser(request);
 
-        await _assignRoles(request, user);
+        await AssignRoles(request, user);
 
         return user.Id;
     }
 
-    private async Task<User> _createUser(CreateUserCommand request)
+    private async Task<User> CreateUser(CreateUserCommand request)
     {
-        var user = _createEntity(request);
+        var user = CreateEntity(request);
         
         var saveAction = await _openedUnitOfWork!.UserRepository.CreateAsync(user);
 
@@ -51,21 +51,21 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
         return createdUser;
     }
 
-    private async Task _assignRoles(CreateUserCommand request, User user)
+    private async Task AssignRoles(CreateUserCommand request, User user)
     {
         var userRoles = await _openedUnitOfWork!.UserRolesRepository.FindByUserId(user.Id);
-        var roles = _getRoles(request);
+        var roles = GetRoles(request);
         userRoles.UpdateRoles(roles);
         await _openedUnitOfWork.UserRolesRepository.Update(userRoles);
     }
 
-    private IList<Role> _getRoles(CreateUserCommand request)
+    private IList<Role> GetRoles(CreateUserCommand request)
     {
         var roles = _openedUnitOfWork!.RoleRepository.GetAll().WhereFilters(request);
         return roles.ToList();
     }
 
-    private static User _createEntity(CreateUserCommand request)
+    private static User CreateEntity(CreateUserCommand request)
     {
         return new User
         {

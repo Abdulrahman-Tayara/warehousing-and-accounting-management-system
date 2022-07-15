@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Authorization.UserRoles;
+using Application.Common.Models;
 using Application.Queries.Authorization.UserRoles;
 using AutoMapper;
 using MediatR;
@@ -18,6 +19,14 @@ public class UserRolesController : ApiControllerBase
     {
     }
 
+    [HttpGet]
+    public async Task<ActionResult<BaseResponse<IPaginatedEnumerable<UserRolesViewModel>>>> GetUsersRoles()
+    {
+        var usersRoles = await Mediator.Send(new GetAllUsersRolesQuery());
+
+        return Ok(usersRoles.ToViewModel<UserRolesViewModel>(Mapper));
+    }
+    
     [HttpGet("{userId}")]
     public async Task<ActionResult<BaseResponse<PageViewModel<RoleViewModel>>>> GetUserRoles(int userId)
     {

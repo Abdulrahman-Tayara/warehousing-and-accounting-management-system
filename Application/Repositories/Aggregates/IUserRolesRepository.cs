@@ -7,4 +7,6 @@ public interface IUserRolesRepository
     Task<UserRoles> FindByUserId(int userId);
     
     Task<UserRoles> Update(UserRoles userRoles);
+
+    IQueryable<UserRoles> GetAll();
 }
