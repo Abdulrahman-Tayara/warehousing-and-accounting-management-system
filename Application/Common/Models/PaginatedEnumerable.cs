@@ -48,6 +48,19 @@ public class PaginatedEnumerable<T> : IPaginatedEnumerable<T>
             RowsCount = rowsCount
         };
     }
+
+    public static PaginatedEnumerable<TModel> Create<TModel>(IQueryable<TModel> query)
+        where TModel : class
+    {
+        return new PaginatedEnumerable<TModel>
+        {
+            data = query,
+            CurrentPage = 1,
+            PagesCount = 1,
+            PageSize = query.Count(),
+            RowsCount = query.Count(),
+        };
+    }
 }
 
 public static class QueryableExtensions
@@ -56,5 +69,11 @@ public static class QueryableExtensions
         where T : class
     {
         return PaginatedEnumerable<T>.Create(query, page, pageSize);
+    }
+
+    public static IPaginatedEnumerable<T> AsPaginatedQuery<T>(this IQueryable<T> query)
+        where T : class
+    {
+        return PaginatedEnumerable<T>.Create(query);
     }
 }

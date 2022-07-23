@@ -22,7 +22,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IWarehouseRepository> _warehouseRepository;
     private readonly Lazy<IPaymentRepository> _paymentRepository;
     private readonly Lazy<IJournalRepository> _journalRepository;
-
+    private readonly Lazy<IRoleRepository> _rolesRepository;
+    private readonly Lazy<IUserRolesRepository> _userRolesRepository;
     private readonly Lazy<IInvoicePaymentsRepository> _invoicePaymentRepository;
 
     private readonly IDbContextTransaction _transaction;
@@ -34,7 +35,7 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IStoragePlaceRepository> storagePlaceRepository, Lazy<IUnitRepository> unitRepository,
         Lazy<IUserRepository> userRepository, Lazy<IWarehouseRepository> warehouseRepository,
         Lazy<IPaymentRepository> paymentRepository, Lazy<IInvoicePaymentsRepository> invoicePaymentRepository,
-        Lazy<IJournalRepository> journalRepository, ApplicationDbContext dbContext)
+        Lazy<IJournalRepository> journalRepository, ApplicationDbContext dbContext, Lazy<IRoleRepository> rolesRepository, Lazy<IUserRolesRepository> userRolesRepository)
     {
         _accountRepository = accountRepository;
         _categoryRepository = categoryRepository;
@@ -51,6 +52,8 @@ public class UnitOfWork : IUnitOfWork
         _paymentRepository = paymentRepository;
         _invoicePaymentRepository = invoicePaymentRepository;
         _journalRepository = journalRepository;
+        _rolesRepository = rolesRepository;
+        _userRolesRepository = userRolesRepository;
         _transaction = dbContext.Database.BeginTransaction();
     }
 
@@ -83,6 +86,9 @@ public class UnitOfWork : IUnitOfWork
     public IJournalRepository JournalRepository => _journalRepository.Value;
 
     public IInvoicePaymentsRepository InvoicePaymentsRepository => _invoicePaymentRepository.Value;
+
+    public IRoleRepository RoleRepository => _rolesRepository.Value;
+    public IUserRolesRepository UserRolesRepository => _userRolesRepository.Value;
 
     public void Commit()
     {

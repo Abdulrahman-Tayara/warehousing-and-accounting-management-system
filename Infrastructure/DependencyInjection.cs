@@ -20,6 +20,7 @@ using Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Infrastructure;
 
@@ -64,8 +65,13 @@ public static class DependencyInjection
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
+            .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            // For Asp.Net Authorization
+            .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
+
+        services.AddScoped<ApplicationUserClaimsPrincipalFactory>();
     }
 
     private static void AddRepositories(this IServiceCollection services)
@@ -86,6 +92,8 @@ public static class DependencyInjection
         services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IJournalRepository, JournalRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 
         services.AddScoped<IInvoicePaymentsRepository, InvoicePaymentsRepository>();
 
@@ -105,7 +113,7 @@ public static class DependencyInjection
         services.AddScoped<ApplicationSettings>(s => s.GetService<IApplicationSettingsProvider>()!.Get());
     }
 
-    public static void EnsureDatabaseOps(this WebApplication app)
+    public static async Task EnsureDatabaseOps(this WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
         {
@@ -115,9 +123,10 @@ public static class DependencyInjection
 
             using (var dbContext = services.GetRequiredService<ApplicationDbContext>())
             {
-                dbContext.Database.Migrate();
-                dbContext.Database.EnsureCreated();
-                dbContext.Seed(dbSeeder, settingsProvider);
+                await dbContext.Database.MigrateAsync();
+                await dbContext.Database.EnsureCreatedAsync();
+                if (!app.Environment.IsDevelopment())
+                    await dbContext.Seed(dbSeeder, settingsProvider);
             }
         }
     }

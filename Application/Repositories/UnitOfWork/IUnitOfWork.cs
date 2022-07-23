@@ -18,8 +18,10 @@ public interface IUnitOfWork : IDisposable
     public IWarehouseRepository WarehouseRepository { get; }
     public IPaymentRepository PaymentRepository { get; }
     public IJournalRepository JournalRepository { get; }
-    
+    public IRoleRepository RoleRepository { get; }
     public IInvoicePaymentsRepository InvoicePaymentsRepository { get; }
+    
+    public IUserRolesRepository UserRolesRepository { get; }
 
     public void Commit();
 

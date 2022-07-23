@@ -20,7 +20,7 @@ public class GetPaginatedQuery<TEntity> : IRequest<IPaginatedEnumerable<TEntity>
 }
 
 public abstract class PaginatedQueryHandler<TRequest, TEntity> : IRequestHandler<TRequest, IPaginatedEnumerable<TEntity>>
-    where TEntity : class, IEntity
+    where TEntity : class
     where TRequest : GetPaginatedQuery<TEntity>
 {
     public async Task<IPaginatedEnumerable<TEntity>> Handle(TRequest request, CancellationToken cancellationToken)

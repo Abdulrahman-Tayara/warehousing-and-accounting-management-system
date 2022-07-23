@@ -24,6 +24,6 @@ public static class DbContextExtensions
         }
     }
 
-    public static void Seed(this ApplicationDbContext dbContext, IDatabaseSeeder dbSeeder,
+    public static Task Seed(this ApplicationDbContext dbContext, IDatabaseSeeder dbSeeder,
         IApplicationSettingsProvider settingsProvider) => dbSeeder.Seed(dbContext, settingsProvider);
 }

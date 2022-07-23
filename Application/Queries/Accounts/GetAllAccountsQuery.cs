@@ -1,4 +1,5 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
@@ -6,6 +7,7 @@ using MediatR;
 
 namespace Application.Queries.Accounts;
 
+[Authorize(Resource = Resource.Accounts, Method = Method.Read)]
 public class GetAllAccountsQuery : GetPaginatedQuery<Account>
 {
     [QueryFilter(QueryFilterCompareType.StringContains)]

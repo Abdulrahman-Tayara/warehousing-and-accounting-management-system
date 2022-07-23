@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using Application.Services.Identity;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using wms.Dto.Common.Responses.Validation;
 using wms.Filters;
+using wms.Services;
 using wms.Utils;
 
 namespace wms;
@@ -61,6 +63,11 @@ public static class DependencyInjection
         return services;
     }
 
+    public static IServiceCollection AddCurrentUserService(this IServiceCollection services)
+    {
+        return services.AddScoped<ICurrentUserService, ApiCurrentUserService>();
+    }
+    
     public static void UseSwaggerMiddlewares(this WebApplication app)
     {
         // if (app.Environment.IsDevelopment())

@@ -14,8 +14,8 @@ public class CurrenciesSeeder : ISeeder
         };
     }
     
-    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
+    public Task Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
-        _seeders.ForEach(seeder => seeder.Seed(dbContext, settingsProvider));
+        return Task.WhenAll(_seeders.Select(seeder => seeder.Seed(dbContext, settingsProvider)));
     }
 }
