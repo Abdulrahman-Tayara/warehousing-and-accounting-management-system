@@ -12,4 +12,6 @@ public class NotificationViewModel : IViewModel, IMapFrom<Notification>
     public ProductViewModel Product { get; set; }
 
     public NotificationType NotificationType { get; set; }
+
+    public bool IsValid { get; set; }
 }

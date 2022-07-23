@@ -11,5 +11,5 @@ public class GetNotificationsQueryParams : PaginationRequestParams, IMapFrom<Get
 
     public NotificationType? NotificationType { get; set; } = default;
     
-    public bool? IsValid { get; set; }
+    public bool? ValidOnly { get; set; }
 }
