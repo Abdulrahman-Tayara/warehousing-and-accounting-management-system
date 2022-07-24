@@ -34,17 +34,24 @@ public class NotificationsController : ApiControllerBase
             .Where(product => notificationsPage.Any(notification => notification.ObjectId == product.Id))
             .Select(productEntity => Mapper.Map<ProductViewModel>(productEntity));
 
-        var notificationsViewModelPage = notificationsPage
+        var notificationsViewModel = notificationsPage
             .Select(notification => new NotificationViewModel
             {
                 Id = notification.Id,
                 NotificationType = notification.NotificationType,
                 Product = products.First(product => product.Id == notification.ObjectId),
                 IsValid = notification.IsValid
-            })
-            .AsQueryable()
-            .AsPaginatedQuery(notificationsPage.CurrentPage, notificationsPage.PageSize);
+            });
 
-        return Ok(notificationsViewModelPage);
+        var notificationViewModelPage = new PageViewModel<NotificationViewModel>
+        {
+            Data = notificationsViewModel,
+            CurrentPage = notificationsPage.CurrentPage,
+            PageSize = notificationsPage.PageSize,
+            PagesCount = notificationsPage.PagesCount,
+            RowsCount = notificationsPage.RowsCount,
+        };
+
+        return Ok(notificationViewModelPage);
     }
 }
