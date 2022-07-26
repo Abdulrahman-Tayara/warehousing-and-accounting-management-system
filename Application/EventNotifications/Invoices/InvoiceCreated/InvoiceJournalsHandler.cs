@@ -21,12 +21,12 @@ public class InvoiceJournalsHandler : INotificationHandler<InvoiceCreatedNotific
     {
         var invoice = notification.Invoice;
 
-        if (invoice.Type == InvoiceType.Out)
+        if (invoice.Type == InvoiceType.Out && invoice.AccountType == InvoiceAccountType.PurchasesSales)
         {
             await _handleFromCashDrawerToCustomer(invoice, cancellationToken);
             await _handleFromSalesToCashDrawer(invoice, cancellationToken);
         }
-        else if (invoice.Type == InvoiceType.In)
+        else if (invoice.Type == InvoiceType.In && invoice.AccountType == InvoiceAccountType.PurchasesSales)
         {
             await _handleFromCustomerToCashDrawer(invoice, cancellationToken);
             await _handleFromCashDrawerToPurchases(invoice, cancellationToken);

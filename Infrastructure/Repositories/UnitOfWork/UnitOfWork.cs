@@ -24,6 +24,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IJournalRepository> _journalRepository;
     private readonly Lazy<IRoleRepository> _rolesRepository;
     private readonly Lazy<IUserRolesRepository> _userRolesRepository;
+    private readonly Lazy<IConversionRepository> _conversionRepository;
+
     private readonly Lazy<IInvoicePaymentsRepository> _invoicePaymentRepository;
 
     private readonly IDbContextTransaction _transaction;
@@ -35,7 +37,9 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IStoragePlaceRepository> storagePlaceRepository, Lazy<IUnitRepository> unitRepository,
         Lazy<IUserRepository> userRepository, Lazy<IWarehouseRepository> warehouseRepository,
         Lazy<IPaymentRepository> paymentRepository, Lazy<IInvoicePaymentsRepository> invoicePaymentRepository,
-        Lazy<IJournalRepository> journalRepository, ApplicationDbContext dbContext, Lazy<IRoleRepository> rolesRepository, Lazy<IUserRolesRepository> userRolesRepository)
+        Lazy<IJournalRepository> journalRepository, Lazy<IRoleRepository> rolesRepository,
+        Lazy<IUserRolesRepository> userRolesRepository, Lazy<IConversionRepository> conversionRepository,
+        ApplicationDbContext dbContext)
     {
         _accountRepository = accountRepository;
         _categoryRepository = categoryRepository;
@@ -54,6 +58,7 @@ public class UnitOfWork : IUnitOfWork
         _journalRepository = journalRepository;
         _rolesRepository = rolesRepository;
         _userRolesRepository = userRolesRepository;
+        _conversionRepository = conversionRepository;
         _transaction = dbContext.Database.BeginTransaction();
     }
 
@@ -84,6 +89,8 @@ public class UnitOfWork : IUnitOfWork
     public IPaymentRepository PaymentRepository => _paymentRepository.Value;
 
     public IJournalRepository JournalRepository => _journalRepository.Value;
+
+    public IConversionRepository ConversionRepository => _conversionRepository.Value;
 
     public IInvoicePaymentsRepository InvoicePaymentsRepository => _invoicePaymentRepository.Value;
 
