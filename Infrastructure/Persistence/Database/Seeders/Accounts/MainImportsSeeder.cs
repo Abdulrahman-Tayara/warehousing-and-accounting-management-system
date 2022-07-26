@@ -5,7 +5,7 @@ namespace Infrastructure.Persistence.Database.Seeders.Accounts;
 
 public class MainImportsSeeder : ISeeder
 {
-    public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
+    public Task Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
         var settings = settingsProvider.Get();
 
@@ -14,7 +14,7 @@ public class MainImportsSeeder : ISeeder
         
         if (mainImports != null)
         {
-            return;
+            return Task.CompletedTask;
         }
         
         using (var transaction = dbContext.Database.BeginTransaction())
@@ -35,5 +35,7 @@ public class MainImportsSeeder : ISeeder
             
             transaction.Commit();
         }
+        
+        return Task.CompletedTask;
     }
 }
