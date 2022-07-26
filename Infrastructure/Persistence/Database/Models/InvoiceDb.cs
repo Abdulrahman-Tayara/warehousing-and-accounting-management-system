@@ -34,4 +34,6 @@ public class InvoiceDb : IDbModel, IMapFrom<Invoice>
     public InvoiceStatus Status { get; set; }
     
     public InvoiceType Type { get; set; }
+    
+    public InvoiceAccountType AccountType { get; set; }
 }

@@ -21,7 +21,7 @@ public class MainCurrencySeeder : ISeeder
         {
             var entry = dbContext.Currencies.Add(new CurrencyDb()
             {
-                Name = "Main Sales",
+                Name = "Syrian Pound",
                 Symbol = "SYP",
                 Factor = 1
             });

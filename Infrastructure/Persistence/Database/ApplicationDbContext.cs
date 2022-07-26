@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationIdentityUser, A
     public DbSet<StoragePlaceDb> StoragePlaces { get; set; }
     public DbSet<AccountDb> Accounts { get; set; } = null!;
     public DbSet<JournalDb> JournalDbs { get; set; }
+    public DbSet<ConversionDb> Conversions { get; set; }
 
     public DbSet<ProductMovementDb> ProductMovements { get; set; }
     public DbSet<CurrencyAmountDb> CurrencyAmounts { get; set; }

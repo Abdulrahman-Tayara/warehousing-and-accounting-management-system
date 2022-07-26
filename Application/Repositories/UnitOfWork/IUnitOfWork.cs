@@ -19,6 +19,8 @@ public interface IUnitOfWork : IDisposable
     public IPaymentRepository PaymentRepository { get; }
     public IJournalRepository JournalRepository { get; }
     public IRoleRepository RoleRepository { get; }
+    public IConversionRepository ConversionRepository { get; }
+    
     public IInvoicePaymentsRepository InvoicePaymentsRepository { get; }
     
     public IUserRolesRepository UserRolesRepository { get; }
