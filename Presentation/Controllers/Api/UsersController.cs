@@ -2,6 +2,7 @@ using Application.Commands.Users.CreateUser;
 using Application.Commands.Users.DeleteUser;
 using Application.Commands.Users.UpdateUser;
 using Application.Queries.Users;
+using Application.Services.Identity;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,7 @@ using wms.Dto.Users;
 
 namespace wms.Controllers.Api;
 
+[Authorize]
 public class UsersController : ApiControllerBase
 {
     private readonly ILogger<UsersController> _logger;
@@ -39,7 +41,6 @@ public class UsersController : ApiControllerBase
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<BaseResponse<PageViewModel<UserViewModel>>>> GetUsers(
         [FromQuery] UsersQueryParams request)
     {
@@ -54,6 +55,14 @@ public class UsersController : ApiControllerBase
         var user = await Mediator.Send(new GetUserQuery {Id = id});
 
         return Ok(user.ToViewModel<UserViewModel>(Mapper));
+    }
+
+    [HttpGet("info")]
+    public Task<ActionResult<BaseResponse<UserViewModel>>> GetUser([FromServices] ICurrentUserService currentUserService)
+    {
+        var id = currentUserService.UserId;
+
+        return GetUser(id ?? 0);
     }
 
     [HttpDelete("{id}")]

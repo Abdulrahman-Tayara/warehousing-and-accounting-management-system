@@ -23,7 +23,7 @@ public class AuthenticationController : ApiControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<BaseResponse<string>>> Login(LoginRequest request)
+    public async Task<ActionResult<BaseResponse<LoginResponse>>> Login(LoginRequest request)
     {
         var result = await  _authenticationService.JwtLogin(_mapper.Map<JwtLoginRequest>(request));
 
