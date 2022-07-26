@@ -4,7 +4,6 @@ using Application.Queries.Invoicing;
 using Application.Queries.Invoicing.Dto;
 using Application.Repositories.UnitOfWork;
 using Domain.Entities;
-using Domain.Factories;
 using MediatR;
 
 namespace Application.Commands.Invoicing;
@@ -16,6 +15,7 @@ public class CreateInvoiceCommand : IRequest<int>
     public int CurrencyId { get; set; }
     public string? Note { get; set; }
     public InvoiceType Type { get; set; }
+    public InvoiceAccountType AccountType { get; set; }
     public IEnumerable<InvoiceItemDto> Items { get; set; }
 
     public bool IgnoreMinLevelWarnings { get; set; }
@@ -59,6 +59,7 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             note: request.Note,
             createdAt: DateTime.Now,
             type: request.Type,
+            accountType: request.AccountType,
             items: request.Items.Select(dto => _buildItem(dto, request.Type)).ToList()
         );
 

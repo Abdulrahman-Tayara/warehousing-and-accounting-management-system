@@ -12,7 +12,10 @@ public class AccountsSeeder : ISeeder
         {
             new MainCashDrawerSeeder(),
             new MainSalesSeeder(),
-            new MainPurchasesSeeder()
+            new MainPurchasesSeeder(),
+            new MainExportsSeeder(),
+            new MainImportsSeeder(),
+            new ConversionsSeeder(),
         };
     }
     

@@ -22,10 +22,12 @@ public class Invoice : BaseEntity<int>
     public InvoiceStatus Status { get; set; }
 
     public InvoiceType Type { get; set; }
+    
+    public InvoiceAccountType AccountType { get; set; }
 
     public IList<ProductMovement> Items { get; set; }
 
-    public Invoice(int? accountId, int warehouseId, int? currencyId, string? note, DateTime createdAt, InvoiceType type, IList<ProductMovement> items)
+    public Invoice(int? accountId, int warehouseId, int? currencyId, string? note, DateTime createdAt, InvoiceType type, InvoiceAccountType accountType, IList<ProductMovement> items)
     {
         AccountId = accountId;
         WarehouseId = warehouseId;
@@ -35,6 +37,7 @@ public class Invoice : BaseEntity<int>
         CreatedAt = createdAt;
         Status = InvoiceStatus.Closed;
         Type = type;
+        AccountType = accountType;
         Items = new List<ProductMovement>();
         items.ToList().ForEach(item => AddItem(item));
     }
@@ -91,4 +94,10 @@ public enum InvoiceType
 {
     In,
     Out
+}
+
+public enum InvoiceAccountType
+{
+    PurchasesSales, // Related to Purchases and Sales accounts
+    ImportExport, // Related to Imports and Exports accounts
 }

@@ -9,4 +9,10 @@ public class ApplicationSettings
     public int DefaultPurchasesAccountId { get; set; } = default;
 
     public int DefaultMainCashDrawerAccountId { get; set; } = default;
+    
+    public int DefaultMainExportsAccountId { get; set; } = default;
+    
+    public int DefaultMainImportsAccountId { get; set; } = default;
+    
+    public int DefaultConversionsAccountId { get; set; } = default;
 }

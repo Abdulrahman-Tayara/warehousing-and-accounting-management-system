@@ -27,7 +27,10 @@ public class InvoicesController : ApiControllerBase
         StatusCodes.ProductMinLevelExceededExceptionCode)]
     public async Task<ActionResult<BaseResponse<InvoiceViewModel>>> Create(CreateInvoiceRequest request)
     {
-        var invoiceId = await Mediator.Send(Mapper.Map<CreateInvoiceCommand>(request));
+        var createInvoiceCommand = Mapper.Map<CreateInvoiceCommand>(request);
+        createInvoiceCommand.AccountType = InvoiceAccountType.PurchasesSales;
+
+        var invoiceId = await Mediator.Send(createInvoiceCommand);
 
         var invoice = await Mediator.Send(new GetInvoiceQuery {Id = invoiceId});
 

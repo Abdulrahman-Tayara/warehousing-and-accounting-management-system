@@ -1,34 +1,35 @@
 using Application.Services.Settings;
 using Infrastructure.Persistence.Database.Models;
 
-namespace Infrastructure.Persistence.Database.Seeders.Currencies;
+namespace Infrastructure.Persistence.Database.Seeders.Accounts;
 
-public class MainCurrencySeeder : ISeeder
+public class MainImportsSeeder : ISeeder
 {
     public void Seed(ApplicationDbContext dbContext, IApplicationSettingsProvider settingsProvider)
     {
         var settings = settingsProvider.Get();
 
-        var mainCurrency = dbContext.Currencies
-            .FirstOrDefault(currency => currency.Id == settings.DefaultCurrencyId);
+        var mainImports = dbContext.Accounts
+            .FirstOrDefault(account => account.Id == settings.DefaultMainImportsAccountId);
         
-        if (mainCurrency != null)
+        if (mainImports != null)
         {
             return;
         }
         
         using (var transaction = dbContext.Database.BeginTransaction())
         {
-            var entry = dbContext.Currencies.Add(new CurrencyDb()
+            var entry = dbContext.Accounts.Add(new AccountDb
             {
-                Name = "Syrian Pound",
-                Symbol = "SYP",
-                Factor = 1
+                Name = "الواردات الرئيسي",
+                Code = "MIm",
+                City = "",
+                Phone = ""
             });
 
             dbContext.SaveChanges();
 
-            settings.DefaultCurrencyId = entry.Entity.Id;
+            settings.DefaultMainImportsAccountId = entry.Entity.Id;
             
             settingsProvider.Configure(settings);
             
