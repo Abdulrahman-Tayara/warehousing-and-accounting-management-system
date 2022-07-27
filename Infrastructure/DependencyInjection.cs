@@ -126,8 +126,10 @@ public static class DependencyInjection
             {
                 await dbContext.Database.MigrateAsync();
                 await dbContext.Database.EnsureCreatedAsync();
-                if (!app.Environment.IsDevelopment())
+                if (app.Configuration.GetValue<bool>("SeedDatabaseAtStartup"))
+                {
                     await dbContext.Seed(dbSeeder, settingsProvider);
+                }
             }
         }
     }
