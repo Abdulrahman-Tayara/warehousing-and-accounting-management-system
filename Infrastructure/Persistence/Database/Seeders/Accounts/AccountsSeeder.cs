@@ -16,6 +16,8 @@ public class AccountsSeeder : ISeeder
             new MainExportsSeeder(),
             new MainImportsSeeder(),
             new ConversionsSeeder(),
+            new MainSalesReturnsSeeder(),
+            new MainPurchasesReturnsSeeder()
         };
     }
     

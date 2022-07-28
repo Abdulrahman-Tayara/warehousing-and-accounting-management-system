@@ -63,4 +63,20 @@ public class InvoicesController : ApiControllerBase
 
         return Ok(items.ToViewModel<ProductMovementViewModel>(Mapper));
     }
+    
+    [HttpPost("returns")]
+    [ProducesResponseType(typeof(ActionResult<BaseResponse<InvoiceViewModel>>), 200)]
+    [ProducesResponseType(typeof(ActionResult<BaseResponse<IList<int>>>),
+        StatusCodes.ProductMinLevelExceededExceptionCode)]
+    public async Task<ActionResult<BaseResponse<InvoiceViewModel>>> CreateReturns(CreateInvoiceRequest request)
+    {
+        var createInvoiceCommand = Mapper.Map<CreateInvoiceCommand>(request);
+        createInvoiceCommand.AccountType = InvoiceAccountType.Returns;
+
+        var invoiceId = await Mediator.Send(createInvoiceCommand);
+
+        var invoice = await Mediator.Send(new GetInvoiceQuery {Id = invoiceId});
+
+        return Ok(invoice.ToViewModel<InvoiceViewModel>(Mapper));
+    }
 }

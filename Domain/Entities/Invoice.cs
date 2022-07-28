@@ -100,4 +100,27 @@ public enum InvoiceAccountType
 {
     PurchasesSales, // Related to Purchases and Sales accounts
     ImportExport, // Related to Imports and Exports accounts
+    Returns // Related to PurchasesReturns and SalesReturns account
+}
+
+public static class InvoiceAccountTypeExtensions
+{
+    public static bool DealsWithPurchasesSales(this InvoiceAccountType invoiceAccountType)
+    {
+        return invoiceAccountType switch
+        {
+            InvoiceAccountType.PurchasesSales => true,
+            InvoiceAccountType.Returns => true,
+            _ => false
+        };
+    }
+    
+    public static bool DealsWithReturns(this InvoiceAccountType invoiceAccountType)
+    {
+        return invoiceAccountType switch
+        {
+            InvoiceAccountType.Returns => true,
+            _ => false
+        };
+    }
 }
