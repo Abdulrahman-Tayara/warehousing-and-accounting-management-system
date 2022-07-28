@@ -10,7 +10,6 @@ public class GetAllStoragePlacesQuery : GetPaginatedQuery<StoragePlace>
     [QueryFilter(QueryFilterCompareType.StringContains)]
     public string? Name { get; set; }
     
-    [QueryFilter(QueryFilterCompareType.Equal)]
     public int? WarehouseId { get; set; }
 
     public bool? IsParent { get; set; }
@@ -48,6 +47,8 @@ public class GetAllStoragePlacesQueryHandler : PaginatedQueryHandler<GetAllStora
             q = q.Where(storagePlace =>
                 (bool) request.IsParent ? storagePlace.ContainerId == null : storagePlace.ContainerId != null);
 
+        q = q.Where(storagePlace => storagePlace.WarehouseId == request.WarehouseId || request.WarehouseId == 0);
+        
         return q;
     }
 }
