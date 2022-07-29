@@ -18,4 +18,5 @@ public class InvoiceViewModel : IViewModel, IMapFrom<Invoice>
     public DateTime CreatedAt { get; set; }
     public InvoiceStatus Status { get; set; }
     public InvoiceType Type { get; set; }
+    public InvoiceAccountType AccountType { get; set; }
 }
