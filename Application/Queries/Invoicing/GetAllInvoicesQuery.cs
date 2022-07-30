@@ -7,6 +7,7 @@ namespace Application.Queries.Invoicing;
 public class GetAllInvoicesQuery : GetPaginatedQuery<Invoice>
 {
     public InvoiceType? Type { get; set; }
+    public InvoiceAccountType? AccountType { get; set; }
     public int? AccountId { get; set; } = default;
     public int? WarehouseId { get; set; } = default;
 }
@@ -37,6 +38,8 @@ public class GetAllInvoicesQueryHandler : PaginatedQueryHandler<GetAllInvoicesQu
     {
         if (request.Type is not null)
             query = query.Where(invoice => invoice.Type == request.Type);
+        if (request.AccountType is not null)
+            query = query.Where(invoice => invoice.AccountType == request.AccountType);
         if (request.WarehouseId is not null)
             query = query.Where(invoice => invoice.WarehouseId == request.WarehouseId);
         if (request.AccountId is not null)
