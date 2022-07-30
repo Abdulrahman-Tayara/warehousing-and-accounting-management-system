@@ -16,9 +16,9 @@ public class ConversionViewModel : IViewModel, IMapFrom<Conversion>
     
     public WarehouseViewModel ToWarehouse { get; set; }
     
-    public ProductViewModel FromProduct { get; set; }
+    public ProductJoinedViewModel FromProduct { get; set; }
     
-    public ProductViewModel ToProduct { get; set; }
+    public ProductJoinedViewModel ToProduct { get; set; }
     
     public StoragePlaceViewModel FromPlace { get; set; }
     
