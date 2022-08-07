@@ -1,4 +1,5 @@
 using Application.Common.Dtos;
+using Application.Common.Security;
 using Application.EventNotifications.Payments.PaymentCreated;
 using Application.Repositories.UnitOfWork;
 using Domain.Entities;
@@ -6,6 +7,7 @@ using MediatR;
 
 namespace Application.Commands.Payments;
 
+[Authorize(Method = Method.Write, Resource = Resource.Invoices)]
 public class CreatePaymentCommand : IRequest<int>
 {
     public int InvoiceId { get; set; }

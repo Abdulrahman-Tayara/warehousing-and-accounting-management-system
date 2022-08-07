@@ -1,9 +1,11 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.CountryOrigins;
 
+[Authorize(Method = Method.Write, Resource = Resource.Countries)]
 public class CreateCountryOriginCommand : ICreateEntityCommand<int>
 {
     public string Name { get; init; }

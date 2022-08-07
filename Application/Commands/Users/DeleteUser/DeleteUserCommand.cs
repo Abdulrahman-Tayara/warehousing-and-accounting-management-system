@@ -1,8 +1,10 @@
+using Application.Common.Security;
 using Application.Repositories;
 using MediatR;
 
 namespace Application.Commands.Users.DeleteUser;
 
+[Authorize(Method = Method.Delete, Resource = Resource.Users)]
 public class DeleteUserCommand : IRequest
 {
     public int Id { get; init; }

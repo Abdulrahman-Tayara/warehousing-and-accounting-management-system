@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Factories;
 using MediatR;
 
 namespace Application.Commands.Journals;
 
+[Authorize(Method = Method.Write, Resource = Resource.Journals)]
 public class CreateJournalsCommand : IRequest<(int DebitId, int CreditId)>
 {
     public int SourceAccountId { get; }

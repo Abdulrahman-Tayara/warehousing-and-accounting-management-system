@@ -1,10 +1,12 @@
 ﻿using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories.UnitOfWork;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.Warehouses;
 
+[Authorize(Method = Method.Write, Resource = Resource.Warehouses)]
 public class CreateWarehouseCommand : ICreateEntityCommand<int>
 {
     public string Name { get; set; }

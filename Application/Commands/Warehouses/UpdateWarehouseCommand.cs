@@ -1,10 +1,12 @@
 ﻿using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.Warehouses;
 
+[Authorize(Method = Method.Update, Resource = Resource.Warehouses)]
 public class UpdateWarehouseCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }

@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.Users.UpdateUser;
 
+[Authorize(Method = Method.Update, Resource = Resource.Users)]
 public class UpdateUserCommand : IRequest
 {
     public int Id { get; set; }

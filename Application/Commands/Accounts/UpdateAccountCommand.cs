@@ -1,9 +1,11 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.Accounts;
 
+[Authorize(Method = Method.Update, Resource = Resource.Accounts)]
 public class UpdateAccountCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }

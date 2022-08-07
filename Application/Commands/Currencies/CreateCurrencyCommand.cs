@@ -1,9 +1,11 @@
 ﻿using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.Currencies;
 
+[Authorize(Method = Method.Write, Resource = Resource.Currencies)]
 public class CreateCurrencyCommand : ICreateEntityCommand<int>
 {
     public string Name { get; set; }

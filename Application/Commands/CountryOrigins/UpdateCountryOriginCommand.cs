@@ -1,9 +1,11 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.CountryOrigins;
 
+[Authorize(Method = Method.Update, Resource = Resource.Countries)]
 public partial class UpdateCountryOriginCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }

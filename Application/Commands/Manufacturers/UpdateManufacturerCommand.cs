@@ -1,9 +1,11 @@
 ﻿using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.Manufacturers;
 
+[Authorize(Method = Method.Update, Resource = Resource.Manufacturers)]
 public class UpdateManufacturerCommand : IUpdateEntityCommand<int>
 {
     public int Id { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Invoicing.Dto;
+using Application.Common.Security;
 using Application.EventNotifications.Invoices.InvoiceCreated;
 using Application.Queries.Invoicing;
 using Application.Queries.Invoicing.Dto;
@@ -8,6 +9,7 @@ using MediatR;
 
 namespace Application.Commands.Invoicing;
 
+[Authorize(Method = Method.Write, Resource = Resource.Invoices)]
 public class CreateInvoiceCommand : IRequest<int>
 {
     public int AccountId { get; set; }

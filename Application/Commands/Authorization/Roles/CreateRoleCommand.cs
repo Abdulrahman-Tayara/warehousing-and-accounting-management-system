@@ -4,6 +4,7 @@ using MediatR;
 
 namespace Application.Commands.Authorization.Roles;
 
+[Authorize(Method = Method.Write, Resource = Resource.Roles)]
 public class CreateRoleCommand : IRequest<int>
 {
     public string Name { get; set; }

@@ -1,9 +1,11 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.Categories;
 
+[Authorize(Method = Method.Write, Resource = Resource.Categories)]
 public class CreateCategoryCommand : ICreateEntityCommand<int>
 {
     public string Name { get; init; }

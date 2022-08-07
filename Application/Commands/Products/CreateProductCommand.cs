@@ -1,10 +1,12 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.Products;
 
+[Authorize(Method = Method.Write, Resource = Resource.Products)]
 public class CreateProductCommand : ICreateEntityCommand<int>
 {
     public string Name { get; init; }

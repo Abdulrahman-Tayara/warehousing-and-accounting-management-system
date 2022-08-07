@@ -1,8 +1,10 @@
-﻿using Application.Repositories;
+﻿using Application.Common.Security;
+using Application.Repositories;
 using MediatR;
 
 namespace Application.Commands.Authorization.Roles;
 
+[Authorize(Method = Method.Delete, Resource = Resource.Roles)]
 public class DeleteRoleCommand : IRequest
 {
     public int Id;

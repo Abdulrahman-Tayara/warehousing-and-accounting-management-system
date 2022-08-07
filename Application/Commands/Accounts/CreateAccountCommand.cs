@@ -1,9 +1,11 @@
 using Application.Commands.Common;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Commands.Accounts;
 
+[Authorize(Method = Method.Write, Resource = Resource.Accounts)]
 public class CreateAccountCommand : ICreateEntityCommand<int>
 {
     public string Code { get; set; }

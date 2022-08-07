@@ -8,6 +8,7 @@ using MediatR;
 
 namespace Application.Commands.Users.CreateUser;
 
+[Authorize(Method = Method.Write, Resource = Resource.Users)]
 public class CreateUserCommand : ICreateEntityCommand<int>
 {
     public string Username { get; set; }

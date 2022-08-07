@@ -6,6 +6,7 @@ using MediatR;
 
 namespace Application.Commands.Authorization.UserRoles;
 
+[Authorize(Method = Method.Update, Resource = Resource.Roles)]
 public class UpdateUserRolesCommand : IRequest
 {
     public int UserId { get; set; }
