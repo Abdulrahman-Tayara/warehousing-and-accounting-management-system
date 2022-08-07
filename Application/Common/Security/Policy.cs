@@ -32,7 +32,6 @@ public enum Resource
     Products,
     Warehouses,
     Currencies,
-    Users,
     Roles,
     Invoices,
     Journals,
