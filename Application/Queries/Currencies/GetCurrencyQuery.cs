@@ -1,10 +1,12 @@
 ﻿using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Currencies;
 
+[Authorize(Method = Method.Read, Resource = Resource.Currencies)]
 public class GetCurrencyQuery : IRequest<Currency>
 {
     public int Id { get; set; }

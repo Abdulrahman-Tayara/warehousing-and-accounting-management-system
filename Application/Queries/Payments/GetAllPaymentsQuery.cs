@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.Payments;
 
+[Authorize(Method = Method.Read, Resource = Resource.Invoices)]
 public class GetAllPaymentsQuery : GetPaginatedQuery<Payment>
 {
     public int InvoiceId { get; set; } = 0;

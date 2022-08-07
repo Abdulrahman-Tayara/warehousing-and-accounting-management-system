@@ -1,10 +1,12 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Unit = Domain.Entities.Unit;
 
 namespace Application.Queries.Units;
 
+[Authorize(Method = Method.Read, Resource = Resource.Units)]
 public class GetAllUnitsQuery : GetPaginatedQuery<Unit>
 {
     [QueryFilter(QueryFilterCompareType.StringContains)]

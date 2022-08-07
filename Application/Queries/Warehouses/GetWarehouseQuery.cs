@@ -1,9 +1,11 @@
-﻿using Application.Repositories;
+﻿using Application.Common.Security;
+using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Warehouses;
 
+[Authorize(Method = Method.Read, Resource = Resource.Warehouses)]
 public class GetWarehouseQuery : IRequest<Warehouse>
 {
     public int Id { get; set; }

@@ -1,9 +1,11 @@
 ﻿using Application.Common.Models;
+using Application.Common.Security;
 using Application.Repositories.Aggregates;
 using MediatR;
 
 namespace Application.Queries.Authorization.UserRoles;
 
+[Authorize(Method = Method.Read, Resource = Resource.Roles)]
 public class GetAllUsersRolesQuery : IRequest<IPaginatedEnumerable<Application.Common.Security.UserRoles>>
 {
     

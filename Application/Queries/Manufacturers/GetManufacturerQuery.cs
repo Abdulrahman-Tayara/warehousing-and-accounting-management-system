@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Manufacturers;
 
+[Authorize(Method = Method.Read, Resource = Resource.Manufacturers)]
 public class GetManufacturerQuery : IRequest<Manufacturer>
 {
     public int Id { get; set; }

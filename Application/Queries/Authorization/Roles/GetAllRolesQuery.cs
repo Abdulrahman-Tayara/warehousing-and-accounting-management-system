@@ -4,6 +4,7 @@ using Application.Repositories;
 
 namespace Application.Queries.Authorization.Roles;
 
+[Authorize(Method = Method.Read, Resource = Resource.Roles)]
 public class GetAllRolesQuery : GetPaginatedQuery<Role>
 {
 }

@@ -6,6 +6,7 @@ using MediatR;
 
 namespace Application.Queries.Authorization.UserRoles;
 
+[Authorize(Method = Method.Read, Resource = Resource.Roles)]
 public class GetUserRolesQuery : IRequest<IPaginatedEnumerable<Role>>
 {
     public int UserId { get; set; }

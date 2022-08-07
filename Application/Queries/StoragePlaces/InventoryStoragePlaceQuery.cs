@@ -1,5 +1,6 @@
 using Application.Common.Dtos;
 using Application.Common.Models;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Aggregations;
@@ -7,6 +8,7 @@ using MediatR;
 
 namespace Application.Queries.StoragePlaces;
 
+[Authorize(Method = Method.Read, Resource = Resource.Invoices)]
 public class InventoryStoragePlaceQuery : GetPaginatedQuery<AggregateStoragePlaceQuantity>
 {
     public ProductMovementFilters? Filters { get; set; }

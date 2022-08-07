@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.Products;
 
+[Authorize(Method = Method.Read, Resource = Resource.Products)]
 public class GetAllProductsInStoragePlaceQuery : GetPaginatedQuery<Product>
 {
     public int Page { get; set; }

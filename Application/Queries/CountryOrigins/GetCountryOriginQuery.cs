@@ -1,10 +1,12 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.CountryOrigins;
 
+[Authorize(Method = Method.Read, Resource = Resource.Countries)]
 public class GetCountryOriginQuery : IRequest<CountryOrigin>
 {
     public int Id { get; init; }

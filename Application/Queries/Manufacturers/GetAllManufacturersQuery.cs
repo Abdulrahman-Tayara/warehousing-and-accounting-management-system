@@ -1,4 +1,5 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
@@ -6,6 +7,7 @@ using MediatR;
 
 namespace Application.Queries.Manufacturers;
 
+[Authorize(Method = Method.Read, Resource = Resource.Manufacturers)]
 public class GetAllManufacturersQuery : GetPaginatedQuery<Manufacturer>
 {
     [QueryFilter(QueryFilterCompareType.StringContains)]

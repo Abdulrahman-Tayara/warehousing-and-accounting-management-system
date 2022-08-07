@@ -1,9 +1,11 @@
-﻿using Application.Queries.Common;
+﻿using Application.Common.Security;
+using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.Invoicing;
 
+[Authorize(Method = Method.Read, Resource = Resource.Invoices)]
 public class GetProductMovementsQuery : GetPaginatedQuery<ProductMovement>
 {
     public int? InvoiceId { get; set; }

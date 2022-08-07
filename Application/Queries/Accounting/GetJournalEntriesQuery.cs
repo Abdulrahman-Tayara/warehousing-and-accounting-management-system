@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.Accounting;
 
+[Authorize(Method = Method.Read, Resource = Resource.Journals)]
 public class GetJournalEntriesQuery : GetPaginatedQuery<Journal>
 {
     public int FromAccountId { get; set; }

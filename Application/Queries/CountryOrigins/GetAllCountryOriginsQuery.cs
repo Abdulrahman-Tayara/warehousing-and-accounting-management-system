@@ -1,10 +1,12 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.CountryOrigins;
 
+[Authorize(Method = Method.Read, Resource = Resource.Countries)]
 public class GetAllCountryOriginsQuery : GetPaginatedQuery<CountryOrigin>
 {
     [QueryFilter(QueryFilterCompareType.StringContains)]

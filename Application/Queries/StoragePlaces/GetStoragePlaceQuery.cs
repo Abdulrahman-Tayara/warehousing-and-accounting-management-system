@@ -1,10 +1,12 @@
 ﻿using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.StoragePlaces;
 
+[Authorize(Method = Method.Read, Resource = Resource.Warehouses)]
 public class GetStoragePlaceQuery : IRequest<StoragePlace>
 {
     public int Id { get; set; }

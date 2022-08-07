@@ -1,4 +1,5 @@
 ﻿using Application.Common.Dtos;
+using Application.Common.Security;
 using Application.Queries.Invoicing.Dto;
 using Application.Repositories;
 using Domain.Aggregations;
@@ -7,6 +8,7 @@ using MediatR;
 
 namespace Application.Queries.Invoicing;
 
+[Authorize(Method = Method.Read, Resource = Resource.Invoices)]
 public class CheckProductQuantityQuery : IRequest
 {
     public IEnumerable<CheckProductQuantityDto> ProductQuantities { get; init; } = null!;

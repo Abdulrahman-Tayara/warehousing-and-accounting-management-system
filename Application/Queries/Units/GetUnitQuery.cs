@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using MediatR;
 using Unit = Domain.Entities.Unit;
 
 namespace Application.Queries.Units;
 
+[Authorize(Method = Method.Read, Resource = Resource.Units)]
 public class GetUnitQuery : IRequest<Unit>
 {
     public int Id { get; init; }

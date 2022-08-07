@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Products;
 
+[Authorize(Method = Method.Read, Resource = Resource.Products)]
 public class GetProductQuery : IRequest<Product>
 {
     public int Id { get; set; }

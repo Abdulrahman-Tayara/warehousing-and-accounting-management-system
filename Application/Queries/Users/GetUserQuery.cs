@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Users;
 
+[Authorize(Method = Method.Read, Resource = Resource.Users)]
 public class GetUserQuery : IRequest<User>
 {
     public int Id { get; set; }

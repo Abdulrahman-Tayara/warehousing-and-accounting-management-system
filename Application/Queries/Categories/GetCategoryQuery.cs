@@ -1,10 +1,12 @@
 using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Categories;
 
+[Authorize(Method = Method.Read, Resource = Resource.Categories)]
 public class GetCategoryQuery : IRequest<Category>
 {
     public int Id { get; init; }

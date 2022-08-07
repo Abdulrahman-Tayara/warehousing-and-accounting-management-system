@@ -1,10 +1,12 @@
 ﻿using Application.Common.QueryFilters;
+using Application.Common.Security;
 using Application.Queries.Common;
 using Application.Repositories;
 using Domain.Entities;
 
 namespace Application.Queries.StoragePlaces;
 
+[Authorize(Method = Method.Read, Resource = Resource.Warehouses)]
 public class GetAllStoragePlacesQuery : GetPaginatedQuery<StoragePlace>
 {
     [QueryFilter(QueryFilterCompareType.StringContains)]

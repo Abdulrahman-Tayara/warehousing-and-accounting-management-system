@@ -1,3 +1,4 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Application.Settings;
 using Domain.Aggregations;
@@ -6,6 +7,8 @@ using MediatR;
 
 namespace Application.Queries.Accounting;
 
+[Authorize(Method = Method.Read, Resource = Resource.Journals)]
+[Authorize(Method = Method.Read, Resource = Resource.Accounts)]
 public class GetAccountStatementQuery : IRequest<AggregateAccountStatement>
 {
     public int AccountId { get; }

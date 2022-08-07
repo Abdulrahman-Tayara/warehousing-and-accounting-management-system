@@ -1,9 +1,11 @@
+using Application.Common.Security;
 using Application.Repositories;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Queries.Payments;
 
+[Authorize(Method = Method.Read, Resource = Resource.Invoices)]
 public class GetPaymentQuery : IRequest<Payment>
 {
     public int Id { get; set; }
