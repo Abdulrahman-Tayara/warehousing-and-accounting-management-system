@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Security;
+namespace Application.Common.Security;
 
 public class Policy
 {
@@ -27,6 +27,15 @@ public enum Resource
 {
     Users,
     Accounts,
+    Categories,
+    Manufacturers,
+    Products,
+    Warehouses,
+    Currencies,
+    Users,
+    Roles,
+    Invoices,
+    Journals,
 }
 
 public enum Method
