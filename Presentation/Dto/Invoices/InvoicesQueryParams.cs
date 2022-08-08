@@ -13,7 +13,7 @@ public class InvoicesQueryParams : PaginationRequestParams, IMapFrom<GetAllInvoi
     public InvoiceType? Type { get; set; } = default;
     
     [FromQuery(Name = "account_type")]
-    public InvoiceAccountType? AccountType { get; set; } = default;
+    public InvoiceAccountType? AccountType { get; set; } = InvoiceAccountType.PurchasesSales;
     
     [Range(0, int.MaxValue)]
     [FromQuery(Name = "account_id")]
