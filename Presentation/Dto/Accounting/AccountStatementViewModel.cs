@@ -32,6 +32,8 @@ public class AccountStatementDetailViewModel : IViewModel, IMapFrom<AggregateAcc
     public double Debit { get; set; }
 
     public double Credit { get; set; }
+    
+    public double Result { get; set; }
 
     public CurrencyViewModel Currency { get; set; }
 }

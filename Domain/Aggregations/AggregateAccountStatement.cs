@@ -40,6 +40,7 @@ public class AggregateAccountStatementDetail : AggregateRoot
 
     public double Credit { get; set; }
 
+    public double Result => Debit - Credit;
     public Currency Currency { get; set; }
 
     public AggregateAccountStatementDetail(Account account, double debit, double credit, Currency currency)
