@@ -46,6 +46,8 @@ public class InvoicePaymentsRepository : RepositoryBase<ApplicationDbContext>, I
 
             Invoice updatedInvoice = await _invoiceRepository.Update(invoicePayments.Invoice);
 
+            await _invoiceRepository.SaveChanges();
+
             return new InvoicePayments
             {
                 Invoice = updatedInvoice,
