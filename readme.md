@@ -1,7 +1,6 @@
-# Project Title
+# Warehousing and Accounting Management System (back-end)
 
-The back-end of Warehousing and Accounting Management System, developed using .NET Core for my senior Software
-Engineering graduation project.
+Developed using .NET Core for my senior Software Engineering graduation project.
 
 ## Description
 
